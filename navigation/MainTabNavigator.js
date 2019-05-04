@@ -1,26 +1,30 @@
-import React from 'react'
-import { Platform } from 'react-native'
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'
+import React from "react"
+import { Platform } from "react-native"
+import { createStackNavigator, createBottomTabNavigator } from "react-navigation"
 
-import TabBarIcon from '../components/TabBarIcon'
-import HomeScreen from '../screens/HomeScreen'
-import LinksScreen from '../screens/LinksScreen'
-import SettingsScreen from '../screens/SettingsScreen'
+// Screens
+import HomeScreen from "../screens/HomeScreen"
+import LinksScreen from "../screens/LinksScreen"
+import SettingsScreen from "../screens/SettingsScreen"
+
+// Components
+import TabBarIcon from "../components/TabBarIcon"
+
+// Constants
+import Colors from "../constants/Colors"
+
+const prefix = Platform.OS === "ios" ? "ios" : "md"
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
 })
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: "Home",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-home${focused ? '' : '-outline'}`
-          : 'md-home'
-      }
+      name={`${prefix}-home`}
     />
   ),
 }
@@ -30,11 +34,11 @@ const MapStack = createStackNavigator({
 })
 
 MapStack.navigationOptions = {
-  tabBarLabel: 'Near me',
+  tabBarLabel: "Near me",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-map' : 'md-map'}
+      name={`${prefix}-map`}
     />
   ),
 }
@@ -44,11 +48,11 @@ const FavoritesStack = createStackNavigator({
 })
 
 FavoritesStack.navigationOptions = {
-  tabBarLabel: 'Favorites',
+  tabBarLabel: "Favorites",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-heart' : 'md-heart'}
+      name={`${prefix}-heart`}
     />
   ),
 }
@@ -58,11 +62,11 @@ const ProfileStack = createStackNavigator({
 })
 
 ProfileStack.navigationOptions = {
-  tabBarLabel: 'Profile',
+  tabBarLabel: "Profile",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'}
+      name={`${prefix}-person`}
     />
   )
 }
@@ -72,4 +76,19 @@ export default createBottomTabNavigator({
   MapStack,
   FavoritesStack,
   ProfileStack
-})
+}, {
+    tabBarOptions: {
+      showLabel: true,
+      activeTintColor: Colors.redible.accent,
+      inactiveTintColor: Colors.redible.lavenderGray,
+      style: {
+        backgroundColor: Colors.redible.babyPowder,
+        borderTopWidth: 0,
+        shadowColor: "rgb(0, 0, 0)",
+        shadowOffset: { height: 5, width: 0 },
+        shadowOpacity: 1,
+        shadowRadius: 3,
+        elevation: 5,
+      }
+    }
+  })

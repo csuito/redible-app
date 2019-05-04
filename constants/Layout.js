@@ -9,7 +9,8 @@ export default {
     height,
   },
   fontSize: {
-    contentTile: 18,
+    largeText: 22,
+    contentTitle: 18,
     mainContent: 16,
     mediumText: 14,
     smallText: 12

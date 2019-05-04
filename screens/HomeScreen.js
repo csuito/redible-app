@@ -1,41 +1,83 @@
-import React from 'react'
+import React from "react"
 import {
-  Image,
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
-} from 'react-native'
-import { WebBrowser } from 'expo'
-import RestaurantCard from "../components/RestaurantCard"
+  Text,
+  TouchableOpacity
+} from "react-native"
+import { Icon } from "expo"
 
-import { MonoText } from '../components/StyledText'
+// Components
 import SearchHeader from "../components/headers/SearchHeader"
+import RestaurantBanner from "../components/RestaurantBanner"
+import RestaurantCard from "../components/RestaurantCard"
+import FiltersList from "../components/Filters"
+
+// Constants
+import Layout from "../constants/Layout"
+import Colors from "../constants/Colors"
 
 export default class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      filtersVisible: false
+    }
+  }
   static navigationOptions = {
     header: <SearchHeader />
   }
 
+  _buildFeaturedList = () => {
+    let featured = []
+    for (let i = 0; i < 3; i++) {
+      featured.push(<RestaurantBanner key={i} />)
+    }
+    return featured
+  }
+
   _buildRestaurantList = () => {
     let restaurantList = []
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i <= 8; i++) {
       restaurantList.push(<RestaurantCard key={i} />)
     }
     return restaurantList
   }
 
   render() {
-    const restaurantList = this._buildRestaurantList()
-    console.log(restaurantList)
+    const restaurantList = this._buildRestaurantList(),
+      featuredList = this._buildFeaturedList(),
+      { filtersVisible } = this.state
+
     return (
       <View style={styles.container}>
         <ScrollView style={styles.contentContainer}>
-          {
-            restaurantList.map(restaurant => restaurant)
-          }
+          <View>
+            <ScrollView horizontal={true}>
+              {
+                featuredList.map(restaurant => restaurant)
+              }
+            </ScrollView>
+            <TouchableOpacity style={styles.filterButton} onPress={() => this.setState({ filtersVisible: !filtersVisible })}>
+              <Icon.Ionicons
+                name={"md-funnel"}
+                size={Layout.fontSize.contentTitle}
+                color={Colors.basic.white} />
+              <Text style={styles.filterButtonText}>{` Top rated`}</Text>
+            </TouchableOpacity>
+            {
+              filtersVisible ?
+                <View style={styles.filtersContainer}>
+                  <FiltersList />
+                </View> :
+                null
+            }
+            {
+              restaurantList.map(restaurant => restaurant)
+            }
+          </View>
         </ScrollView>
       </View>
     )
@@ -45,88 +87,37 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-  },
-  developmentModeText: {
-    marginBottom: 20,
-    color: "rgba(0,0,0,0.4)",
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: "center",
+    backgroundColor: Colors.basic.white,
   },
   contentContainer: {
-    marginTop: 15,
+    backgroundColor: Colors.basic.white
   },
-  welcomeContainer: {
+  filterButton: {
+    flexDirection: "row",
     alignItems: "center",
-    marginTop: 10,
-    marginBottom: 20,
+    justifyContent: "center",
+    padding: 7.5,
+    shadowColor: "rgb(0, 0, 0)",
+    shadowOffset: { height: 5, width: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    elevation: 5,
+    backgroundColor: Colors.redible.raspberry,
+    borderRadius: 25,
+    marginLeft: Layout.window.width / 4,
+    marginRight: Layout.window.width / 4,
+    marginBottom: 15
   },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: "contain",
-    marginTop: 3,
-    marginLeft: -10,
+  filterButtonText: {
+    fontSize: Layout.fontSize.mainContent,
+    color: Colors.basic.white,
   },
-  getStartedContainer: {
-    alignItems: "center",
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: "rgba(96,100,109, 0.8)",
-  },
-  codeHighlightContainer: {
-    backgroundColor: "rgba(0,0,0,0.05)",
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: "rgba(96,100,109, 1)",
-    lineHeight: 24,
-    textAlign: "center",
-  },
-  tabBarInfoContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: "black",
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: "center",
-    backgroundColor: "#fbfbfb",
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: "rgba(96,100,109, 1)",
-    textAlign: "center",
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: "center",
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: "#2e78b7",
+  filtersContainer: {
+    marginBottom: 15,
+    marginLeft: 15,
+    marginRight: 15,
+    borderRadius: 8,
+    padding: 20,
+    backgroundColor: Colors.redible.cream
   },
 })

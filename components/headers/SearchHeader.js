@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { StyleSheet, StatusBar, View, Image } from "react-native"
+import { StyleSheet, StatusBar, View } from "react-native"
 import { Searchbar } from "react-native-paper"
 
 // Constants
@@ -21,7 +21,7 @@ export default class SearchHeader extends Component {
     return (
       <View style={styles.container}>
         <Searchbar
-          placeholder="Search"
+          placeholder="Search Redible"
           onChangeText={searchTerm => this.setState({ searchTerm })}
           value={searchTerm}
           style={styles.searchBar}
@@ -35,8 +35,8 @@ export default class SearchHeader extends Component {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 15 + StatusBar.currentHeight,
-    paddingLeft: 60,
-    paddingRight: 60,
+    paddingLeft: 15,
+    paddingRight: 15,
     height: Layout.androidHeaderHeight + StatusBar.currentHeight,
     backgroundColor: Colors.redible.main,
     shadowColor: "rgb(0, 0, 0)",
