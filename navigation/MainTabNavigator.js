@@ -4,7 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from "react-navigation
 
 // Screens
 import HomeScreen from "../screens/HomeScreen"
-import LinksScreen from "../screens/LinksScreen"
+import MapScreen from "../screens/Map"
 import SettingsScreen from "../screens/SettingsScreen"
 
 // Components
@@ -30,7 +30,7 @@ HomeStack.navigationOptions = {
 }
 
 const MapStack = createStackNavigator({
-  Map: LinksScreen,
+  Map: MapScreen,
 })
 
 MapStack.navigationOptions = {
@@ -79,12 +79,12 @@ export default createBottomTabNavigator({
 }, {
     tabBarOptions: {
       showLabel: true,
-      activeTintColor: Colors.redible.accent,
+      activeTintColor: Colors.redible.main,
       inactiveTintColor: Colors.redible.lavenderGray,
       style: {
         backgroundColor: Colors.redible.babyPowder,
         borderTopWidth: 0,
-        shadowColor: "rgb(0, 0, 0)",
+        shadowColor: "rgba(0, 0, 0, 0.4)",
         shadowOffset: { height: 5, width: 0 },
         shadowOpacity: 1,
         shadowRadius: 3,

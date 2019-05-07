@@ -18,7 +18,7 @@ export default class FiltersList extends Component {
     prefix = Platform.OS === "ios" ? "ios" : "md"
 
     return (
-      <TouchableOpacity style={styles.container} onPress={() => this.setState({ selected: true })}>
+      <TouchableOpacity style={styles.container} onPress={() => this.setState({ selected: !selected })}>
         <Icon.Ionicons
           name={`${prefix}-${name}`}
           size={size}

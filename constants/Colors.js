@@ -25,5 +25,6 @@ export default {
     cream: "#F4F4ED",
     raspberry: "#F61067",
     star: "#E6AF2E"
-  }
+  },
+  searchModal: "rgba(252, 252, 252, 0.9)"
 }

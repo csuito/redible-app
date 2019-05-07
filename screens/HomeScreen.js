@@ -1,19 +1,16 @@
 import React from "react"
 import {
-  Platform,
   ScrollView,
   StyleSheet,
   View,
   Text,
-  TouchableOpacity
 } from "react-native"
-import { Icon } from "expo"
 
 // Components
 import SearchHeader from "../components/headers/SearchHeader"
+import SearchModal from "../components/modals/SearchModal"
 import RestaurantBanner from "../components/RestaurantBanner"
 import RestaurantCard from "../components/RestaurantCard"
-import FiltersList from "../components/Filters"
 
 // Constants
 import Layout from "../constants/Layout"
@@ -22,18 +19,38 @@ import Colors from "../constants/Colors"
 export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      filtersVisible: false
+    this.state = {}
+  }
+
+  static navigationOptions = ({ navigation }) => {
+    return {
+      header: <SearchHeader navigation={navigation} />
     }
   }
-  static navigationOptions = {
-    header: <SearchHeader />
+
+  componentDidMount() {
+    this._addModalSub(this.props.navigation)
+  }
+
+  /**
+	* Adds modal subscription
+	*  @param {Object} navigation
+	*/
+  _addModalSub = navigation => {
+    modalSub = navigation.addListener("willBlur", () => {
+      navigation.setParams({ modalVisible: false })
+    })
+  }
+
+  _hideModal = () => {
+    this.props.navigation.setParams({ modalVisible: false })
   }
 
   _buildFeaturedList = () => {
+    const types = ["Featured", "Top rated", "Healthy"]
     let featured = []
     for (let i = 0; i < 3; i++) {
-      featured.push(<RestaurantBanner key={i} />)
+      featured.push(<RestaurantBanner key={i} type={types[i]} />)
     }
     return featured
   }
@@ -49,31 +66,26 @@ export default class HomeScreen extends React.Component {
   render() {
     const restaurantList = this._buildRestaurantList(),
       featuredList = this._buildFeaturedList(),
-      { filtersVisible } = this.state
+      { navigation } = this.props
+
+    let modalVisible = navigation.getParam("modalVisible") || false
 
     return (
       <View style={styles.container}>
+
+        <SearchModal
+          navigation={navigation}
+          _onPress={this._hideModal}
+          modalVisible={modalVisible} />
+
         <ScrollView style={styles.contentContainer}>
           <View>
-            <ScrollView horizontal={true}>
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
               {
                 featuredList.map(restaurant => restaurant)
               }
             </ScrollView>
-            <TouchableOpacity style={styles.filterButton} onPress={() => this.setState({ filtersVisible: !filtersVisible })}>
-              <Icon.Ionicons
-                name={"md-funnel"}
-                size={Layout.fontSize.contentTitle}
-                color={Colors.basic.white} />
-              <Text style={styles.filterButtonText}>{` Top rated`}</Text>
-            </TouchableOpacity>
-            {
-              filtersVisible ?
-                <View style={styles.filtersContainer}>
-                  <FiltersList />
-                </View> :
-                null
-            }
+            <Text style={styles.subtitle}>Top picks</Text>
             {
               restaurantList.map(restaurant => restaurant)
             }
@@ -92,25 +104,11 @@ const styles = StyleSheet.create({
   contentContainer: {
     backgroundColor: Colors.basic.white
   },
-  filterButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 7.5,
-    shadowColor: "rgb(0, 0, 0)",
-    shadowOffset: { height: 5, width: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 3,
-    elevation: 5,
-    backgroundColor: Colors.redible.raspberry,
-    borderRadius: 25,
-    marginLeft: Layout.window.width / 4,
-    marginRight: Layout.window.width / 4,
-    marginBottom: 15
-  },
-  filterButtonText: {
-    fontSize: Layout.fontSize.mainContent,
-    color: Colors.basic.white,
+  subtitle: {
+    marginBottom: 15,
+    textAlign: "center",
+    color: Colors.redible.accent,
+    fontSize: Layout.fontSize.contentTitle
   },
   filtersContainer: {
     marginBottom: 15,
@@ -118,6 +116,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 8,
     padding: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
     backgroundColor: Colors.redible.cream
   },
 })

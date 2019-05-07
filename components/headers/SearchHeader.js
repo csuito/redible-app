@@ -1,6 +1,7 @@
 import React, { Component } from "react"
-import { StyleSheet, StatusBar, View } from "react-native"
+import { Platform, StyleSheet, StatusBar, View, TouchableOpacity } from "react-native"
 import { Searchbar } from "react-native-paper"
+import { Icon } from 'expo'
 
 // Constants
 import Layout from "../../constants/Layout"
@@ -16,8 +17,15 @@ export default class SearchHeader extends Component {
       searchTerm: ""
     }
   }
+
+  _showModal = navigation => {
+    navigation.setParams({ modalVisible: true })
+  }
+
   render() {
-    const { searchTerm } = this.state
+    const { searchTerm } = this.state,
+      prefix = Platform.OS === "ios" ? "ios" : "md"
+
     return (
       <View style={styles.container}>
         <Searchbar
@@ -27,6 +35,12 @@ export default class SearchHeader extends Component {
           style={styles.searchBar}
           inputStyle={styles.searchText}
         />
+        <TouchableOpacity style={styles.iconContainer} onPress={() => this._showModal(this.props.navigation)}>
+          <Icon.Ionicons
+            name={`${prefix}-options`}
+            size={28}
+            color={Colors.basic.white} />
+        </TouchableOpacity>
       </View>
     )
   }
@@ -34,23 +48,32 @@ export default class SearchHeader extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: "row",
     paddingTop: 15 + StatusBar.currentHeight,
     paddingLeft: 15,
     paddingRight: 15,
     height: Layout.androidHeaderHeight + StatusBar.currentHeight,
     backgroundColor: Colors.redible.main,
-    shadowColor: "rgb(0, 0, 0)",
+    shadowColor: "rgba(0, 0, 0, 0.4)",
     shadowOffset: { height: 5, width: 0 },
     shadowOpacity: 1,
     shadowRadius: 3,
     elevation: 5,
   },
   searchBar: {
+    flex: 1,
     padding: 0,
-    height: "70%"
+    height: "70%",
   },
   searchText: {
     fontSize: 16,
     padding: 0
+  },
+  iconContainer: {
+    flexDirection: "row",
+    height: "70%",
+    marginLeft: 15,
+    alignItems: "center",
+    justifyContent: "flex-end"
   }
 })

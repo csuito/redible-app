@@ -17,7 +17,7 @@ export default class RestaurantCard extends Component {
   render() {
     const iconPrefix = Platform.OS === "ios" ? "ios" : "md"
     return (
-      <TouchableOpacity style={styles.container}>
+      <View style={styles.container}>
         <View>
           <Image style={styles.image} source={require("../assets/images/paella.jpg")} />
         </View>
@@ -49,7 +49,7 @@ export default class RestaurantCard extends Component {
             </Text>
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
     )
   }
 }
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     flexDirection: "row",
     overflow: "hidden",
-    shadowColor: "rgb(0, 0, 0)",
+    shadowColor: "rgba(0, 0, 0, 0.4)",
     shadowOffset: { height: 5, width: 0 },
     shadowOpacity: 1,
     shadowRadius: 3,
