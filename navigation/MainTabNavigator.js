@@ -5,6 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from "react-navigation
 // Screens
 import HomeScreen from "../screens/HomeScreen"
 import MapScreen from "../screens/Map"
+import FavoritesScreen from "../screens/FavoritesScreen"
 import SettingsScreen from "../screens/SettingsScreen"
 
 // Components
@@ -44,7 +45,7 @@ MapStack.navigationOptions = {
 }
 
 const FavoritesStack = createStackNavigator({
-  Favorites: SettingsScreen,
+  Favorites: FavoritesScreen,
 })
 
 FavoritesStack.navigationOptions = {

@@ -1,46 +1,63 @@
 import React, { Component } from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { MapView } from "expo"
+
+// Components
+import SearchHeader from "../components/headers/SearchHeader"
 
 export default class MapScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      region: {
+      mapCenter: {
         latitude: 41.397465,
         longitude: 2.188411,
-        latitudeDelta: 0.05,
-        longitudeDelta: 0.05,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      },
+      restaurantMarker: {
+        latitude: 41.397465,
+        longitude: 2.188411,
       }
     }
-    this.mapRef = React.createRef()
   }
 
-  componentDidMount() {
-    this.mapRef.animateToRegion(this.state.region)
+  static navigationOptions = ({ navigation }) => {
+    return {
+      header: <SearchHeader navigation={navigation} />
+    }
   }
 
-  _onRegionChange = region => {
-    console.log("CHANGING REGION \n", region)
-    this.setState({ region })
+  _onRegionChange = mapCenter => {
+    this.setState({ mapCenter })
   }
 
   render() {
-    const { region } = this.state
+    const { mapCenter, restaurantMarker } = this.state
+
     return (
-      region ?
-        <MapView
-          ref={this.mapRef}
-          style={styles.map}
-          initialRegion={region}
-          onRegionChange={this._onRegionChange}
-        /> :
+      mapCenter ?
+        <View style={styles.mapContainer}>
+          <MapView
+            style={styles.map}
+            initialRegion={mapCenter}
+            onRegionChange={this._onRegionChange}>
+            <MapView.Marker
+              coordinate={restaurantMarker}
+              title={"Forastera Restaurant"}
+            />
+          </MapView>
+        </View>
+        :
         null
     )
   }
 }
 
 const styles = StyleSheet.create({
+  mapContainer: {
+    flex: 1,
+  },
   map: {
     flex: 1,
   }
