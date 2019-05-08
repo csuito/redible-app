@@ -1,0 +1,79 @@
+import React from "react"
+import { StyleSheet, Platform, Text, View } from "react-native"
+import { Icon } from "expo"
+
+// Components
+import StarRow from "./StarRow"
+
+// Constants
+import Layout from "../constants/Layout"
+import Colors from "../constants/Colors"
+
+const DescriptionCard = props => {
+  const prefix = Platform.OS === "ios" ? "ios" : "md"
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.contentTitle}>
+          {`Forastera Restaurant`}
+        </Text>
+        <StarRow prefix={prefix} rating={4.3} />
+      </View>
+      <View style={styles.descriptionContainer}>
+        <Text style={{ ...styles.description, marginBottom: 10 }}>
+          <Icon.Ionicons
+            name={`${prefix}-locate`}
+            color={Colors.redible.accent}
+            size={Layout.fontSize.mediumText}
+          />
+          {` Carrer de Sancho de Ávila, 22, 08018 Barcelona`}</Text>
+        <Text style={styles.description}>
+          <Icon.Ionicons
+            name={`${prefix}-information-circle-outline`}
+            color={Colors.redible.accent}
+            size={Layout.fontSize.mediumText}
+          />{` Nice place, good vibes and economically priced lunch menu`}</Text>
+      </View>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    position: "absolute",
+    bottom: 35,
+    left: 15,
+    right: 15,
+    backgroundColor: Colors.basic.white,
+    borderRadius: 8,
+    shadowColor: Colors.shadow,
+    shadowOffset: { height: 5, width: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    backgroundColor: Colors.redible.main,
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 10,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8
+  },
+  contentTitle: {
+    fontSize: Layout.fontSize.mainContent,
+    color: Colors.basic.white,
+    fontWeight: "bold"
+  },
+  descriptionContainer: {
+    padding: 15
+  },
+  description: {
+    color: Colors.redible.accent,
+    fontSize: Layout.fontSize.mediumText
+  }
+})
+
+export default DescriptionCard

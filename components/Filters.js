@@ -37,21 +37,17 @@ export default class FiltersList extends Component {
           textColor={Colors.redible.accent} />
         <View style={styles.buttonsContainer}>
           <Button
-            row
-            name={"close"}
-            fontSize={Layout.fontSize.mainContent}
-            fontColor={Colors.basic.white}
-            backgroundColor={Colors.redible.raspberry}
+            iconName={"close"}
             text={"Cancel"}
+            containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry }}
+            textStyles={{ fontSize: Layout.fontSize.mainContent, color: Colors.basic.white }}
             _onPress={_onPress}
           />
           <Button
-            row
-            name={"checkmark"}
-            fontSize={Layout.fontSize.mainContent}
-            fontColor={Colors.basic.white}
-            backgroundColor={Colors.redible.main}
+            iconName={"checkmark"}
             text={"Apply"}
+            containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.main }}
+            textStyles={{ fontSize: Layout.fontSize.mainContent, color: Colors.basic.white }}
             _onPress={_onPress}
           />
         </View>

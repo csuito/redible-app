@@ -4,10 +4,9 @@ import { Icon } from 'expo'
 
 // Components
 import WithBackIconHeader from "../components/headers/WithBackIconHeader"
-import RestaurantCard from "../components/RestaurantCard"
+import DishCard from "../components/DishCard"
 
 // Constants
-import Layout from "../constants/Layout"
 import Colors from "../constants/Colors"
 
 
@@ -18,8 +17,6 @@ export default class FavoritesScreen extends Component {
   }
 
   static navigationOptions = ({ navigation }) => {
-    const prefix = Platform.OS === "ios" ? "ios" : "md"
-
     return {
       header: <WithBackIconHeader text={"Favorites"} iconName={"arrow-back"} color={Colors.basic.white} />
     }
@@ -28,7 +25,7 @@ export default class FavoritesScreen extends Component {
   _buildRestaurantList = () => {
     let restaurantList = []
     for (let i = 0; i <= 8; i++) {
-      restaurantList.push(<RestaurantCard key={i} />)
+      restaurantList.push(<DishCard key={i} />)
     }
     return restaurantList
   }
@@ -39,7 +36,9 @@ export default class FavoritesScreen extends Component {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.contentContainer}>
-          {restaurantList.map(restaurant => restaurant)}
+          <View style={styles.listContainer}>
+            {restaurantList.map(restaurant => restaurant)}
+          </View>
         </ScrollView>
       </View>
     )
@@ -50,10 +49,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.basic.white,
-    paddingTop: 30,
-    paddingBottom: 30
   },
   contentContainer: {
-    backgroundColor: Colors.basic.white
+    backgroundColor: Colors.basic.white,
   },
+  listContainer: {
+    marginTop: 15,
+    marginBottom: 15
+  }
 })

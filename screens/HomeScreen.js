@@ -1,22 +1,17 @@
-import React from "react"
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  Text,
-} from "react-native"
+import React, { Component } from "react"
+import { ScrollView, StyleSheet, View, Text } from "react-native"
 
 // Components
 import SearchHeader from "../components/headers/SearchHeader"
 import SearchModal from "../components/modals/SearchModal"
 import RestaurantBanner from "../components/RestaurantBanner"
-import RestaurantCard from "../components/RestaurantCard"
+import DishCard from "../components/DishCard"
 
 // Constants
 import Layout from "../constants/Layout"
 import Colors from "../constants/Colors"
 
-export default class HomeScreen extends React.Component {
+export default class HomeScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -55,16 +50,16 @@ export default class HomeScreen extends React.Component {
     return featured
   }
 
-  _buildRestaurantList = () => {
-    let restaurantList = []
+  _buildDishList = () => {
+    let dishList = []
     for (let i = 0; i <= 8; i++) {
-      restaurantList.push(<RestaurantCard key={i} />)
+      dishList.push(<DishCard key={i} />)
     }
-    return restaurantList
+    return dishList
   }
 
   render() {
-    const restaurantList = this._buildRestaurantList(),
+    const dishList = this._buildDishList(),
       featuredList = this._buildFeaturedList(),
       { navigation } = this.props
 
@@ -87,7 +82,7 @@ export default class HomeScreen extends React.Component {
             </ScrollView>
             <Text style={styles.subtitle}>Top picks</Text>
             {
-              restaurantList.map(restaurant => restaurant)
+              dishList.map(dish => dish)
             }
           </View>
         </ScrollView>

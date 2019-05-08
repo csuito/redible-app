@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { StyleSheet, View, Image, Text, Platform, TouchableOpacity } from "react-native"
+import { StyleSheet, View, Image, Text, Platform } from "react-native"
 import { Icon } from "expo"
 
 // Constants
@@ -9,7 +9,7 @@ import Colors from "../constants/Colors"
 /**
  * Restaurant card for main screen
  */
-export default class RestaurantCard extends Component {
+export default class DishCard extends Component {
   constructor(props) {
     super(props)
     this.state = {}

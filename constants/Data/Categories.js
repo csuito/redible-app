@@ -11,7 +11,7 @@ export default [
   { value: "Kebab" },
   { value: "Korean" },
   { value: "Italian" },
-  { vale: "Mediterranean" },
+  { value: "Mediterranean" },
   { value: "Mexican" },
   { value: "Pizza" },
   { value: "Poke" },

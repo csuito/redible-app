@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React from "react"
 import { Platform, StyleSheet, StatusBar, View, TouchableOpacity, Text } from "react-native"
 import { Icon } from 'expo'
 
@@ -9,24 +9,22 @@ import Colors from "../../constants/Colors"
 /**
  * Back Icon Header
  */
-export default class WithBackIconHeader extends Component {
-  render() {
-    const prefix = Platform.OS === "ios" ? "ios" : "md",
-      { iconName, text, color } = this.props
+const WithBackIconHeader = props => {
+  const prefix = Platform.OS === "ios" ? "ios" : "md",
+    { iconName, text, color } = props
 
-    return (
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.icon}>
-          <Icon.Ionicons
-            name={`${prefix}-${iconName}`}
-            color={color}
-            size={28}
-          />
-        </TouchableOpacity>
-        <Text style={{ ...styles.title, color }}>{text}</Text>
-      </View>
-    )
-  }
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.icon}>
+        <Icon.Ionicons
+          name={`${prefix}-${iconName}`}
+          color={color}
+          size={28}
+        />
+      </TouchableOpacity>
+      <Text style={{ ...styles.title, color }}>{text}</Text>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -38,20 +36,20 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     height: Layout.androidHeaderHeight + StatusBar.currentHeight,
     backgroundColor: Colors.redible.main,
-    shadowColor: "rgba(0, 0, 0, 0.4)",
+    shadowColor: Colors.shadow,
     shadowOffset: { height: 5, width: 0 },
     shadowOpacity: 1,
     shadowRadius: 3,
     elevation: 5,
   },
   icon: {
-    flex: 1,
-    textAlign: "left"
+    textAlign: "left",
   },
   title: {
     flex: 1,
-    fontSize: Layout.fontSize.title,
-    fontWeight: "bold",
-    textAlign: "center"
+    fontSize: Layout.fontSize.largeText,
+    textAlign: "center",
   }
 })
+
+export default WithBackIconHeader

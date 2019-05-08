@@ -1,9 +1,15 @@
 import React, { Component } from "react"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, View, Text } from "react-native"
 import { MapView } from "expo"
+const { Marker } = MapView
 
 // Components
 import SearchHeader from "../components/headers/SearchHeader"
+import DescriptionCard from "../components/MapDescription"
+
+// Constants
+import Layout from "../constants/Layout"
+import Colors from "../constants/Colors"
 
 export default class MapScreen extends Component {
   constructor(props) {
@@ -18,7 +24,8 @@ export default class MapScreen extends Component {
       restaurantMarker: {
         latitude: 41.397465,
         longitude: 2.188411,
-      }
+      },
+      showDescription: false
     }
   }
 
@@ -33,7 +40,7 @@ export default class MapScreen extends Component {
   }
 
   render() {
-    const { mapCenter, restaurantMarker } = this.state
+    const { mapCenter, restaurantMarker, showDescription } = this.state
 
     return (
       mapCenter ?
@@ -42,11 +49,19 @@ export default class MapScreen extends Component {
             style={styles.map}
             initialRegion={mapCenter}
             onRegionChange={this._onRegionChange}>
-            <MapView.Marker
+            <Marker
               coordinate={restaurantMarker}
               title={"Forastera Restaurant"}
+              pinColor={Colors.redible.main}
+              onPress={() => this.setState({ showDescription: true })}
             />
           </MapView>
+          {
+            showDescription ?
+              <DescriptionCard />
+              :
+              null
+          }
         </View>
         :
         null
@@ -57,8 +72,9 @@ export default class MapScreen extends Component {
 const styles = StyleSheet.create({
   mapContainer: {
     flex: 1,
+    position: "relative"
   },
   map: {
     flex: 1,
-  }
+  },
 })

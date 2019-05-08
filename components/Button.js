@@ -1,53 +1,46 @@
-import React, { Component } from "react"
-import { Platform, StyleSheet, Text, View, TouchableOpacity } from "react-native"
+import React from "react"
+import { Platform, StyleSheet, Text, TouchableOpacity } from "react-native"
 import { Icon } from "expo"
 
 // Constants
 import Colors from "../constants/Colors"
-import Layout from "../constants/Layout"
 
 /**
  * Generic button component
  */
-export default class Button extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-  render() {
-    const { row, margins, text, name, fontSize, fontColor, backgroundColor, _onPress } = this.props,
-      flexDirection = row ? "row" : "column",
-      prefix = Platform.OS === "ios" ? "ios" : "md"
+const Button = props => {
+  const prefix = Platform.OS === "ios" ? "ios" : "md",
+    { text, iconName, _onPress, containerStyles, textStyles } = props
 
-    return (
-      <TouchableOpacity style={{ ...styles.container, flexDirection, margins, backgroundColor, fontWeight: "bold" }} onPress={_onPress}>
-        {
-          name && fontSize && fontColor ?
-            <Icon.Ionicons
-              name={`${prefix}-${name}`}
-              size={fontSize}
-              color={fontColor} /> :
-            null
-        }
-        <Text style={{ fontSize, color: fontColor }}>{` ${text}`}</Text>
-      </TouchableOpacity>
-    )
-  }
+  return (
+    <TouchableOpacity style={{ ...styles.default, ...containerStyles }} onPress={_onPress}>
+      {
+        iconName ?
+          <Icon.Ionicons
+            name={`${prefix}-${iconName}`}
+            size={textStyles.fontSize}
+            color={textStyles.color} /> :
+          null
+      }
+      <Text style={{ ...textStyles }}>{` ${text}`}</Text>
+    </TouchableOpacity>
+  )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  default: {
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
     paddingLeft: 20,
     paddingRight: 20,
-    shadowColor: "rgba(0, 0, 0, 0.4)",
+    shadowColor: Colors.shadow,
     shadowOffset: { height: 2, width: 0 },
     shadowOpacity: 1,
     shadowRadius: 3,
     elevation: 2,
     borderRadius: 25,
-    marginBottom: 15
-  },
+  }
 })
+
+export default Button

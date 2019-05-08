@@ -1,18 +1,7 @@
-const tintColor = '#2f95dc'
-
 export default {
-  tintColor,
-  tabIconDefault: '#ccc',
-  tabIconSelected: tintColor,
-  tabBar: '#fefefe',
-  errorBackground: 'red',
-  errorText: '#fff',
-  warningBackground: '#EAEB5E',
-  warningText: '#666804',
-  noticeBackground: tintColor,
-  noticeText: '#fff',
   basic: {
-    white: "#FFF"
+    white: "#FFF",
+    black: "#000"
   },
   redible: {
     main: "#6DECAF", //"#2AFC98",
@@ -24,7 +13,8 @@ export default {
     blue: "#011627",
     cream: "#F4F4ED",
     raspberry: "#F61067",
-    star: "#E6AF2E"
+    star: "#FCCE62"
   },
-  searchModal: "rgba(252, 252, 252, 0.9)"
+  searchModal: "rgba(252, 252, 252, 0.9)",
+  shadow: "rgba(0, 0, 0, 0.4)"
 }
