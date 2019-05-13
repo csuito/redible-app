@@ -11,11 +11,11 @@ import Colors from "../../constants/Colors"
  */
 const WithBackIconHeader = props => {
   const prefix = Platform.OS === "ios" ? "ios" : "md",
-    { iconName, text, color } = props
+    { iconName, text, color, navigation } = props
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.icon}>
+      <TouchableOpacity style={styles.icon} onPress={() => navigation.goBack(null)}>
         <Icon.Ionicons
           name={`${prefix}-${iconName}`}
           color={color}

@@ -4,9 +4,13 @@ import { createStackNavigator, createBottomTabNavigator } from "react-navigation
 
 // Screens
 import HomeScreen from "../screens/HomeScreen"
+import DetailsScreen from "../screens/DetailsScreen"
+
 import MapScreen from "../screens/Map"
+
 import FavoritesScreen from "../screens/FavoritesScreen"
-import SettingsScreen from "../screens/SettingsScreen"
+
+import ProfileScreen from "../screens/Profile"
 
 // Components
 import TabBarIcon from "../components/TabBarIcon"
@@ -18,6 +22,7 @@ const prefix = Platform.OS === "ios" ? "ios" : "md"
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
+  Details: DetailsScreen
 })
 
 HomeStack.navigationOptions = {
@@ -59,7 +64,7 @@ FavoritesStack.navigationOptions = {
 }
 
 const ProfileStack = createStackNavigator({
-  Profile: SettingsScreen
+  Profile: ProfileScreen
 })
 
 ProfileStack.navigationOptions = {
@@ -79,13 +84,13 @@ export default createBottomTabNavigator({
   ProfileStack
 }, {
     tabBarOptions: {
-      showLabel: true,
+      showLabel: false,
       activeTintColor: Colors.redible.main,
       inactiveTintColor: Colors.redible.lavenderGray,
       style: {
         backgroundColor: Colors.redible.babyPowder,
         borderTopWidth: 0,
-        shadowColor: "rgba(0, 0, 0, 0.4)",
+        shadowColor: Colors.shadow,
         shadowOffset: { height: 5, width: 0 },
         shadowOpacity: 1,
         shadowRadius: 3,

@@ -5,6 +5,7 @@ const { Marker } = MapView
 
 // Components
 import SearchHeader from "../components/headers/SearchHeader"
+import SearchModal from "../components/modals/SearchModal"
 import DescriptionCard from "../components/MapDescription"
 
 // Constants
@@ -25,7 +26,8 @@ export default class MapScreen extends Component {
         latitude: 41.397465,
         longitude: 2.188411,
       },
-      showDescription: false
+      showDescription: false,
+      modalVisible: false
     }
   }
 
@@ -35,30 +37,58 @@ export default class MapScreen extends Component {
     }
   }
 
+  componentDidMount() {
+    this._addModalSub(this.props.navigation)
+  }
+
+  /**
+  * Adds modal subscription
+  *  @param {Object} navigation
+  */
+  _addModalSub = navigation => {
+    modalSub = navigation.addListener("willBlur", () => {
+      navigation.setParams({ modalVisible: false })
+    })
+  }
+
+  _hideModal = () => {
+    this.props.navigation.setParams({ modalVisible: false })
+  }
+
   _onRegionChange = mapCenter => {
     this.setState({ mapCenter })
   }
 
   render() {
-    const { mapCenter, restaurantMarker, showDescription } = this.state
+    const { mapCenter, restaurantMarker, showDescription } = this.state,
+      { navigation } = this.props
+
+    let modalVisible = navigation.getParam("modalVisible") || false
 
     return (
       mapCenter ?
         <View style={styles.mapContainer}>
+
+          <SearchModal
+            navigation={navigation}
+            _onPress={this._hideModal}
+            modalVisible={modalVisible} />
+
           <MapView
             style={styles.map}
             initialRegion={mapCenter}
             onRegionChange={this._onRegionChange}>
+
             <Marker
               coordinate={restaurantMarker}
-              title={"Forastera Restaurant"}
               pinColor={Colors.redible.main}
               onPress={() => this.setState({ showDescription: true })}
             />
+
           </MapView>
           {
             showDescription ?
-              <DescriptionCard />
+              <DescriptionCard navigation={navigation} _onPress={() => this.setState({ showDescription: false })} />
               :
               null
           }

@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { StyleSheet, View, Image, Text, Platform } from "react-native"
+import { StyleSheet, View, Image, Text, Platform, TouchableWithoutFeedback } from "react-native"
 import { Icon } from "expo"
 
 // Constants
@@ -14,42 +14,47 @@ export default class DishCard extends Component {
     super(props)
     this.state = {}
   }
+
   render() {
-    const iconPrefix = Platform.OS === "ios" ? "ios" : "md"
+    const iconPrefix = Platform.OS === "ios" ? "ios" : "md",
+      { navigation, _onPress } = this.props
+
     return (
-      <View style={styles.container}>
-        <View>
-          <Image style={styles.image} source={require("../assets/images/paella.jpg")} />
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.dishName}>
-            <Icon.Ionicons
-              name={`${iconPrefix}-restaurant`}
-              size={Layout.fontSize.contentTitle}
-            />{` Paella Valenciana`}</Text>
-          <Text style={styles.text}>
-            <Icon.Ionicons
-              name={`${iconPrefix}-locate`}
-              size={Layout.fontSize.mainContent}
-            />{` Forastera Restaurant`}</Text>
-          <Text style={styles.text}>
-            <Icon.Ionicons
-              name={`${iconPrefix}-time`}
-              size={Layout.fontSize.mainContent}
-            />{` Pick-up: 20:00 - 22:30`}
-          </Text>
-          <View style={styles.footer}>
-            <Text style={styles.price}>€ 5.50</Text>
-            <Text style={styles.rating}>
+      <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details") : _onPress ? _onPress() : null}>
+        <View style={styles.container}>
+          <View>
+            <Image style={styles.image} source={require("../assets/images/paella.jpg")} />
+          </View>
+          <View style={styles.textContainer}>
+            <Text style={styles.dishName}>
               <Icon.Ionicons
-                name={`${iconPrefix}-star`}
-                size={Layout.fontSize.mediumText}
-                color={Colors.redible.star}
-              />{` 4.2 Good`}
+                name={`${iconPrefix}-restaurant`}
+                size={Layout.fontSize.contentTitle}
+              />{` Paella Valenciana`}</Text>
+            <Text style={styles.text}>
+              <Icon.Ionicons
+                name={`${iconPrefix}-pin`}
+                size={Layout.fontSize.mainContent}
+              />{` Forastera Restaurant`}</Text>
+            <Text style={styles.text}>
+              <Icon.Ionicons
+                name={`${iconPrefix}-time`}
+                size={Layout.fontSize.mainContent}
+              />{` Pick-up: 20:00 - 22:30`}
             </Text>
+            <View style={styles.footer}>
+              <Text style={styles.price}>€ 5.50</Text>
+              <Text style={styles.rating}>
+                <Icon.Ionicons
+                  name={`${iconPrefix}-star`}
+                  size={Layout.fontSize.mediumText}
+                  color={Colors.redible.star}
+                />{` 4.2 Good`}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     )
   }
 }
@@ -62,7 +67,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     flexDirection: "row",
     overflow: "hidden",
-    shadowColor: "rgba(0, 0, 0, 0.4)",
+    shadowColor: Colors.shadow,
     shadowOffset: { height: 5, width: 0 },
     shadowOpacity: 1,
     shadowRadius: 3,

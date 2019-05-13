@@ -1,16 +1,18 @@
 import React from "react"
-import { StyleSheet, Platform, Text, View } from "react-native"
+import { StyleSheet, Platform, Text, View, TouchableWithoutFeedback } from "react-native"
 import { Icon } from "expo"
 
 // Components
 import StarRow from "./StarRow"
+import Button from "./Button"
 
 // Constants
 import Layout from "../constants/Layout"
 import Colors from "../constants/Colors"
 
 const DescriptionCard = props => {
-  const prefix = Platform.OS === "ios" ? "ios" : "md"
+  const prefix = Platform.OS === "ios" ? "ios" : "md",
+    { navigation, _onPress } = props
 
   return (
     <View style={styles.container}>
@@ -23,7 +25,7 @@ const DescriptionCard = props => {
       <View style={styles.descriptionContainer}>
         <Text style={{ ...styles.description, marginBottom: 10 }}>
           <Icon.Ionicons
-            name={`${prefix}-locate`}
+            name={`${prefix}-pin`}
             color={Colors.redible.accent}
             size={Layout.fontSize.mediumText}
           />
@@ -33,7 +35,23 @@ const DescriptionCard = props => {
             name={`${prefix}-information-circle-outline`}
             color={Colors.redible.accent}
             size={Layout.fontSize.mediumText}
-          />{` Nice place, good vibes and economically priced lunch menu`}</Text>
+          />{` Nice place, good vibes and an economically priced lunch menu`}</Text>
+      </View>
+      <View style={styles.buttonsContainer}>
+        <Button
+          iconName={"close"}
+          text={"Close"}
+          containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry, width: 100 }}
+          textStyles={{ fontSize: Layout.fontSize.smallText, color: Colors.basic.white }}
+          _onPress={_onPress}
+        />
+        <Button
+          iconName={"checkmark"}
+          text={"Go"}
+          containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.main, width: 100 }}
+          textStyles={{ fontSize: Layout.fontSize.smallText, color: Colors.basic.white }}
+          _onPress={() => navigation.navigate("Details")}
+        />
       </View>
     </View>
   )
@@ -73,7 +91,16 @@ const styles = StyleSheet.create({
   description: {
     color: Colors.redible.accent,
     fontSize: Layout.fontSize.mediumText
-  }
+  },
+  buttonsContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    marginLeft: 15,
+    marginRight: 15,
+    paddingBottom: 15
+  },
 })
 
 export default DescriptionCard

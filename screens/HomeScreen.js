@@ -42,20 +42,20 @@ export default class HomeScreen extends Component {
   }
 
   _buildFeaturedList = () => {
-    const types = ["Featured", "Top rated", "Healthy"]
+    const types = ["Recommended", "Top deal", "Top rated", "Healthy", "Trending", "Near me"]
     let featured = []
-    for (let i = 0; i < 3; i++) {
-      featured.push(<RestaurantBanner key={i} type={types[i]} />)
+    for (let i = 0; i < 6; i++) {
+      featured.push(<RestaurantBanner key={i} type={types[i]} navigation={this.props.navigation} />)
     }
-    return featured
+    return featured.map(restaurant => restaurant)
   }
 
   _buildDishList = () => {
     let dishList = []
     for (let i = 0; i <= 8; i++) {
-      dishList.push(<DishCard key={i} />)
+      dishList.push(<DishCard key={i} navigation={this.props.navigation} />)
     }
-    return dishList
+    return dishList.map(dish => dish)
   }
 
   render() {
@@ -73,17 +73,15 @@ export default class HomeScreen extends Component {
           _onPress={this._hideModal}
           modalVisible={modalVisible} />
 
+        <Text style={{ ...styles.subtitle, marginTop: 15, marginBottom: 0 }}>Restaurants</Text>
+
         <ScrollView style={styles.contentContainer}>
           <View>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-              {
-                featuredList.map(restaurant => restaurant)
-              }
+              {featuredList}
             </ScrollView>
-            <Text style={styles.subtitle}>Top picks</Text>
-            {
-              dishList.map(dish => dish)
-            }
+            <Text style={styles.subtitle}>Meals</Text>
+            {dishList}
           </View>
         </ScrollView>
       </View>
@@ -97,22 +95,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.basic.white,
   },
   contentContainer: {
-    backgroundColor: Colors.basic.white
+    backgroundColor: Colors.basic.white,
   },
   subtitle: {
     marginBottom: 15,
     textAlign: "center",
     color: Colors.redible.accent,
     fontSize: Layout.fontSize.contentTitle
-  },
-  filtersContainer: {
-    marginBottom: 15,
-    marginLeft: 15,
-    marginRight: 15,
-    borderRadius: 8,
-    padding: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
-    backgroundColor: Colors.redible.cream
   },
 })

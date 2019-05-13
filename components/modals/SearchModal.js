@@ -1,14 +1,12 @@
 import React, { Component } from "react"
-import { Platform, Modal, StyleSheet, View, Text, TouchableOpacity } from "react-native"
+import { Platform, Modal, StyleSheet, View, TouchableOpacity } from "react-native"
 import { Icon } from "expo"
 
 // Components
 import FiltersList from "../Filters"
-import Button from "../Button"
 
 // Constants
 import Colors from "../../constants/Colors"
-import Layout from "../../constants/Layout"
 
 export default class SearchModal extends Component {
   render() {

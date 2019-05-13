@@ -29,7 +29,7 @@ export default class SearchHeader extends Component {
     return (
       <View style={styles.container}>
         <Searchbar
-          placeholder="Search Redible"
+          placeholder="Search restaurants, cuisines..."
           onChangeText={searchTerm => this.setState({ searchTerm })}
           value={searchTerm}
           style={styles.searchBar}
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     height: Layout.androidHeaderHeight + StatusBar.currentHeight,
     backgroundColor: Colors.redible.main,
-    shadowColor: "rgba(0, 0, 0, 0.4)",
+    shadowColor: Colors.shadow,
     shadowOffset: { height: 5, width: 0 },
     shadowOpacity: 1,
     shadowRadius: 3,
@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
     height: "70%",
+    borderRadius: 25
   },
   searchText: {
     fontSize: 16,

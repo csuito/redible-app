@@ -1,10 +1,9 @@
 import React, { Component } from "react"
-import { Platform, StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-native"
-import { Icon } from 'expo'
+import { StyleSheet, View, ScrollView } from "react-native"
 
 // Components
 import WithBackIconHeader from "../components/headers/WithBackIconHeader"
-import DishCard from "../components/DishCard"
+import RestaurantBanner from "../components/RestaurantBanner"
 
 // Constants
 import Colors from "../constants/Colors"
@@ -18,16 +17,16 @@ export default class FavoritesScreen extends Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      header: <WithBackIconHeader text={"Favorites"} iconName={"arrow-back"} color={Colors.basic.white} />
+      header: <WithBackIconHeader text={"Favorites"} iconName={"arrow-back"} color={Colors.basic.white} navigation={navigation} />
     }
   }
 
   _buildRestaurantList = () => {
     let restaurantList = []
     for (let i = 0; i <= 8; i++) {
-      restaurantList.push(<DishCard key={i} />)
+      restaurantList.push(<RestaurantBanner key={i} navigation={this.props.navigation} type={"Favorite"} />)
     }
-    return restaurantList
+    return restaurantList.map(restaurant => restaurant)
   }
 
   render() {
@@ -37,7 +36,7 @@ export default class FavoritesScreen extends Component {
       <View style={styles.container}>
         <ScrollView style={styles.contentContainer}>
           <View style={styles.listContainer}>
-            {restaurantList.map(restaurant => restaurant)}
+            {restaurantList}
           </View>
         </ScrollView>
       </View>

@@ -1,10 +1,13 @@
 import React, { Component } from "react"
-import { Platform, StyleSheet, View, Image, Text, ImageBackground, TouchableOpacity } from "react-native"
+import { Platform, StyleSheet, View, Text, ImageBackground, TouchableWithoutFeedback } from "react-native"
 import { Icon } from 'expo'
 
 // Constants
 import Layout from "../constants/Layout"
 import Colors from "../constants/Colors"
+
+// Helpers
+import { getIconProperties } from "../helpers/getIconProperties"
 
 /**
  * Restaurant banner for main screen
@@ -15,49 +18,55 @@ export default class RestaurantBanner extends Component {
     this.state = {}
   }
 
-  _getIconProperties = type => {
-    let color, iconName
-    switch (type) {
-      case "Featured":
-        color = Colors.redible.raspberry; iconName = "flame";
-        break
-      case "Top rated":
-        color = Colors.redible.star; iconName = "star";
-        break
-      case "Healthy":
-        color = Colors.redible.main; iconName = "leaf";
-        break
-      default:
-        null
-    }
-    return { color, iconName }
-  }
   render() {
     const iconPrefix = Platform.OS === "ios" ? "ios" : "md",
-      { type } = this.props,
-      { color, iconName } = this._getIconProperties(type)
+      { type, detail, navigation } = this.props,
+      { color, iconName } = getIconProperties(type)
 
     return (
       <ImageBackground style={styles.container} source={require("../assets/images/paella.jpg")}>
-        <View style={styles.contentContainer}>
-          <View style={{ ...styles.verticalLine, backgroundColor: color }}></View>
-          <View style={styles.textContainer}>
-            <View style={styles.ratingContainer}>
-              <Text style={styles.rating}>
-                <Icon.Ionicons
-                  name={`${iconPrefix}-star`}
-                  size={Layout.fontSize.contentTitle} />
-                {` 4.5 Good`}</Text>
+        <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details") : null}>
+          <View style={styles.contentContainer}>
+            <View style={{ ...styles.verticalLine, backgroundColor: color }}></View>
+            <View style={styles.textContainer}>
+              <View style={styles.ratingContainer}>
+                <Text style={styles.rating}>
+                  <Icon.Ionicons
+                    name={`${iconPrefix}-star`}
+                    size={Layout.fontSize.contentTitle} />
+                  {` 4.5 Good`}</Text>
+              </View>
+              {
+                type && !detail ?
+                  <View>
+                    <Text style={{ ...styles.bannerTitle, color }}>
+                      <Icon.Ionicons
+                        name={`${iconPrefix}-${iconName}`}
+                        size={Layout.fontSize.contentTitle}
+                        color={color}
+                      />{` ${type}`}</Text>
+                    <Text style={styles.restaurantTitle}>Forastera Restaurant</Text>
+                  </View>
+                  :
+                  <View>
+                    <Text style={styles.restaurantTitle}>Forastera Restaurant</Text>
+                    <Text style={styles.description}>
+                      <Icon.Ionicons
+                        name={`${iconPrefix}-pin`}
+                        color={Colors.redible.accent}
+                        size={Layout.fontSize.mediumText}
+                      />{` Carrer de Sancho de Ávila, 22, 08018 Barcelona`}</Text>
+                    <Text style={styles.description}>
+                      <Icon.Ionicons
+                        name={`${iconPrefix}-information-circle-outline`}
+                        color={Colors.redible.accent}
+                        size={Layout.fontSize.mediumText}
+                      />{` Nice place, good vibes and an economically priced lunch menu`}</Text>
+                  </View>
+              }
             </View>
-            <Text style={{ ...styles.bannerTitle, color }}>
-              <Icon.Ionicons
-                name={`${iconPrefix}-${iconName}`}
-                size={Layout.fontSize.contentTitle}
-                color={color}
-              />{` ${type}`}</Text>
-            <Text style={styles.restaurantTitle}>Forastera Restaurant</Text>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </ImageBackground>
     )
   }
@@ -82,7 +91,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(255, 255, 255, 0.0)",
+    backgroundColor: "transparent",
     position: "relative"
   },
   verticalLine: {
@@ -99,13 +108,12 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 25,
     paddingBottom: 15,
-    backgroundColor: "rgba(255, 255, 255, 1)",
+    backgroundColor: Colors.basic.white,
     position: "relative",
     overflow: "visible",
   },
   ratingContainer: {
     position: "absolute",
-    zIndex: 1000,
     top: -20,
     right: 15,
     backgroundColor: Colors.basic.white,
@@ -116,7 +124,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     fontSize: Layout.fontSize.contentTitle,
     overflow: "hidden",
-    shadowColor: "rgba(0, 0, 0, 0.4)",
+    shadowColor: Colors.shadow,
     shadowOffset: { height: 3, width: 0 },
     shadowOpacity: 1,
     shadowRadius: 3,
@@ -132,5 +140,10 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 10,
     fontSize: Layout.fontSize.contentTitle
+  },
+  description: {
+    color: Colors.redible.accent,
+    fontSize: Layout.fontSize.mediumText,
+    marginTop: 10
   },
 })

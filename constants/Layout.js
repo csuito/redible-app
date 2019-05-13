@@ -9,6 +9,8 @@ export default {
     height,
   },
   fontSize: {
+    largeIcon: 28,
+    mediumIcon: 24,
     largeText: 22,
     title: 20,
     contentTitle: 18,
