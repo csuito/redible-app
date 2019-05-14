@@ -10,7 +10,7 @@ export const getIconProperties = type => {
       color = Colors.redible.star; iconName = "star";
       break
     case "Healthy":
-      color = Colors.redible.main; iconName = "leaf";
+      color = Colors.redible.green; iconName = "leaf";
       break
     case "Recommended":
       color = Colors.redible.star; iconName = "ribbon";

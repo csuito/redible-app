@@ -15,17 +15,20 @@ import { getIconProperties } from "../helpers/getIconProperties"
 export default class RestaurantBanner extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      showDescription: false
+    }
   }
 
   render() {
     const iconPrefix = Platform.OS === "ios" ? "ios" : "md",
+      { showDescription } = this.state,
       { type, detail, navigation } = this.props,
       { color, iconName } = getIconProperties(type)
 
     return (
-      <ImageBackground style={styles.container} source={require("../assets/images/paella.jpg")}>
-        <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details") : null}>
+      <ImageBackground style={styles.container} source={require("../assets/images/starbucks-logo.jpg")}>
+        <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details") : this.setState({ showDescription: !showDescription })}>
           <View style={styles.contentContainer}>
             <View style={{ ...styles.verticalLine, backgroundColor: color }}></View>
             <View style={styles.textContainer}>
@@ -50,18 +53,24 @@ export default class RestaurantBanner extends Component {
                   :
                   <View>
                     <Text style={styles.restaurantTitle}>Forastera Restaurant</Text>
-                    <Text style={styles.description}>
-                      <Icon.Ionicons
-                        name={`${iconPrefix}-pin`}
-                        color={Colors.redible.accent}
-                        size={Layout.fontSize.mediumText}
-                      />{` Carrer de Sancho de Ávila, 22, 08018 Barcelona`}</Text>
-                    <Text style={styles.description}>
-                      <Icon.Ionicons
-                        name={`${iconPrefix}-information-circle-outline`}
-                        color={Colors.redible.accent}
-                        size={Layout.fontSize.mediumText}
-                      />{` Nice place, good vibes and an economically priced lunch menu`}</Text>
+                    {showDescription ?
+                      <View>
+                        <Text style={styles.description}>
+                          <Icon.Ionicons
+                            name={`${iconPrefix}-pin`}
+                            color={Colors.redible.accent}
+                            size={Layout.fontSize.mediumText}
+                          />{` Carrer de Sancho de Ávila, 22, 08018 Barcelona`}</Text>
+                        <Text style={styles.description}>
+                          <Icon.Ionicons
+                            name={`${iconPrefix}-information-circle-outline`}
+                            color={Colors.redible.accent}
+                            size={Layout.fontSize.mediumText}
+                          />{` Nice place, good vibes and an economically priced lunch menu`}</Text>
+                      </View>
+                      :
+                      null
+                    }
                   </View>
               }
             </View>

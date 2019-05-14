@@ -73,14 +73,13 @@ export default class HomeScreen extends Component {
           _onPress={this._hideModal}
           modalVisible={modalVisible} />
 
-        <Text style={{ ...styles.subtitle, marginTop: 15, marginBottom: 0 }}>Restaurants</Text>
-
         <ScrollView style={styles.contentContainer}>
+          <Text style={{ ...styles.title, marginTop: 15, marginBottom: 0 }}>Restaurants</Text>
           <View>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
               {featuredList}
             </ScrollView>
-            <Text style={styles.subtitle}>Meals</Text>
+            <Text style={styles.title}>Meals</Text>
             {dishList}
           </View>
         </ScrollView>
@@ -97,10 +96,10 @@ const styles = StyleSheet.create({
   contentContainer: {
     backgroundColor: Colors.basic.white,
   },
-  subtitle: {
+  title: {
     marginBottom: 15,
     textAlign: "center",
-    color: Colors.redible.accent,
-    fontSize: Layout.fontSize.contentTitle
+    color: Colors.redible.gray,
+    fontSize: Layout.fontSize.contentTitle,
   },
 })

@@ -4,7 +4,7 @@ export default {
     black: "#000"
   },
   redible: {
-    main: "#6DECAF", //"#6DECAF",
+    main: "#03DAC5", //"#6DECAF",
     accent: "#6E8894",
     gray: "#808080",
     babyPowder: "#FCFCFC",
@@ -14,7 +14,7 @@ export default {
     cream: "#F4F4ED",
     raspberry: "#F61067",
     star: "#FCCE62",
-    grape: "#07CDFF"
+    green: "#6DECAF"
   },
   searchModal: "rgba(252, 252, 252, 0.9)",
   shadow: "rgba(0, 0, 0, 0.4)"
