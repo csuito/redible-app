@@ -60,30 +60,32 @@ export default class RestaurantBanner extends Component {
                   </View>
                   :
                   <View>
-                    <Text style={styles.restaurantTitle}>
+                    <View style={styles.titleContainer}>
                       <Icon.Ionicons
-                        name={`${iconPrefix}-${arrow}`}
-                        color={Colors.basic.black}
-                        size={Layout.fontSize.mainContent}
+                        name={`md-${arrow}`}
+                        color={showDescription ? Colors.redible.main : Colors.redible.lavenderGray}
+                        size={Layout.fontSize.largeIcon}
                       />
-                      {` Forastera Restaurant`}</Text>
-                    {showDescription ?
-                      <View>
-                        <Text style={styles.description}>
-                          <Icon.Ionicons
-                            name={`${iconPrefix}-pin`}
-                            color={Colors.redible.accent}
-                            size={Layout.fontSize.mediumText}
-                          />{` Carrer de Sancho de Ávila, 22, 08018 Barcelona`}</Text>
-                        <Text style={styles.description}>
-                          <Icon.Ionicons
-                            name={`${iconPrefix}-information-circle-outline`}
-                            color={Colors.redible.accent}
-                            size={Layout.fontSize.mediumText}
-                          />{` Nice place, good vibes and an economically priced lunch menu`}</Text>
-                      </View>
-                      :
-                      null
+                      <Text style={{ ...styles.restaurantTitle, marginLeft: 15 }}>{`Forastera Restaurant`}</Text>
+                    </View>
+                    {
+                      showDescription ?
+                        <View>
+                          <Text style={styles.description}>
+                            <Icon.Ionicons
+                              name={`${iconPrefix}-pin`}
+                              color={Colors.redible.accent}
+                              size={Layout.fontSize.mediumText}
+                            />{` Carrer de Sancho de Ávila, 22, 08018 Barcelona`}</Text>
+                          <Text style={styles.description}>
+                            <Icon.Ionicons
+                              name={`${iconPrefix}-information-circle-outline`}
+                              color={Colors.redible.accent}
+                              size={Layout.fontSize.mediumText}
+                            />{` Nice place, good vibes and an economically priced lunch menu`}</Text>
+                        </View>
+                        :
+                        null
                     }
                   </View>
               }
@@ -159,6 +161,10 @@ const styles = StyleSheet.create({
   restaurantTitle: {
     fontSize: Layout.fontSize.mainContent,
     fontWeight: "bold"
+  },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center"
   },
   text: {
     marginTop: 10,

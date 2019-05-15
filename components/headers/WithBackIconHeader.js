@@ -45,13 +45,13 @@ const styles = StyleSheet.create({
   },
   icon: {
     textAlign: "left",
-    flex: 1
+    flex: 1,
   },
   title: {
     flex: 2,
     fontSize: Layout.fontSize.largeText,
     textAlign: "center",
-    fontWeight: "bold"
+    fontWeight: "bold",
   }
 })
 
