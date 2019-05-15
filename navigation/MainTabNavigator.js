@@ -6,6 +6,7 @@ import { createStackNavigator, createBottomTabNavigator } from "react-navigation
 import HomeScreen from "../screens/HomeScreen"
 import DetailsScreen from "../screens/DetailsScreen"
 import ShoppingCartScreen from "../screens/ShoppingCartScreen"
+import OrderSummaryScreen from "../screens/OrderSummaryScreen"
 
 import MapScreen from "../screens/Map"
 
@@ -24,7 +25,8 @@ const prefix = Platform.OS === "ios" ? "ios" : "md"
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   Details: DetailsScreen,
-  Cart: ShoppingCartScreen
+  Cart: ShoppingCartScreen,
+  Summary: OrderSummaryScreen
 })
 
 HomeStack.navigationOptions = {

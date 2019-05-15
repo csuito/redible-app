@@ -11,10 +11,20 @@ import Colors from "../../constants/Colors"
  */
 const WithBackIconHeader = props => {
   const prefix = Platform.OS === "ios" ? "ios" : "md",
-    { iconName, text, color, navigation } = props
+    { iconName, text, color, navigation, noShadow, bgColor } = props
+
+  const shadowStyles = !noShadow ? {
+    shadowColor: Colors.shadow,
+    shadowOffset: { height: 5, width: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    elevation: 5
+  } : null
+
+  const backgroundColor = bgColor ? bgColor : Colors.redible.main
 
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, ...shadowStyles, backgroundColor }}>
       <TouchableOpacity style={styles.icon} onPress={() => navigation.goBack(null)}>
         <Icon.Ionicons
           name={`${prefix}-${iconName}`}
@@ -36,12 +46,6 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     height: Layout.androidHeaderHeight + StatusBar.currentHeight,
-    backgroundColor: Colors.redible.main,
-    shadowColor: Colors.shadow,
-    shadowOffset: { height: 5, width: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 3,
-    elevation: 5,
   },
   icon: {
     textAlign: "left",

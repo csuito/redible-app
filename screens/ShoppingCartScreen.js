@@ -52,7 +52,7 @@ export default class ShoppingCartScreen extends Component {
                 text={"Checkout"}
                 containerStyles={{ ...styles.button, marginLeft: 7.5, backgroundColor: Colors.redible.main }}
                 textStyles={{ fontSize: Layout.fontSize.mediumText, color: Colors.basic.white }}
-                _onPress={() => { }}
+                _onPress={() => { this._navigate("Summary") }}
               />
             </View>
           </View>

@@ -10,10 +10,17 @@ import Colors from "../constants/Colors"
  */
 const Button = props => {
   const prefix = Platform.OS === "ios" ? "ios" : "md",
-    { text, iconName, _onPress, containerStyles, textStyles } = props
+    { text, iconName, _onPress, containerStyles, textStyles, noShadow } = props,
+    shadowStyles = !noShadow ? {
+      shadowColor: Colors.shadow,
+      shadowOffset: { height: 2, width: 0 },
+      shadowOpacity: 1,
+      shadowRadius: 3,
+      elevation: 2,
+    } : null
 
   return (
-    <TouchableOpacity style={{ ...styles.default, ...containerStyles }} onPress={_onPress}>
+    <TouchableOpacity style={{ ...styles.default, ...containerStyles, ...shadowStyles }} onPress={_onPress}>
       {
         iconName ?
           <Icon.Ionicons
@@ -34,11 +41,6 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 20,
     paddingRight: 20,
-    shadowColor: Colors.shadow,
-    shadowOffset: { height: 2, width: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 3,
-    elevation: 2,
     borderRadius: 25,
   }
 })

@@ -42,9 +42,9 @@ export default class HomeScreen extends Component {
   }
 
   _buildFeaturedList = () => {
-    const types = ["Recommended", "Top deal", "Top rated", "Healthy", "Trending", "Near me"]
+    const types = ["Recommended", "Top deal", "Top rated", "Healthy", "Trending"]
     let featured = []
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 5; i++) {
       featured.push(<RestaurantBanner key={i} type={types[i]} navigation={this.props.navigation} />)
     }
     return featured.map(restaurant => restaurant)

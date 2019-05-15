@@ -14,7 +14,8 @@ export default {
     cream: "#F4F4ED",
     raspberry: "#F61067",
     star: "#FCCE62",
-    green: "#6DECAF"
+    green: "#6DECAF",
+    grape: "#6D45B2"
   },
   searchModal: "rgba(252, 252, 252, 0.9)",
   shadow: "rgba(0, 0, 0, 0.4)",
