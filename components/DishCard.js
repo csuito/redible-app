@@ -26,22 +26,24 @@ export default class DishCard extends Component {
             <Image style={styles.image} source={require("../assets/images/paella.jpg")} />
           </View>
           <View style={styles.textContainer}>
-            <Text style={styles.dishName}>
-              <Icon.Ionicons
-                name={`${iconPrefix}-restaurant`}
-                size={Layout.fontSize.contentTitle}
-              />{` Paella Valenciana`}</Text>
-            <Text style={styles.text}>
-              <Icon.Ionicons
-                name={`${iconPrefix}-pin`}
-                size={Layout.fontSize.mainContent}
-              />{` Forastera Restaurant`}</Text>
-            <Text style={styles.text}>
-              <Icon.Ionicons
-                name={`${iconPrefix}-time`}
-                size={Layout.fontSize.mainContent}
-              />{` Pick-up: 20:00 - 22:30`}
-            </Text>
+            <View>
+              <Text style={styles.dishName}>
+                <Icon.Ionicons
+                  name={`${iconPrefix}-restaurant`}
+                  size={Layout.fontSize.contentTitle}
+                />{` Paella Valenciana`}</Text>
+              <Text style={styles.text}>
+                <Icon.Ionicons
+                  name={`${iconPrefix}-pin`}
+                  size={Layout.fontSize.mainContent}
+                />{` Forastera Restaurant`}</Text>
+              <Text style={styles.text}>
+                <Icon.Ionicons
+                  name={`${iconPrefix}-time`}
+                  size={Layout.fontSize.mainContent}
+                />{` Pick-up: 20:00 - 22:30`}
+              </Text>
+            </View>
             <View style={styles.footer}>
               <Text style={styles.price}>€ 5.50</Text>
               <Text style={styles.rating}>
@@ -75,6 +77,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
+    justifyContent: "space-between",
     backgroundColor: "white",
     padding: 10,
     paddingLeft: 20,
@@ -86,11 +89,11 @@ const styles = StyleSheet.create({
   },
   text: {
     marginTop: 10,
-    fontSize: Layout.fontSize.mainContent,
+    fontSize: Layout.fontSize.medium,
     color: Colors.redible.accent
   },
   dishName: {
-    fontSize: Layout.fontSize.contentTitle
+    fontSize: Layout.fontSize.mainContent
   },
   footer: {
     flexDirection: "row",

@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
   },
   searchText: {
     fontSize: 16,
+    fontFamily: "open-sans",
     padding: 0
   },
   iconContainer: {

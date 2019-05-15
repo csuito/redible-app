@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 15,
     textAlign: "center",
-    color: Colors.redible.gray,
+    color: Colors.redible.accent,
     fontSize: Layout.fontSize.contentTitle,
   },
 })

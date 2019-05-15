@@ -16,19 +16,27 @@ export default class RestaurantBanner extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      showDescription: false
+      showDescription: false,
+      arrow: "arrow-dropup"
     }
+  }
+
+  _toggleDescription = () => {
+    const { showDescription, arrow } = this.state,
+      arrowName = arrow === "arrow-dropup" ? "arrow-dropdown" : "arrow-dropup"
+
+    this.setState({ showDescription: !showDescription, arrow: arrowName })
   }
 
   render() {
     const iconPrefix = Platform.OS === "ios" ? "ios" : "md",
-      { showDescription } = this.state,
+      { showDescription, arrow } = this.state,
       { type, detail, navigation } = this.props,
       { color, iconName } = getIconProperties(type)
 
     return (
       <ImageBackground style={styles.container} source={require("../assets/images/starbucks-logo.jpg")}>
-        <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details") : this.setState({ showDescription: !showDescription })}>
+        <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details") : this._toggleDescription()}>
           <View style={styles.contentContainer}>
             <View style={{ ...styles.verticalLine, backgroundColor: color }}></View>
             <View style={styles.textContainer}>
@@ -52,7 +60,13 @@ export default class RestaurantBanner extends Component {
                   </View>
                   :
                   <View>
-                    <Text style={styles.restaurantTitle}>Forastera Restaurant</Text>
+                    <Text style={styles.restaurantTitle}>
+                      <Icon.Ionicons
+                        name={`${iconPrefix}-${arrow}`}
+                        color={Colors.basic.black}
+                        size={Layout.fontSize.mainContent}
+                      />
+                      {` Forastera Restaurant`}</Text>
                     {showDescription ?
                       <View>
                         <Text style={styles.description}>

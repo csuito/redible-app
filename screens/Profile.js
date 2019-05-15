@@ -98,12 +98,8 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
     backgroundColor: Colors.basic.white,
-    borderRadius: 25,
-    shadowColor: Colors.shadow,
-    shadowOffset: { height: 5, width: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 3,
-    elevation: 5,
+    borderBottomWidth: 2,
+    borderBottomColor: Colors.redible.main
   },
   textInput: {
     flex: 1,

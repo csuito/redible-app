@@ -17,5 +17,6 @@ export default {
     green: "#6DECAF"
   },
   searchModal: "rgba(252, 252, 252, 0.9)",
-  shadow: "rgba(0, 0, 0, 0.4)"
+  shadow: "rgba(0, 0, 0, 0.4)",
+  gradient: ["#03DAC5", "rgb(255, 255, 255)"]
 }

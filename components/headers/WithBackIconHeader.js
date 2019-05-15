@@ -23,6 +23,7 @@ const WithBackIconHeader = props => {
         />
       </TouchableOpacity>
       <Text style={{ ...styles.title, color }}>{text}</Text>
+      <View style={{ flex: 1 }}></View>
     </View>
   )
 }
@@ -44,11 +45,13 @@ const styles = StyleSheet.create({
   },
   icon: {
     textAlign: "left",
+    flex: 1
   },
   title: {
-    flex: 1,
+    flex: 2,
     fontSize: Layout.fontSize.largeText,
     textAlign: "center",
+    fontWeight: "bold"
   }
 })
 

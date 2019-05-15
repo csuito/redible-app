@@ -16,7 +16,8 @@ export default {
     contentTitle: 18,
     mainContent: 16,
     mediumText: 14,
-    smallText: 12
+    smallText: 12,
+    smallerText: 10
   },
   androidHeaderHeight: 65,
   isSmallDevice: width < 375,

@@ -12,6 +12,7 @@ import RestaurantBanner from "../components/RestaurantBanner"
 import DishCard from "../components/DishCard"
 import WithBackIconHeader from "../components/headers/WithBackIconHeader"
 import Button from "../components/Button"
+import CartButton from "../components/CartButton"
 
 /**
  * Details Screen for restaurants or dishes
@@ -57,6 +58,8 @@ export default class DetailsScreen extends Component {
 
     return (
       <View style={styles.container}>
+
+        <CartButton _onPress={() => this.props.navigation.navigate("Cart")} prefix={prefix} />
         <ScrollView style={styles.contentContainer}>
           <RestaurantBanner />
 
@@ -85,8 +88,8 @@ export default class DetailsScreen extends Component {
                   return { quantity: prevState.quantity - 1 >= 0 ? prevState.quantity - 1 : 0 }
                 })}
                 name={`${prefix}-remove-circle-outline`}
-                color={Colors.redible.raspberry}
-                size={Layout.fontSize.mediumIcon}
+                color={Colors.redible.lavenderGray}
+                size={Layout.fontSize.largeIcon}
               />
               <Text style={styles.addToText}>{quantity}</Text>
               <Icon.Ionicons
@@ -95,7 +98,7 @@ export default class DetailsScreen extends Component {
                 })}
                 name={`${prefix}-add-circle-outline`}
                 color={Colors.redible.main}
-                size={Layout.fontSize.mediumIcon}
+                size={Layout.fontSize.largeIcon}
               />
               <Button
                 iconName={"cart"}
@@ -116,6 +119,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.basic.white,
+    position: "relative"
   },
   mapContainer: {
     width: Layout.window.width - 30,
