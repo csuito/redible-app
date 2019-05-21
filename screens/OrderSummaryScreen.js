@@ -4,6 +4,7 @@ import { Icon } from "expo"
 
 // Components
 import WithBackIconHeader from "../components/headers/WithBackIconHeader"
+import PaymentMethodModal from "../components/modals/PaymentMethodModal"
 import Button from "../components/Button"
 
 // Constants
@@ -16,7 +17,10 @@ import Layout from "../constants/Layout"
 export default class OrderSummaryScreen extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      paymentMethodModalVisible: false,
+      paymentData: {}
+    }
   }
   static navigationOptions = ({ navigation }) => {
     return {
@@ -24,10 +28,26 @@ export default class OrderSummaryScreen extends Component {
     }
   }
 
+  _setPaymentMethod = type => {
+    if (type === "edit") {
+      this.setState({ paymentMethodModalVisible: true, paymentData: { name: "Carlos Suito", card: "**** **** **** 5437" } })
+    } else {
+      this.setState({ paymentMethodModalVisible: true })
+    }
+  }
+
   render() {
-    const prefix = Platform.OS === "ios" ? "ios" : "md"
+    const prefix = Platform.OS === "ios" ? "ios" : "md",
+      { paymentMethodModalVisible, paymentData } = this.state
+
     return (
       <View style={styles.container}>
+
+        <PaymentMethodModal
+          modalVisible={paymentMethodModalVisible}
+          paymentData={paymentData}
+        />
+
         <View style={styles.pickupInfo}>
           <Text style={styles.title}>Forastera Restaurant</Text>
           <Text style={styles.text}><Icon.Ionicons
@@ -60,16 +80,18 @@ export default class OrderSummaryScreen extends Component {
                 text={"Edit"}
                 containerStyles={{ flexDirection: "row", padding: 5, backgroundColor: Colors.redible.grape, marginRight: 15 }}
                 textStyles={{ color: Colors.basic.white }}
+                _onPress={() => this._setPaymentMethod("edit")}
               />
               <Button
                 noShadow
                 text={"Add"}
                 containerStyles={{ flexDirection: "row", padding: 5, backgroundColor: Colors.redible.grape }}
                 textStyles={{ color: Colors.basic.white }}
+                _onPress={() => this._setPaymentMethod()}
               />
             </View>
           </View>
-          <Text style={styles.text}>**** **** **** 5437</Text>
+          <Text style={styles.text}>{`**** **** **** 5437`}</Text>
         </View>
         <View style={styles.buttonContainer}>
           <Button
