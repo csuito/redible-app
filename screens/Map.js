@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { StyleSheet, View, Text } from "react-native"
-import { MapView } from "expo"
+import { MapView, Location, Permissions } from "expo"
 const { Marker } = MapView
 
 // Components
@@ -12,19 +12,26 @@ import DescriptionCard from "../components/MapDescription"
 import Layout from "../constants/Layout"
 import Colors from "../constants/Colors"
 
+/**
+ * Renders Map Screen
+ */
 export default class MapScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
       mapCenter: {
-        latitude: 41.397465,
-        longitude: 2.188411,
+        latitude: 0,
+        longitude: 0,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       },
       restaurantMarker: {
         latitude: 41.397465,
         longitude: 2.188411,
+      },
+      userMarker: {
+        latitude: 0,
+        longitude: 0
       },
       showDescription: false,
       modalVisible: false
@@ -39,6 +46,8 @@ export default class MapScreen extends Component {
 
   componentDidMount() {
     this._addModalSub(this.props.navigation)
+    this._getCurrentLocation()
+
   }
 
   /**
@@ -51,6 +60,25 @@ export default class MapScreen extends Component {
     })
   }
 
+  _getCurrentLocation = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION)
+
+    if (status !== "granted") console.log("Gelocation permissions denied")
+
+    const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({})
+    const coordinates = { latitude, longitude }
+
+    this.setState(prevState => ({
+      mapCenter: {
+        ...prevState.mapCenter,
+        ...coordinates
+      },
+      userMarker: {
+        ...coordinates
+      }
+    }))
+  }
+
   _hideModal = () => {
     this.props.navigation.setParams({ modalVisible: false })
   }
@@ -60,13 +88,16 @@ export default class MapScreen extends Component {
   }
 
   render() {
-    const { mapCenter, restaurantMarker, showDescription } = this.state,
+    const { mapCenter, restaurantMarker, userMarker, showDescription } = this.state,
+      { latitude, longitude } = mapCenter,
       { navigation } = this.props
+
+    console.log("MAP CENTER:\n", mapCenter, "USER MARKER:\n", userMarker)
 
     let modalVisible = navigation.getParam("modalVisible") || false
 
     return (
-      mapCenter ?
+      latitude && longitude ?
         <View style={styles.mapContainer}>
 
           <SearchModal
@@ -83,6 +114,12 @@ export default class MapScreen extends Component {
               coordinate={restaurantMarker}
               pinColor={Colors.redible.main}
               onPress={() => this.setState({ showDescription: true })}
+            />
+
+            <Marker
+              coordinate={userMarker}
+              pinColor={Colors.redible.raspberry}
+              onPress={() => { }}
             />
 
           </MapView>
