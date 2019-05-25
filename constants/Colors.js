@@ -15,7 +15,9 @@ export default {
     raspberry: "#F61067",
     star: "#FCCE62",
     green: "#6DECAF",
-    grape: "#6D45B2"
+    grape: "#6D45B2",
+    bronze: "#B1560F",
+    silver: "#C0C0C0"
   },
   searchModal: "rgba(252, 252, 252, 0.9)",
   shadow: "rgba(0, 0, 0, 0.4)",

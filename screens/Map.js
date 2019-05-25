@@ -110,14 +110,27 @@ export default class MapScreen extends Component {
     this.setState({ restaurantMarkers })
   }
 
+  _buildRestaurantLocations = restaurants => {
+    return restaurants.map(restaurantData => {
+      return (
+        <Marker
+          key={restaurantData._id}
+          coordinate={restaurantData.coordinates}
+          tracksViewChanges={false}
+          tracksInfoWindowChanges={false}
+          pinColor={Colors.redible.main}
+          onPress={() => this.setState({ showDescription: true, restaurantData })}
+        />
+      )
+    })
+  }
+
   render() {
     const { mapCenter, restaurantMarkers, restaurantData, userMarker, showDescription, loading } = this.state,
       { latitude, longitude } = mapCenter,
       { navigation } = this.props
 
     let modalVisible = navigation.getParam("modalVisible") || false
-
-    console.log("MARKERS:\n", restaurantMarkers)
 
     return (
       latitude && longitude && !loading ?
@@ -133,20 +146,11 @@ export default class MapScreen extends Component {
             initialRegion={mapCenter}
             onRegionChange={() => { }}>
 
-            {restaurantMarkers ?
-              restaurantMarkers.map(restaurantData => {
-                return (
-                  <Marker
-                    key={restaurantData._id}
-                    coordinate={restaurantData.coordinates}
-                    tracksViewChanges={false}
-                    tracksInfoWindowChanges={false}
-                    pinColor={Colors.redible.main}
-                    onPress={() => this.setState({ showDescription: true, restaurantData })}
-                  />
-                )
-              }) :
-              null
+            {
+              restaurantMarkers ?
+                this._buildRestaurantLocations(restaurantMarkers)
+                :
+                null
             }
 
             <Marker

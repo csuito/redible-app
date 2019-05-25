@@ -31,12 +31,12 @@ export default class RestaurantBanner extends Component {
   render() {
     const iconPrefix = Platform.OS === "ios" ? "ios" : "md",
       { showDescription, arrow } = this.state,
-      { type, detail, navigation } = this.props,
+      { type, detail, navigation, userLocation } = this.props,
       { color, iconName } = getIconProperties(type)
 
     return (
       <ImageBackground style={styles.container} source={require("../assets/images/starbucks-logo.jpg")}>
-        <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details") : this._toggleDescription()}>
+        <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details", { userLocation }) : this._toggleDescription()}>
           <View style={styles.contentContainer}>
             <View style={{ ...styles.verticalLine, backgroundColor: color }}></View>
             <View style={styles.textContainer}>

@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Platform, StyleSheet, View, ScrollView, Text } from "react-native"
 import { MapView, Icon } from "expo"
+import { PacmanIndicator } from "react-native-indicators"
 const { Marker } = MapView,
   { Polyline } = MapView
 
@@ -19,7 +20,6 @@ import Button from "../components/Button"
 import CartButton from "../components/CartButton"
 
 // Services
-import RestaurantService from "../services/restaurant"
 import DirectionsService from "../services/directions"
 
 /**
@@ -31,20 +31,18 @@ export default class DetailsScreen extends Component {
     this.state = {
       data: {},
       mapCenter: {
-        latitude: 41.397465,
-        longitude: 2.188411,
+        latitude: 0,
+        longitude: 0,
         latitudeDelta: 0.0225,
         longitudeDelta: 0.0225,
       },
-      restaurantMarker: {
-        latitude: 41.397465,
-        longitude: 2.188411,
-      },
+      restaurantMarker: {},
+      restaurantData: {},
+      userLocation: {},
       directions: [],
       quantity: 1,
       showAddToCart: false
     }
-    this.restaurantService = new RestaurantService()
     this.directionsService = new DirectionsService()
   }
 
@@ -55,27 +53,28 @@ export default class DetailsScreen extends Component {
   }
 
   componentDidMount() {
-    this._getRestaurant()
     this._getDirections()
   }
 
-  _getRestaurant = async () => {
-    const response = await this.restaurantService.getRestaurantById("5ce3da166f52243cfd2a2bb1")
-    console.log("RESTAURANT: \n", response.data)
-  }
-
   _getDirections = async () => {
+    const userLocation = await this.props.navigation.getParam("userLocation"),
+      restaurantData = await this.props.navigation.getParam("restaurantData"),
+      restaurantMarker = { latitude: parseFloat(restaurantData.lat), longitude: parseFloat(restaurantData.lng) },
+      originString = `${userLocation.latitude},${userLocation.longitude}`,
+      destinationString = `${restaurantData.lat},${restaurantData.lng}`
+
     try {
-      const { data } = await this.directionsService.getDirections("41.39735779999999,2.1885515", "41.3936707,2.1459476")
-      console.log("DIRECTIONS: \n", data)
+      const { data } = await this.directionsService.getDirections(originString, destinationString)
       const points = decode(data.data)
-      console.log("DECODED:\n", points)
       let directions = [
-        { latitude: 41.39735779999999, longitude: 2.1885515 },
+        userLocation,
         ...points,
-        { latitude: 41.3936707, longitude: 2.1459476 }
+        restaurantMarker
       ]
-      this.setState({ directions })
+
+      const mapCenter = { ...this.state.mapCenter, ...restaurantMarker }
+
+      this.setState({ userLocation, directions, restaurantData, mapCenter, restaurantMarker })
     } catch (err) {
       console.log(err)
     }
@@ -91,7 +90,7 @@ export default class DetailsScreen extends Component {
 
   render() {
     const dishList = this._buildDishList(),
-      { mapCenter, restaurantMarker, quantity, directions, showAddToCart } = this.state,
+      { mapCenter, restaurantData, restaurantMarker, quantity, directions, showAddToCart, userLocation } = this.state,
       prefix = Platform.OS === "ios" ? "ios" : "md"
 
     return (
@@ -99,30 +98,46 @@ export default class DetailsScreen extends Component {
 
         <CartButton _onPress={() => this.props.navigation.navigate("Cart")} prefix={prefix} />
         <ScrollView style={styles.contentContainer}>
-          <RestaurantBanner />
+          <RestaurantBanner data={restaurantData} />
 
           <View style={styles.mapContainer}>
-            <MapView
-              style={styles.map}
-              initialRegion={mapCenter}
-              onRegionChange={() => null}>
-
-              {
-                directions ?
-                  <Polyline
-                    coordinates={directions}
-                    strokeWidth={3}
-                    strokeColor={Colors.redible.main}
-                  /> :
-                  null
-              }
-
-
-              <Marker
-                coordinate={restaurantMarker}
-                title={"Forastera Restaurant"}
-                pinColor={Colors.redible.main} />
-            </MapView>
+            {
+              mapCenter.latitude && mapCenter.longitude ?
+                <MapView
+                  style={styles.map}
+                  initialRegion={mapCenter}
+                  onRegionChange={() => null}>
+                  {
+                    directions ?
+                      <Polyline
+                        coordinates={directions}
+                        strokeWidth={3}
+                        strokeColor={Colors.redible.main}
+                      /> :
+                      null
+                  }
+                  {
+                    userLocation.latitude && userLocation.longitude ?
+                      <Marker
+                        coordinate={userLocation}
+                        pinColor={Colors.redible.raspberry}
+                        onPress={() => { }}
+                      /> :
+                      null
+                  }
+                  {
+                    restaurantMarker.latitude && restaurantMarker.longitude ?
+                      <Marker
+                        coordinate={restaurantMarker}
+                        tracksViewChanges={false}
+                        tracksInfoWindowChanges={false}
+                        pinColor={Colors.redible.main} /> :
+                      null
+                  }
+                </MapView>
+                :
+                <PacmanIndicator size={48} color={Colors.redible.main} />
+            }
           </View>
 
           <Text style={styles.subtitle}>Meals</Text>
@@ -131,30 +146,43 @@ export default class DetailsScreen extends Component {
         {
           showAddToCart ?
             <View style={styles.addToCart}>
-              <Text style={styles.addToText}>{`Quantity `}</Text>
-              <Icon.Ionicons
-                onPress={() => this.setState(prevState => {
-                  return { quantity: prevState.quantity - 1 >= 0 ? prevState.quantity - 1 : 0 }
-                })}
-                name={`${prefix}-remove-circle-outline`}
-                color={Colors.redible.lavenderGray}
-                size={Layout.fontSize.largeIcon}
-              />
-              <Text style={styles.addToText}>{quantity}</Text>
-              <Icon.Ionicons
-                onPress={() => this.setState(prevState => {
-                  return { quantity: prevState.quantity + 1 }
-                })}
-                name={`${prefix}-add-circle-outline`}
-                color={Colors.redible.main}
-                size={Layout.fontSize.largeIcon}
-              />
-              <Button
-                iconName={"cart"}
-                text={"Add to cart"}
-                containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.main }}
-                textStyles={{ fontSize: Layout.fontSize.mediumText, color: Colors.basic.white }}
-                _onPress={() => this.setState({ showAddToCart: false, quantity: 1 })} />
+              <Text style={styles.dishText}>{`Paella Valenciana`}</Text>
+              <View style={styles.row}>
+                <Text style={styles.addToText}>{`Quantity `}</Text>
+                <Icon.Ionicons
+                  onPress={() => this.setState(prevState => {
+                    return { quantity: prevState.quantity - 1 >= 0 ? prevState.quantity - 1 : 0 }
+                  })}
+                  name={`${prefix}-remove-circle-outline`}
+                  color={Colors.redible.lavenderGray}
+                  size={Layout.fontSize.largeIcon}
+                />
+                <Text style={styles.addToText}>{quantity}</Text>
+                <Icon.Ionicons
+                  onPress={() => this.setState(prevState => {
+                    return { quantity: prevState.quantity + 1 }
+                  })}
+                  name={`${prefix}-add-circle-outline`}
+                  color={Colors.redible.main}
+                  size={Layout.fontSize.largeIcon}
+                />
+                {
+                  quantity > 0 ?
+                    <Button
+                      iconName={"cart"}
+                      text={"Add to cart"}
+                      containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.main }}
+                      textStyles={{ fontSize: Layout.fontSize.mediumText, color: Colors.basic.white }}
+                      _onPress={() => this.setState({ showAddToCart: false, quantity: 1 })} />
+                    :
+                    <Button
+                      iconName={"close"}
+                      text={"Cancel"}
+                      containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry }}
+                      textStyles={{ fontSize: Layout.fontSize.mediumText, color: Colors.basic.white }}
+                      _onPress={() => this.setState({ showAddToCart: false, quantity: 1 })} />
+                }
+              </View>
             </View>
             :
             null
@@ -194,15 +222,25 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: Layout.window.width,
     bottom: 0,
-    backgroundColor: Colors.basic.white,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
     shadowColor: Colors.basic.black,
+    backgroundColor: Colors.basic.white,
     shadowOffset: { height: 5, width: 0 },
     shadowOpacity: 1,
     shadowRadius: 3,
     elevation: 5,
+  },
+  row: {
+    flex: 1,
+    backgroundColor: Colors.basic.white,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  dishText: {
+    fontSize: Layout.fontSize.mainContent,
+    color: Colors.redible.accent,
+    textAlign: "center",
+    marginBottom: 10,
   },
   addToText: {
     fontSize: Layout.fontSize.mainContent,

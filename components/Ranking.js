@@ -1,34 +1,34 @@
 import React from "react"
-import { StyleSheet, View, TouchableWithoutFeedback, TouchableOpacity, Text, Image } from "react-native"
+import { Platform, StyleSheet, View, TouchableWithoutFeedback, Text, Image } from "react-native"
 import { Icon } from "expo"
 
 // Constants
 import Colors from "../constants/Colors"
 import Layout from "../constants/Layout"
 
-const FavoriteCard = props => {
-  const { name, navigation, _onPress } = props
+const RankingCard = props => {
+  const { name, rank, gender, points } = props,
+    source = gender === "male" ? require(`../assets/images/hip-male-avatar.png`) : require(`../assets/images/purple-female-avatar.png`)
 
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate("Details")}>
+    <TouchableWithoutFeedback onPress={() => { }}>
       <View style={styles.container}>
-        <View>
-          <Image style={styles.image} source={require("../assets/images/forastera-logo.png")} />
+        <View style={{ padding: 5 }}>
+          <Image style={styles.image} source={source} />
         </View>
 
         <View style={styles.textContainer}>
           <View style={{ flex: 1 }}>
-            <Text style={styles.text}>{name}</Text>
+            <Text style={styles.text}>{`${rank + 1}.`} {name}</Text>
           </View>
 
-          <View style={styles.button}>
-            <TouchableOpacity onPress={_onPress}>
-              <Icon.Ionicons
-                name={"md-heart"}
-                color={Colors.redible.raspberry}
-                size={Layout.fontSize.largeIcon}
-              />
-            </TouchableOpacity>
+          <View style={styles.points}>
+            <Icon.Ionicons
+              name={`md-globe`}
+              color={Colors.redible.green}
+              size={Layout.fontSize.largeIcon}
+            />
+            <Text>{`${points} points`}</Text>
           </View>
         </View>
       </View>
@@ -69,13 +69,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: Layout.fontSize.mainContent
   },
-  button: {
-    height: 50,
-    width: 50,
-    borderRadius: 50,
+  points: {
     alignItems: "center",
     justifyContent: "center"
   }
 })
 
-export default FavoriteCard
+export default RankingCard

@@ -9,6 +9,9 @@ import WithBackIconHeader from "../components/headers/WithBackIconHeader"
 import Layout from "../constants/Layout"
 import Colors from "../constants/Colors"
 
+/**
+ * Renders user profile screen or login screen for not logged users
+ */
 export default class ProfileScreen extends Component {
   constructor(props) {
     super(props)

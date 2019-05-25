@@ -10,7 +10,7 @@ import OrderSummaryScreen from "../screens/OrderSummaryScreen"
 
 import MapScreen from "../screens/Map"
 
-import FavoritesScreen from "../screens/FavoritesScreen"
+import RankingScreen from "../screens/RankingScreen"
 
 import ProfileScreen from "../screens/Profile"
 
@@ -53,16 +53,16 @@ MapStack.navigationOptions = {
   ),
 }
 
-const FavoritesStack = createStackNavigator({
-  Favorites: FavoritesScreen,
+const RankingStack = createStackNavigator({
+  Ranking: RankingScreen,
 })
 
-FavoritesStack.navigationOptions = {
-  tabBarLabel: "Favorites",
+RankingStack.navigationOptions = {
+  tabBarLabel: "Ranking",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={`${prefix}-heart`}
+      name={`${prefix}-trophy`}
     />
   ),
 }
@@ -84,7 +84,7 @@ ProfileStack.navigationOptions = {
 export default createBottomTabNavigator({
   HomeStack,
   MapStack,
-  FavoritesStack,
+  RankingStack,
   ProfileStack
 }, {
     tabBarOptions: {
