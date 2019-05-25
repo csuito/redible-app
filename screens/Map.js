@@ -1,5 +1,6 @@
 import React, { Component } from "react"
-import { StyleSheet, View, Text } from "react-native"
+import { StyleSheet, View } from "react-native"
+import { PacmanIndicator } from "react-native-indicators"
 import { MapView, Location, Permissions } from "expo"
 const { Marker } = MapView
 
@@ -9,7 +10,6 @@ import SearchModal from "../components/modals/SearchModal"
 import DescriptionCard from "../components/MapDescription"
 
 // Constants
-import Layout from "../constants/Layout"
 import Colors from "../constants/Colors"
 
 // Services
@@ -29,6 +29,7 @@ export default class MapScreen extends Component {
         longitudeDelta: 0.01,
       },
       restaurantMarkers: [],
+      restaurantData: "",
       userMarker: {},
       showDescription: false,
       modalVisible: false,
@@ -96,7 +97,7 @@ export default class MapScreen extends Component {
 
     let restaurantMarkers = []
 
-    for (let i = 0; i < restaurants.length; i ++) {
+    for (let i = 0; i < restaurants.length; i++) {
       restaurantMarkers.push(
         {
           coordinates: { latitude: parseFloat(restaurants[i].lat), longitude: parseFloat(restaurants[i].lng) },
@@ -110,7 +111,7 @@ export default class MapScreen extends Component {
   }
 
   render() {
-    const { mapCenter, restaurantMarkers, userMarker, showDescription, loading } = this.state,
+    const { mapCenter, restaurantMarkers, restaurantData, userMarker, showDescription, loading } = this.state,
       { latitude, longitude } = mapCenter,
       { navigation } = this.props
 
@@ -130,22 +131,24 @@ export default class MapScreen extends Component {
           <MapView
             style={styles.map}
             initialRegion={mapCenter}
-            onRegionChange={() => {}}>
+            onRegionChange={() => { }}>
 
-              {restaurantMarkers ?
-                restaurantMarkers.map(restaurant => {
-                  return (
-                    <Marker
-                    key={restaurant._id}
-                    coordinate={restaurant.coordinates}
+            {restaurantMarkers ?
+              restaurantMarkers.map(restaurantData => {
+                return (
+                  <Marker
+                    key={restaurantData._id}
+                    coordinate={restaurantData.coordinates}
+                    tracksViewChanges={false}
+                    tracksInfoWindowChanges={false}
                     pinColor={Colors.redible.main}
-                    onPress={() => this.setState({ showDescription: true })}
-                    />
-                  )
-                }) :
-                null
-              }
-            
+                    onPress={() => this.setState({ showDescription: true, restaurantData })}
+                  />
+                )
+              }) :
+              null
+            }
+
             <Marker
               coordinate={userMarker}
               pinColor={Colors.redible.raspberry}
@@ -155,13 +158,15 @@ export default class MapScreen extends Component {
           </MapView>
           {
             showDescription ?
-              <DescriptionCard navigation={navigation} _onPress={() => this.setState({ showDescription: false })} />
+              <DescriptionCard navigation={navigation} restaurantData={restaurantData} _onPress={() => this.setState({ showDescription: false })} />
               :
               null
           }
         </View>
         :
-        null
+        <View style={{ flex: 1, backgroundColor: Colors.redible.main }}>
+          <PacmanIndicator size={75} color={Colors.basic.white} />
+        </View>
     )
   }
 }
@@ -173,5 +178,5 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-  },
+  }
 })

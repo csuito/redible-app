@@ -24,10 +24,19 @@ export default class SearchHeader extends Component {
 
   render() {
     const { searchTerm } = this.state,
-      prefix = Platform.OS === "ios" ? "ios" : "md"
+      { noShadow } = this.props
+    prefix = Platform.OS === "ios" ? "ios" : "md"
+
+    const shadowStyles = !noShadow ? {
+      shadowColor: Colors.shadow,
+      shadowOffset: { height: 5, width: 0 },
+      shadowOpacity: 1,
+      shadowRadius: 3,
+      elevation: 5
+    } : null
 
     return (
-      <View style={styles.container}>
+      <View style={{ ...styles.container, ...shadowStyles }}>
         <Searchbar
           placeholder="Search restaurants, cuisines..."
           onChangeText={searchTerm => this.setState({ searchTerm })}
@@ -54,11 +63,6 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     height: Layout.androidHeaderHeight + StatusBar.currentHeight,
     backgroundColor: Colors.redible.main,
-    shadowColor: Colors.shadow,
-    shadowOffset: { height: 5, width: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 3,
-    elevation: 5,
   },
   searchBar: {
     flex: 1,

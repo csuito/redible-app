@@ -1,9 +1,10 @@
 import React from "react"
-import { StyleSheet, Platform, Text, View, TouchableWithoutFeedback } from "react-native"
+import { StyleSheet, Platform, Text, View } from "react-native"
 import { Icon } from "expo"
+import PropTypes from "prop-types"
 
 // Components
-import StarRow from "./StarRow"
+import Stars from "./StarRow"
 import Button from "./Button"
 
 // Constants
@@ -12,15 +13,15 @@ import Colors from "../constants/Colors"
 
 const DescriptionCard = props => {
   const prefix = Platform.OS === "ios" ? "ios" : "md",
-    { navigation, _onPress } = props
+    { navigation, _onPress, restaurantData } = props
 
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={styles.contentTitle}>
-          {`Forastera Restaurant`}
+          {`${restaurantData.name}`}
         </Text>
-        <StarRow prefix={prefix} rating={4.3} />
+        <Stars prefix={prefix} rating={4.3} />
       </View>
       <View style={styles.descriptionContainer}>
         <Text style={{ ...styles.description, marginBottom: 10 }}>
@@ -29,7 +30,7 @@ const DescriptionCard = props => {
             color={Colors.redible.accent}
             size={Layout.fontSize.mediumText}
           />
-          {` Carrer de Sancho de Ávila, 22, 08018 Barcelona`}</Text>
+          {` ${restaurantData.address}`}</Text>
         <Text style={styles.description}>
           <Icon.Ionicons
             name={`${prefix}-information-circle-outline`}
@@ -50,11 +51,17 @@ const DescriptionCard = props => {
           text={"Go"}
           containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.main, width: 100 }}
           textStyles={{ fontSize: Layout.fontSize.smallText, color: Colors.basic.white }}
-          _onPress={() => navigation.navigate("Details")}
+          _onPress={() => navigation.navigate("Details", { restaurantData })}
         />
       </View>
     </View>
   )
+}
+
+DescriptionCard.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  _onPress: PropTypes.func.isRequired,
+  restaurantData: PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({

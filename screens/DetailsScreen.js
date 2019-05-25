@@ -1,11 +1,15 @@
 import React, { Component } from "react"
 import { Platform, StyleSheet, View, ScrollView, Text } from "react-native"
 import { MapView, Icon } from "expo"
-const { Marker } = MapView
+const { Marker } = MapView,
+  { Polyline } = MapView
 
 // Constants
 import Colors from "../constants/Colors"
 import Layout from "../constants/Layout"
+
+// Helpers
+import { decode } from "../helpers/decodeDirections"
 
 // Components
 import RestaurantBanner from "../components/RestaurantBanner"
@@ -13,6 +17,10 @@ import DishCard from "../components/DishCard"
 import WithBackIconHeader from "../components/headers/WithBackIconHeader"
 import Button from "../components/Button"
 import CartButton from "../components/CartButton"
+
+// Services
+import RestaurantService from "../services/restaurant"
+import DirectionsService from "../services/directions"
 
 /**
  * Details Screen for restaurants or dishes
@@ -25,21 +33,51 @@ export default class DetailsScreen extends Component {
       mapCenter: {
         latitude: 41.397465,
         longitude: 2.188411,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
+        latitudeDelta: 0.0225,
+        longitudeDelta: 0.0225,
       },
       restaurantMarker: {
         latitude: 41.397465,
         longitude: 2.188411,
       },
+      directions: [],
       quantity: 1,
       showAddToCart: false
     }
+    this.restaurantService = new RestaurantService()
+    this.directionsService = new DirectionsService()
   }
 
   static navigationOptions = ({ navigation }) => {
     return {
       header: <WithBackIconHeader text={"Restaurant"} iconName={"arrow-back"} color={Colors.basic.white} navigation={navigation} />
+    }
+  }
+
+  componentDidMount() {
+    this._getRestaurant()
+    this._getDirections()
+  }
+
+  _getRestaurant = async () => {
+    const response = await this.restaurantService.getRestaurantById("5ce3da166f52243cfd2a2bb1")
+    console.log("RESTAURANT: \n", response.data)
+  }
+
+  _getDirections = async () => {
+    try {
+      const { data } = await this.directionsService.getDirections("41.39735779999999,2.1885515", "41.3936707,2.1459476")
+      console.log("DIRECTIONS: \n", data)
+      const points = decode(data.data)
+      console.log("DECODED:\n", points)
+      let directions = [
+        { latitude: 41.39735779999999, longitude: 2.1885515 },
+        ...points,
+        { latitude: 41.3936707, longitude: 2.1459476 }
+      ]
+      this.setState({ directions })
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -53,7 +91,7 @@ export default class DetailsScreen extends Component {
 
   render() {
     const dishList = this._buildDishList(),
-      { mapCenter, restaurantMarker, quantity, showAddToCart } = this.state,
+      { mapCenter, restaurantMarker, quantity, directions, showAddToCart } = this.state,
       prefix = Platform.OS === "ios" ? "ios" : "md"
 
     return (
@@ -68,6 +106,17 @@ export default class DetailsScreen extends Component {
               style={styles.map}
               initialRegion={mapCenter}
               onRegionChange={() => null}>
+
+              {
+                directions ?
+                  <Polyline
+                    coordinates={directions}
+                    strokeWidth={3}
+                    strokeColor={Colors.redible.main}
+                  /> :
+                  null
+              }
+
 
               <Marker
                 coordinate={restaurantMarker}

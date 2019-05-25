@@ -5,11 +5,15 @@ import BaseService from "./base"
  * @extends BaseService
  */
 export default class RestaurantService extends BaseService {
-    constructor() {
-        super("restaurants")
-    }
+  constructor() {
+    super("restaurants")
+  }
 
-    async getAllRestaurants() {
-        return await this.request()
-    }
+  async getAllRestaurants() {
+    return await this.request()
+  }
+
+  async getRestaurantById(id) {
+    return await this.request("/" + id)
+  }
 }
