@@ -67,19 +67,28 @@ export default class HomeScreen extends Component {
     })
   }
 
-
   _getAllRestaurants = async () => {
     const { data } = await this.restaurantService.getAllRestaurants()
     this.setState({ restaurants: data.data })
   }
 
   _buildFeaturedList = () => {
-    const types = ["Top deal", "Top rated", "Healthy", "Trending"]
-    let featured = []
-    for (let i = 0; i < 4; i++) {
-      featured.push(<RestaurantBanner key={i} type={types[i]} navigation={this.props.navigation} userLocation={this.state.userLocation} />)
-    }
-    return featured.map(restaurant => restaurant)
+    const types = ["Top deal", "Top rated", "Healthy", "Trending"],
+      { restaurants, userLocation } = this.state
+
+    return restaurants.map((restaurant, i) => {
+      return (
+        i >= types.length ? null :
+          (
+            <RestaurantBanner
+              restaurantData={restaurant}
+              key={restaurant._id}
+              type={types[i]}
+              navigation={this.props.navigation}
+              userLocation={userLocation} />
+          )
+      )
+    })
   }
 
   _buildRestaurantList = () => {
@@ -87,7 +96,8 @@ export default class HomeScreen extends Component {
 
     return restaurants.map(restaurant => {
       return (
-        <RestaurantCard key={restaurant._id}
+        <RestaurantCard
+          key={restaurant._id}
           navigation={this.props.navigation}
           userLocation={userLocation}
           restaurantData={restaurant} />
@@ -96,9 +106,7 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    const
-      featuredList = this._buildFeaturedList(),
-      { restaurants } = this.state,
+    const { restaurants, userLocation } = this.state,
       { navigation } = this.props
 
     let modalVisible = navigation.getParam("modalVisible") || false
@@ -114,13 +122,18 @@ export default class HomeScreen extends Component {
         <ScrollView style={styles.contentContainer}>
           <Text style={{ ...styles.title, marginTop: 15, marginBottom: 0 }}>Recommended</Text>
           <View>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-              {featuredList}
-            </ScrollView>
-            <Text style={styles.title}>Restaurants</Text>
             {
-              restaurants ?
-                this._buildRestaurantList() :
+              restaurants && userLocation ?
+                <View>
+                  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                    {
+                      this._buildFeaturedList()
+                    }
+                  </ScrollView>
+                  {
+                    this._buildRestaurantList()
+                  }
+                </View> :
                 null
             }
           </View>

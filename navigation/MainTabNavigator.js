@@ -41,6 +41,7 @@ HomeStack.navigationOptions = {
 
 const MapStack = createStackNavigator({
   Map: MapScreen,
+  Details: DetailsScreen,
 })
 
 MapStack.navigationOptions = {
@@ -62,7 +63,7 @@ RankingStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={`${prefix}-trophy`}
+      name={`${prefix}-trending-up`}
     />
   ),
 }

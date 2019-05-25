@@ -1,9 +1,9 @@
 import React, { Component } from "react"
-import { Platform, StyleSheet, View, Text, TextInput } from "react-native"
+import { Platform, StyleSheet, Image, View, Text, TextInput } from "react-native"
 import { Icon } from "expo"
 
 // Components
-import WithBackIconHeader from "../components/headers/WithBackIconHeader"
+import Button from "../components/Button"
 
 // Constants
 import Layout from "../constants/Layout"
@@ -24,7 +24,7 @@ export default class ProfileScreen extends Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      header: <WithBackIconHeader text={"Profile"} iconName={"arrow-back"} color={Colors.basic.white} navigation={navigation} />
+      header: null
     }
   }
   render() {
@@ -35,43 +35,53 @@ export default class ProfileScreen extends Component {
         {
           !isLoggedUser ?
             <View style={styles.contentContainer}>
-              <View style={styles.inputContainer}>
-                <Icon.Ionicons
-                  name="md-create"
-                  color={Colors.redible.gray}
-                  size={Layout.fontSize.largeText}
-                />
-                <TextInput
-                  placeholder="Email"
-                  onChangeText={email => this.setState({ email })}
-                  mode={"outlined"}
-                  value={email}
-                  style={styles.textInput}
-                />
-                <Icon.Ionicons
-                  name="md-backspace"
-                  color={Colors.redible.gray}
-                  size={Layout.fontSize.largeText}
-                />
+              <View style={styles.topContainer}>
+                <Image source={require("../assets/images/splash.png")} style={{ height: 250, width: 250 }} />
+                <Text style={styles.title}>Love food? Let's save eat!</Text>
               </View>
-              <View style={{ ...styles.inputContainer, marginTop: 15 }}>
-                <Icon.Ionicons
-                  name="md-create"
-                  color={Colors.redible.gray}
-                  size={Layout.fontSize.largeText}
-                />
-                <TextInput
-                  placeholder="Password"
-                  onChangeText={password => this.setState({ password })}
-                  mode={"outlined"}
-                  value={password}
-                  style={styles.textInput}
-                />
-                <Icon.Ionicons
-                  name="md-backspace"
-                  color={Colors.redible.gray}
-                  size={Layout.fontSize.largeText}
-                />
+              <View style={styles.bottomContainer}>
+                <View>
+                  <View style={styles.inputContainer}>
+                    <Icon.Ionicons
+                      name="md-create"
+                      color={Colors.redible.gray}
+                      size={Layout.fontSize.largeText}
+                    />
+                    <TextInput
+                      placeholder="Email"
+                      onChangeText={email => this.setState({ email })}
+                      mode={"outlined"}
+                      value={email}
+                      style={styles.textInput}
+                    />
+                  </View>
+                  <View style={styles.inputContainer}>
+                    <Icon.Ionicons
+                      name="md-create"
+                      color={Colors.redible.gray}
+                      size={Layout.fontSize.largeText}
+                    />
+                    <TextInput
+                      placeholder="Password"
+                      onChangeText={password => this.setState({ password })}
+                      mode={"outlined"}
+                      value={password}
+                      style={styles.textInput}
+                    />
+                  </View>
+                  <Button
+                    text={"Login"}
+                    containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry, marginTop: 20, marginLeft: 25, marginRight: 25 }}
+                    textStyles={{ color: Colors.basic.white, fontSize: Layout.fontSize.mainContent }}
+                  />
+                  <Button
+                    noShadow
+                    text={"Sign up"}
+                    containerStyles={{ flexDirection: "row", backgroundColor: Colors.basic.white, marginTop: 20, marginLeft: 25, marginRight: 25 }}
+                    textStyles={{ color: Colors.redible.accent, fontSize: Layout.fontSize.mainContent }}
+                  />
+                </View>
+                <Text style={styles.passwordRecovery}>Forgot password?</Text>
               </View>
             </View>
             :
@@ -86,28 +96,52 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.basic.white,
-    paddingLeft: 30,
-    paddingRight: 30
   },
   contentContainer: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "center"
+  },
+  topContainer: {
+    flex: 1.25,
+    backgroundColor: Colors.redible.main,
+    paddingLeft: 30,
+    paddingRight: 30,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  title: {
+    fontSize: Layout.fontSize.title,
+    color: Colors.basic.white
+  },
+  bottomContainer: {
+    flex: 1,
+    color: Colors.basic.white,
+    paddingLeft: 30,
+    paddingRight: 30,
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   inputContainer: {
     flexDirection: "row",
     width: "100%",
     alignItems: "center",
-    padding: 5,
+    marginTop: 15,
+    padding: 7.5,
     paddingRight: 20,
     paddingLeft: 20,
-    backgroundColor: Colors.basic.white,
-    borderBottomWidth: 2,
-    borderBottomColor: Colors.redible.main
+    backgroundColor: "rgba(235, 235, 235, 0.8)",
+    borderRadius: 8
   },
   textInput: {
     flex: 1,
     paddingLeft: 10,
     paddingRight: 10,
     fontSize: Layout.fontSize.mainContent
+  },
+  passwordRecovery: {
+    color: Colors.redible.accent,
+    fontSize: Layout.fontSize.mediumText,
+    marginBottom: 15,
+    fontStyle: "italic"
   }
 })

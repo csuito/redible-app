@@ -101,9 +101,7 @@ export default class MapScreen extends Component {
       restaurantMarkers.push(
         {
           coordinates: { latitude: parseFloat(restaurants[i].lat), longitude: parseFloat(restaurants[i].lng) },
-          name: restaurants[i].name,
-          _id: restaurants[i]._id,
-          address: restaurants[i].address
+          ...restaurants[i]
         }
       )
     }
@@ -161,8 +159,8 @@ export default class MapScreen extends Component {
 
           </MapView>
           {
-            showDescription ?
-              <DescriptionCard navigation={navigation} restaurantData={restaurantData} _onPress={() => this.setState({ showDescription: false })} />
+            userMarker && showDescription ?
+              <DescriptionCard navigation={navigation} userLocation={userMarker} restaurantData={restaurantData} _onPress={() => this.setState({ showDescription: false })} />
               :
               null
           }

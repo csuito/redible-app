@@ -98,7 +98,11 @@ export default class DetailsScreen extends Component {
 
         <CartButton _onPress={() => this.props.navigation.navigate("Cart")} prefix={prefix} />
         <ScrollView style={styles.contentContainer}>
-          <RestaurantBanner data={restaurantData} />
+          {
+            restaurantData ?
+              <RestaurantBanner restaurantData={restaurantData} /> :
+              null
+          }
 
           <View style={styles.mapContainer}>
             {
@@ -140,7 +144,7 @@ export default class DetailsScreen extends Component {
             }
           </View>
 
-          <Text style={styles.subtitle}>Meals</Text>
+          <Text style={styles.subtitle}>Offers</Text>
           {dishList}
         </ScrollView>
         {

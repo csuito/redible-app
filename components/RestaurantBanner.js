@@ -10,7 +10,7 @@ import Colors from "../constants/Colors"
 import { getIconProperties } from "../helpers/getIconProperties"
 
 /**
- * Restaurant banner for main screen
+ * Restaurant banner for main screen and details screen
  */
 export default class RestaurantBanner extends Component {
   constructor(props) {
@@ -31,12 +31,14 @@ export default class RestaurantBanner extends Component {
   render() {
     const iconPrefix = Platform.OS === "ios" ? "ios" : "md",
       { showDescription, arrow } = this.state,
-      { type, detail, navigation, userLocation } = this.props,
+      { type, detail, navigation, userLocation, restaurantData } = this.props,
       { color, iconName } = getIconProperties(type)
+
+    console.log(restaurantData)
 
     return (
       <ImageBackground style={styles.container} source={require("../assets/images/starbucks-logo.jpg")}>
-        <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details", { userLocation }) : this._toggleDescription()}>
+        <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details", { userLocation, restaurantData }) : this._toggleDescription()}>
           <View style={styles.contentContainer}>
             <View style={{ ...styles.verticalLine, backgroundColor: color }}></View>
             <View style={styles.textContainer}>
@@ -56,7 +58,7 @@ export default class RestaurantBanner extends Component {
                         size={Layout.fontSize.contentTitle}
                         color={color}
                       />{` ${type}`}</Text>
-                    <Text style={styles.restaurantTitle}>Forastera Restaurant</Text>
+                    <Text style={styles.restaurantTitle}>{restaurantData.name}</Text>
                   </View>
                   :
                   <View>
@@ -66,7 +68,7 @@ export default class RestaurantBanner extends Component {
                         color={showDescription ? Colors.redible.main : Colors.redible.lavenderGray}
                         size={Layout.fontSize.largeIcon}
                       />
-                      <Text style={{ ...styles.restaurantTitle, marginLeft: 15 }}>{`Forastera Restaurant`}</Text>
+                      <Text style={{ ...styles.restaurantTitle, marginLeft: 15 }}>{restaurantData.name}</Text>
                     </View>
                     {
                       showDescription ?
@@ -76,7 +78,7 @@ export default class RestaurantBanner extends Component {
                               name={`${iconPrefix}-pin`}
                               color={Colors.redible.accent}
                               size={Layout.fontSize.mediumText}
-                            />{` Carrer de Sancho de Ávila, 22, 08018 Barcelona`}</Text>
+                            />{` ${restaurantData.address}`}</Text>
                           <Text style={styles.description}>
                             <Icon.Ionicons
                               name={`${iconPrefix}-information-circle-outline`}

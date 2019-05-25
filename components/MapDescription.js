@@ -13,7 +13,7 @@ import Colors from "../constants/Colors"
 
 const DescriptionCard = props => {
   const prefix = Platform.OS === "ios" ? "ios" : "md",
-    { navigation, _onPress, restaurantData } = props
+    { navigation, _onPress, restaurantData, userLocation } = props
 
   return (
     <View style={styles.container}>
@@ -51,7 +51,7 @@ const DescriptionCard = props => {
           text={"Go"}
           containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.main, width: 100 }}
           textStyles={{ fontSize: Layout.fontSize.smallText, color: Colors.basic.white }}
-          _onPress={() => navigation.navigate("Details", { restaurantData })}
+          _onPress={() => navigation.navigate("Details", { userLocation, restaurantData })}
         />
       </View>
     </View>
