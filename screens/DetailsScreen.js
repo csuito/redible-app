@@ -41,7 +41,8 @@ export default class DetailsScreen extends Component {
       userLocation: {},
       directions: [],
       quantity: 1,
-      showAddToCart: false
+      showAddToCart: false,
+      loading: true
     }
     this.directionsService = new DirectionsService()
   }
@@ -74,7 +75,9 @@ export default class DetailsScreen extends Component {
 
       const mapCenter = { ...this.state.mapCenter, ...restaurantMarker }
 
-      this.setState({ userLocation, directions, restaurantData, mapCenter, restaurantMarker })
+      this.setState({ userLocation, directions, restaurantData, mapCenter, restaurantMarker, loading: false }, () => {
+        this.props.navigation.setParams({ noShadow: false })
+      })
     } catch (err) {
       console.log(err)
     }
@@ -90,108 +93,113 @@ export default class DetailsScreen extends Component {
 
   render() {
     const dishList = this._buildDishList(),
-      { mapCenter, restaurantData, restaurantMarker, quantity, directions, showAddToCart, userLocation } = this.state,
+      { mapCenter, restaurantData, restaurantMarker, quantity, directions, showAddToCart, userLocation, loading } = this.state,
       prefix = Platform.OS === "ios" ? "ios" : "md"
 
     return (
-      <View style={styles.container}>
+      !loading ?
+        <View style={styles.container}>
 
-        <CartButton _onPress={() => this.props.navigation.navigate("Cart")} prefix={prefix} />
-        <ScrollView style={styles.contentContainer}>
+          <CartButton _onPress={() => this.props.navigation.navigate("Cart")} prefix={prefix} />
+          <ScrollView style={styles.contentContainer}>
+            {
+              restaurantData ?
+                <RestaurantBanner restaurantData={restaurantData} /> :
+                null
+            }
+
+            <View style={styles.mapContainer}>
+              {
+                mapCenter.latitude && mapCenter.longitude ?
+                  <MapView
+                    style={styles.map}
+                    initialRegion={mapCenter}
+                    onRegionChange={() => null}>
+                    {
+                      directions ?
+                        <Polyline
+                          coordinates={directions}
+                          strokeWidth={3}
+                          strokeColor={Colors.redible.main}
+                        /> :
+                        null
+                    }
+                    {
+                      userLocation.latitude && userLocation.longitude ?
+                        <Marker
+                          coordinate={userLocation}
+                          pinColor={Colors.redible.raspberry}
+                          onPress={() => { }}
+                        /> :
+                        null
+                    }
+                    {
+                      restaurantMarker.latitude && restaurantMarker.longitude ?
+                        <Marker
+                          coordinate={restaurantMarker}
+                          tracksViewChanges={false}
+                          tracksInfoWindowChanges={false}
+                          pinColor={Colors.redible.main} /> :
+                        null
+                    }
+                  </MapView>
+                  :
+                  null
+              }
+            </View>
+
+            <Text style={styles.subtitle}>Offers</Text>
+            {dishList}
+          </ScrollView>
           {
-            restaurantData ?
-              <RestaurantBanner restaurantData={restaurantData} /> :
+            showAddToCart ?
+              <View style={styles.addToCart}>
+                <Text style={styles.dishText}>{`Paella Valenciana`}</Text>
+                <View style={styles.row}>
+                  <Text style={styles.addToText}>{`Quantity `}</Text>
+                  <Icon.Ionicons
+                    onPress={() => this.setState(prevState => {
+                      return { quantity: prevState.quantity - 1 >= 0 ? prevState.quantity - 1 : 0 }
+                    })}
+                    name={`${prefix}-remove-circle-outline`}
+                    color={Colors.redible.lavenderGray}
+                    size={Layout.fontSize.largeIcon}
+                  />
+                  <Text style={styles.addToText}>{quantity}</Text>
+                  <Icon.Ionicons
+                    onPress={() => this.setState(prevState => {
+                      return { quantity: prevState.quantity + 1 }
+                    })}
+                    name={`${prefix}-add-circle-outline`}
+                    color={Colors.redible.main}
+                    size={Layout.fontSize.largeIcon}
+                  />
+                  {
+                    quantity > 0 ?
+                      <Button
+                        iconName={"cart"}
+                        text={"Add to cart"}
+                        containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.main }}
+                        textStyles={{ fontSize: Layout.fontSize.mediumText, color: Colors.basic.white }}
+                        _onPress={() => this.setState({ showAddToCart: false, quantity: 1 })} />
+                      :
+                      <Button
+                        iconName={"close"}
+                        text={"Cancel"}
+                        containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry }}
+                        textStyles={{ fontSize: Layout.fontSize.mediumText, color: Colors.basic.white }}
+                        _onPress={() => this.setState({ showAddToCart: false, quantity: 1 })} />
+                  }
+                </View>
+              </View>
+              :
               null
           }
-
-          <View style={styles.mapContainer}>
-            {
-              mapCenter.latitude && mapCenter.longitude ?
-                <MapView
-                  style={styles.map}
-                  initialRegion={mapCenter}
-                  onRegionChange={() => null}>
-                  {
-                    directions ?
-                      <Polyline
-                        coordinates={directions}
-                        strokeWidth={3}
-                        strokeColor={Colors.redible.main}
-                      /> :
-                      null
-                  }
-                  {
-                    userLocation.latitude && userLocation.longitude ?
-                      <Marker
-                        coordinate={userLocation}
-                        pinColor={Colors.redible.raspberry}
-                        onPress={() => { }}
-                      /> :
-                      null
-                  }
-                  {
-                    restaurantMarker.latitude && restaurantMarker.longitude ?
-                      <Marker
-                        coordinate={restaurantMarker}
-                        tracksViewChanges={false}
-                        tracksInfoWindowChanges={false}
-                        pinColor={Colors.redible.main} /> :
-                      null
-                  }
-                </MapView>
-                :
-                <PacmanIndicator size={48} color={Colors.redible.main} />
-            }
-          </View>
-
-          <Text style={styles.subtitle}>Offers</Text>
-          {dishList}
-        </ScrollView>
-        {
-          showAddToCart ?
-            <View style={styles.addToCart}>
-              <Text style={styles.dishText}>{`Paella Valenciana`}</Text>
-              <View style={styles.row}>
-                <Text style={styles.addToText}>{`Quantity `}</Text>
-                <Icon.Ionicons
-                  onPress={() => this.setState(prevState => {
-                    return { quantity: prevState.quantity - 1 >= 0 ? prevState.quantity - 1 : 0 }
-                  })}
-                  name={`${prefix}-remove-circle-outline`}
-                  color={Colors.redible.lavenderGray}
-                  size={Layout.fontSize.largeIcon}
-                />
-                <Text style={styles.addToText}>{quantity}</Text>
-                <Icon.Ionicons
-                  onPress={() => this.setState(prevState => {
-                    return { quantity: prevState.quantity + 1 }
-                  })}
-                  name={`${prefix}-add-circle-outline`}
-                  color={Colors.redible.main}
-                  size={Layout.fontSize.largeIcon}
-                />
-                {
-                  quantity > 0 ?
-                    <Button
-                      iconName={"cart"}
-                      text={"Add to cart"}
-                      containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.main }}
-                      textStyles={{ fontSize: Layout.fontSize.mediumText, color: Colors.basic.white }}
-                      _onPress={() => this.setState({ showAddToCart: false, quantity: 1 })} />
-                    :
-                    <Button
-                      iconName={"close"}
-                      text={"Cancel"}
-                      containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry }}
-                      textStyles={{ fontSize: Layout.fontSize.mediumText, color: Colors.basic.white }}
-                      _onPress={() => this.setState({ showAddToCart: false, quantity: 1 })} />
-                }
-              </View>
-            </View>
-            :
-            null
-        }
-      </View>
+        </View>
+        :
+        <View style={{ height: Layout.window.height, width: Layout.window.width, backgroundColor: Colors.redible.main }}>
+          <PacmanIndicator size={75} color={Colors.basic.white} />
+        </View>
     )
   }
 }

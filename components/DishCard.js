@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React from "react"
 import { StyleSheet, View, Image, Text, Platform, TouchableWithoutFeedback } from "react-native"
 import { Icon } from "expo"
 
@@ -7,58 +7,51 @@ import Layout from "../constants/Layout"
 import Colors from "../constants/Colors"
 
 /**
- * Restaurant card for main screen
+ * Renders Dish Card on details screen
  */
-export default class DishCard extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
+const DishCard = props => {
+  const iconPrefix = Platform.OS === "ios" ? "ios" : "md",
+    { _onPress } = props
 
-  render() {
-    const iconPrefix = Platform.OS === "ios" ? "ios" : "md",
-      { _onPress } = this.props
-
-    return (
-      <TouchableWithoutFeedback onPress={() => _onPress ? _onPress() : null}>
-        <View style={styles.container}>
+  return (
+    <TouchableWithoutFeedback onPress={() => _onPress ? _onPress() : null}>
+      <View style={styles.container}>
+        <View>
+          <Image style={styles.image} source={require("../assets/images/paella.jpg")} />
+        </View>
+        <View style={styles.textContainer}>
           <View>
-            <Image style={styles.image} source={require("../assets/images/paella.jpg")} />
+            <Text style={styles.dishName}>
+              <Icon.Ionicons
+                name={"ios-restaurant"}
+                size={Layout.fontSize.contentTitle}
+              />{` Paella Valenciana`}</Text>
+            <Text style={styles.text}>
+              <Icon.Ionicons
+                name={`${iconPrefix}-time`}
+                size={Layout.fontSize.mainContent}
+              />{` Pick-up: 20:00 - 22:30`}
+            </Text>
+            <Text style={styles.text}>
+              <Icon.Ionicons
+                name={`${iconPrefix}-pin`}
+                size={Layout.fontSize.mainContent}
+              />{` Categories...`}</Text>
           </View>
-          <View style={styles.textContainer}>
-            <View>
-              <Text style={styles.dishName}>
-                <Icon.Ionicons
-                  name={`${iconPrefix}-restaurant`}
-                  size={Layout.fontSize.contentTitle}
-                />{` Paella Valenciana`}</Text>
-              <Text style={styles.text}>
-                <Icon.Ionicons
-                  name={`${iconPrefix}-time`}
-                  size={Layout.fontSize.mainContent}
-                />{` Pick-up: 20:00 - 22:30`}
-              </Text>
-              <Text style={styles.text}>
-                <Icon.Ionicons
-                  name={`${iconPrefix}-pin`}
-                  size={Layout.fontSize.mainContent}
-                />{` Categories...`}</Text>
-            </View>
-            <View style={styles.footer}>
-              <Text style={{ ...styles.price, color: Colors.redible.accent, textDecorationLine: "line-through" }}>€ 5.50</Text>
-              <Text style={{ ...styles.price, color: Colors.basic.black }}>
-                <Icon.Ionicons
-                  name={`${iconPrefix}-pricetags`}
-                  size={Layout.fontSize.mediumText}
-                  color={Colors.basic.black}
-                />{` € 3.25`}
-              </Text>
-            </View>
+          <View style={styles.footer}>
+            <Text style={{ ...styles.price, color: Colors.redible.accent, textDecorationLine: "line-through" }}>€ 5.50</Text>
+            <Text style={{ ...styles.price, color: Colors.basic.black }}>
+              <Icon.Ionicons
+                name={`${iconPrefix}-pricetags`}
+                size={Layout.fontSize.mediumText}
+                color={Colors.basic.black}
+              />{` € 3.25`}
+            </Text>
           </View>
         </View>
-      </TouchableWithoutFeedback>
-    )
-  }
+      </View>
+    </TouchableWithoutFeedback>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -105,3 +98,5 @@ const styles = StyleSheet.create({
     fontSize: Layout.fontSize.mediumText
   },
 })
+
+export default DishCard

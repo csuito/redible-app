@@ -12,7 +12,7 @@ const CartButton = props => {
   return (
     <TouchableOpacity style={styles.container} onPress={_onPress}>
       <Icon.Ionicons
-        name={`${prefix}-cart`}
+        name={`${prefix}-basket`}
         color={Colors.basic.white}
         size={Layout.fontSize.largeIcon}
       />

@@ -24,7 +24,7 @@ export default class OrderSummaryScreen extends Component {
   }
   static navigationOptions = ({ navigation }) => {
     return {
-      header: <WithBackIconHeader text={"Order Summary"} iconName={"arrow-back"} color={Colors.basic.white} navigation={navigation} noShadow />
+      header: <WithBackIconHeader text={"Order Summary"} iconName={"arrow-back"} color={Colors.basic.white} navigation={navigation} />
     }
   }
 
@@ -52,40 +52,40 @@ export default class OrderSummaryScreen extends Component {
           <Text style={styles.title}>Forastera Restaurant</Text>
           <Text style={styles.text}><Icon.Ionicons
             name={`${prefix}-pin`}
-            color={Colors.basic.white}
+            color={Colors.redible.accent}
             size={Layout.fontSize.mainContent}
           />{` Carrer de Sancho de Ávila, 22, 08018 Barcelona`}</Text>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
             <Text style={styles.text}><Icon.Ionicons
               name={`${prefix}-time`}
-              color={Colors.basic.white}
+              color={Colors.redible.accent}
               size={Layout.fontSize.mainContent}
             />{` Pick-up: 20:00 - 22:30`}</Text>
             <Button
               noShadow
               text={"Set time"}
-              containerStyles={{ flexDirection: "row", padding: 5, marginTop: 15, backgroundColor: Colors.redible.grape }}
+              containerStyles={{ flexDirection: "row", padding: 5, marginTop: 15, backgroundColor: Colors.redible.main }}
               textStyles={{ color: Colors.basic.white }}
             />
           </View>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
             <Text style={styles.text}><Icon.Ionicons
               name={`${prefix}-card`}
-              color={Colors.basic.white}
+              color={Colors.redible.accent}
               size={Layout.fontSize.mainContent}
             />{` Payment method`}</Text>
             <View style={styles.paymentMethodButtons}>
               <Button
                 noShadow
                 text={"Edit"}
-                containerStyles={{ flexDirection: "row", padding: 5, backgroundColor: Colors.redible.grape, marginRight: 15 }}
+                containerStyles={{ flexDirection: "row", padding: 5, backgroundColor: Colors.redible.main, marginRight: 15 }}
                 textStyles={{ color: Colors.basic.white }}
                 _onPress={() => this._setPaymentMethod("edit")}
               />
               <Button
                 noShadow
                 text={"Add"}
-                containerStyles={{ flexDirection: "row", padding: 5, backgroundColor: Colors.redible.grape }}
+                containerStyles={{ flexDirection: "row", padding: 5, backgroundColor: Colors.redible.main }}
                 textStyles={{ color: Colors.basic.white }}
                 _onPress={() => this._setPaymentMethod()}
               />
@@ -112,18 +112,18 @@ const styles = StyleSheet.create({
   pickupInfo: {
     padding: 15,
     paddingBottom: 30,
-    backgroundColor: Colors.redible.main
+    backgroundColor: Colors.basic.white
   },
   title: {
     marginTop: 30,
     fontSize: Layout.fontSize.title,
     fontWeight: "bold",
-    color: Colors.basic.white
+    color: Colors.basic.black
   },
   text: {
     marginTop: 15,
     fontSize: Layout.fontSize.mainContent,
-    color: Colors.basic.white
+    color: Colors.redible.accent
   },
   paymentMethodButtons: {
     flexDirection: "row",

@@ -1,6 +1,7 @@
 import React, { Component } from "react"
-import { ScrollView, StyleSheet, View, Text } from "react-native"
+import { ScrollView, StyleSheet, View, Text, RefreshControl } from "react-native"
 import { Location, Permissions } from "expo"
+import { PacmanIndicator } from "react-native-indicators"
 
 // Components
 import SearchHeader from "../components/headers/SearchHeader"
@@ -23,7 +24,9 @@ export default class HomeScreen extends Component {
     super(props)
     this.state = {
       userLocation: {},
-      restaurants: []
+      restaurants: [],
+      loading: true,
+      refreshing: false
     }
     this.restaurantService = new RestaurantService()
   }
@@ -35,9 +38,26 @@ export default class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    this._addModalSub(this.props.navigation)
-    this._getUserLocation()
-    this._getAllRestaurants()
+    const { navigation } = this.props
+    navigation.setParams({ noShadow: true })
+    this._addModalSub(navigation)
+
+    this._loadComponentData()
+  }
+
+  _loadComponentData = async () => {
+    const userLocation = this._getUserLocation(),
+      restaurants = this._getAllRestaurants()
+
+    try {
+      const data = await Promise.all([userLocation, restaurants])
+
+      this.setState({ userLocation: data[0], restaurants: data[1], loading: false }, () => {
+        this.props.navigation.setParams({ noShadow: false })
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
 	/**
@@ -62,14 +82,12 @@ export default class HomeScreen extends Component {
     const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({})
     const coordinates = { latitude, longitude }
 
-    this.setState({
-      userLocation: coordinates
-    })
+    return coordinates
   }
 
   _getAllRestaurants = async () => {
     const { data } = await this.restaurantService.getAllRestaurants()
-    this.setState({ restaurants: data.data })
+    return data.data
   }
 
   _buildFeaturedList = () => {
@@ -105,8 +123,14 @@ export default class HomeScreen extends Component {
     })
   }
 
+  _onRefresh = async () => {
+    this.setState({ refreshing: true })
+    const restaurants = await this._getAllRestaurants()
+    this.setState({ restaurants, refreshing: false })
+  }
+
   render() {
-    const { restaurants, userLocation } = this.state,
+    const { loading, refreshing } = this.state,
       { navigation } = this.props
 
     let modalVisible = navigation.getParam("modalVisible") || false
@@ -119,11 +143,17 @@ export default class HomeScreen extends Component {
           _onPress={this._hideModal}
           modalVisible={modalVisible} />
 
-        <ScrollView style={styles.contentContainer}>
-          <Text style={{ ...styles.title, marginTop: 15, marginBottom: 0 }}>Recommended</Text>
+        <ScrollView style={styles.contentContainer}
+          refreshControl={
+            <RefreshControl
+              onRefresh={this._onRefresh}
+              refreshing={refreshing}
+            />
+          }
+        >
           <View>
             {
-              restaurants && userLocation ?
+              !loading ?
                 <View>
                   <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     {
@@ -133,8 +163,11 @@ export default class HomeScreen extends Component {
                   {
                     this._buildRestaurantList()
                   }
-                </View> :
-                null
+                </View>
+                :
+                <View style={{ height: Layout.window.height, width: Layout.window.width, backgroundColor: Colors.redible.main }}>
+                  <PacmanIndicator size={75} color={Colors.basic.white} />
+                </View>
             }
           </View>
         </ScrollView>
@@ -158,3 +191,4 @@ const styles = StyleSheet.create({
     fontSize: Layout.fontSize.contentTitle,
   },
 })
+

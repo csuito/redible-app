@@ -20,11 +20,12 @@ export default class RestaurantCard extends Component {
   render() {
     const iconPrefix = Platform.OS === "ios" ? "ios" : "md",
       { navigation, _onPress, userLocation, restaurantData } = this.props
+
     return (
-      <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details", { userLocation, restaurantData }) : _onPress ? _onPress() : null}>
+      <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details", { userLocation, restaurantData, noShadow: true }) : _onPress ? _onPress() : null}>
         <View style={styles.container}>
-          <View>
-            <Image style={styles.image} source={require("../assets/images/forastera-logo.png")} />
+          <View style={styles.imageContainer}>
+            <Image style={styles.image} source={{ uri: restaurantData.logo }} />
           </View>
           <View style={styles.textContainer}>
             <View>
@@ -71,6 +72,10 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 5,
   },
+  imageContainer: {
+    height: "100%",
+    backgroundColor: Colors.basic.white
+  },
   textContainer: {
     flex: 1,
     justifyContent: "space-between",
@@ -81,7 +86,8 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 150,
-    width: 150
+    width: 145,
+    resizeMode: "contain"
   },
   text: {
     marginTop: 10,

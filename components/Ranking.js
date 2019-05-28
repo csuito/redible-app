@@ -1,5 +1,5 @@
 import React from "react"
-import { Platform, StyleSheet, View, TouchableWithoutFeedback, Text, Image } from "react-native"
+import { StyleSheet, View, Text } from "react-native"
 import { Icon } from "expo"
 
 // Constants
@@ -7,15 +7,17 @@ import Colors from "../constants/Colors"
 import Layout from "../constants/Layout"
 
 const RankingCard = props => {
-  const { name, rank, gender, points } = props,
-    source = gender === "male" ? require(`../assets/images/hip-male-avatar.png`) : require(`../assets/images/purple-female-avatar.png`)
+  const { name, rank, gender, points } = props
 
   return (
-    <TouchableWithoutFeedback onPress={() => { }}>
+    <View>
       <View style={styles.container}>
-        <View style={{ padding: 5 }}>
+
+        {/**
+        <View style={{ padding: 7.5, alignItems: "center", justifyContent: "center" }}>
           <Image style={styles.image} source={source} />
         </View>
+        */}
 
         <View style={styles.textContainer}>
           <View style={{ flex: 1 }}>
@@ -24,15 +26,15 @@ const RankingCard = props => {
 
           <View style={styles.points}>
             <Icon.Ionicons
-              name={`md-globe`}
-              color={Colors.redible.green}
+              name={"ios-restaurant"}
+              color={Colors.redible.silver}
               size={Layout.fontSize.largeIcon}
             />
-            <Text>{`${points} points`}</Text>
+            <Text style={styles.pointsText}>{`${points} points`}</Text>
           </View>
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    </View>
   )
 }
 
@@ -54,8 +56,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   image: {
-    height: 75,
-    width: 75,
+    height: 45,
+    width: 45,
   },
   textContainer: {
     flex: 1,
@@ -67,11 +69,16 @@ const styles = StyleSheet.create({
     paddingRight: 15,
   },
   text: {
-    fontSize: Layout.fontSize.mainContent
+    fontSize: Layout.fontSize.mainContent,
+    color: Colors.basic.black
   },
   points: {
     alignItems: "center",
     justifyContent: "center"
+  },
+  pointsText: {
+    color: Colors.basic.black,
+    fontSize: Layout.fontSize.mediumText
   }
 })
 

@@ -13,7 +13,7 @@ const WithBackIconHeader = props => {
   const prefix = Platform.OS === "ios" ? "ios" : "md",
     { iconName, text, color, navigation, noShadow, bgColor } = props
 
-  const shadowStyles = !noShadow ? {
+  const shadowStyles = !navigation.getParam("noShadow") && !noShadow ? {
     shadowColor: Colors.shadow,
     shadowOffset: { height: 5, width: 0 },
     shadowOpacity: 1,
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     fontSize: Layout.fontSize.largeText,
     textAlign: "center",
     fontWeight: "bold",
+    fontFamily: "open-sans-bold"
   }
 })
 

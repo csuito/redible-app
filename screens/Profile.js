@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Platform, StyleSheet, Image, View, Text, TextInput } from "react-native"
+import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity } from "react-native"
 import { Icon } from "expo"
 
 // Components
@@ -36,8 +36,8 @@ export default class ProfileScreen extends Component {
           !isLoggedUser ?
             <View style={styles.contentContainer}>
               <View style={styles.topContainer}>
-                <Image source={require("../assets/images/splash.png")} style={{ height: 250, width: 250 }} />
-                <Text style={styles.title}>Love food? Let's save eat!</Text>
+                <Image style={styles.logo} source={require("../assets/images/splash.png")} />
+                <Text style={styles.title}>Love food? Let's <Text style={{ ...styles.title, fontStyle: "italic" }}>save</Text> eat!</Text>
               </View>
               <View style={styles.bottomContainer}>
                 <View>
@@ -81,7 +81,7 @@ export default class ProfileScreen extends Component {
                     textStyles={{ color: Colors.redible.accent, fontSize: Layout.fontSize.mainContent }}
                   />
                 </View>
-                <Text style={styles.passwordRecovery}>Forgot password?</Text>
+                <TouchableOpacity><Text style={styles.passwordRecovery}>Forgot password?</Text></TouchableOpacity>
               </View>
             </View>
             :
@@ -109,9 +109,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center"
   },
+  logo: {
+    width: 155,
+    height: 155,
+    resizeMode: "contain"
+  },
   title: {
     fontSize: Layout.fontSize.title,
-    color: Colors.basic.white
+    color: Colors.basic.white,
+    marginTop: 35
   },
   bottomContainer: {
     flex: 1,

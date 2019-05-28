@@ -5,6 +5,7 @@ export default {
   },
   redible: {
     main: "#03DAC5", //"#6DECAF",
+    mainDark: "#01C6B3",
     accent: "#6E8894",
     gray: "#808080",
     babyPowder: "#FCFCFC",

@@ -34,10 +34,8 @@ export default class RestaurantBanner extends Component {
       { type, detail, navigation, userLocation, restaurantData } = this.props,
       { color, iconName } = getIconProperties(type)
 
-    console.log(restaurantData)
-
     return (
-      <ImageBackground style={styles.container} source={require("../assets/images/starbucks-logo.jpg")}>
+      <ImageBackground style={styles.container} source={{ uri: restaurantData.logo }}>
         <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details", { userLocation, restaurantData }) : this._toggleDescription()}>
           <View style={styles.contentContainer}>
             <View style={{ ...styles.verticalLine, backgroundColor: color }}></View>

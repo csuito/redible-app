@@ -27,7 +27,7 @@ export default class SearchHeader extends Component {
       { noShadow } = this.props
     prefix = Platform.OS === "ios" ? "ios" : "md"
 
-    const shadowStyles = !noShadow ? {
+    const shadowStyles = !this.props.navigation.getParam("noShadow") && !noShadow ? {
       shadowColor: Colors.shadow,
       shadowOffset: { height: 5, width: 0 },
       shadowOpacity: 1,

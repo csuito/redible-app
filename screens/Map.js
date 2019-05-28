@@ -25,8 +25,8 @@ export default class MapScreen extends Component {
       mapCenter: {
         latitude: 0,
         longitude: 0,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.015,
       },
       restaurantMarkers: [],
       restaurantData: "",
@@ -45,11 +45,14 @@ export default class MapScreen extends Component {
   }
 
   async componentDidMount() {
+    this.props.navigation.setParams({ noShadow: true })
     this._addModalSub(this.props.navigation)
     await this._getCurrentLocation()
     await this._getRestaurantMarkers()
 
-    this.setState({ loading: false })
+    this.setState({ loading: false }, () => {
+      this.props.navigation.setParams({ noShadow: false })
+    })
   }
 
   /**

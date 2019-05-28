@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { StyleSheet, View, ScrollView, Text } from "react-native"
+import { Platform, StyleSheet, View, ScrollView, Text, Image } from "react-native"
 import { Icon } from "expo"
 
 // Components
@@ -21,7 +21,7 @@ export default class RankingScreen extends Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      header: <WithBackIconHeader text={"Ranking"} iconName={"arrow-back"} color={Colors.basic.white} navigation={navigation} />
+      header: null // <WithBackIconHeader text={"Ranking"} iconName={"arrow-back"} color={Colors.basic.white} navigation={navigation} />
     }
   }
 
@@ -38,16 +38,17 @@ export default class RankingScreen extends Component {
   }
 
   render() {
-    const ranking = this._buildRankingList()
+    const ranking = this._buildRankingList(),
+      prefix = Platform.OS === "ios" ? "ios" : "md"
 
     return (
       <View style={styles.container}>
         <ScrollView style={styles.contentContainer}>
           <View style={styles.titleContainer}>
             <Icon.Ionicons
-              name={`md-globe`}
-              color={Colors.redible.green}
+              name={`${prefix}-trending-up`}
               size={72}
+              color={Colors.redible.main}
             />
             <Text style={styles.title}>Redible's Top Food Savers</Text>
           </View>
@@ -64,6 +65,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.basic.white,
+    paddingTop: 50
   },
   contentContainer: {
     backgroundColor: Colors.basic.white,
