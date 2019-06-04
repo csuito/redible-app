@@ -71,7 +71,7 @@ export default class DetailsScreen extends Component {
 
     try {
       const { data } = await this.directionsService.getDirections(originString, destinationString)
-      const { points } = decode(data)
+      const points = decode(data.points)
       let directions = [
         userLocation,
         ...points,
