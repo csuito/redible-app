@@ -8,6 +8,7 @@ import Colors from "../constants/Colors"
 
 // Helpers
 import { getIconProperties } from "../helpers/getIconProperties"
+import { getRatingTitle } from "../helpers/ratingHelper"
 
 /**
  * Restaurant banner for main screen and details screen
@@ -29,14 +30,16 @@ export default class RestaurantBanner extends Component {
   }
 
   render() {
-    const iconPrefix = Platform.OS === "ios" ? "ios" : "md",
+    const
+      iconPrefix = Platform.OS === "ios" ? "ios" : "md",
       { showDescription, arrow } = this.state,
       { type, detail, navigation, userLocation, restaurantData } = this.props,
-      { color, iconName } = getIconProperties(type)
+      { color, iconName } = getIconProperties(type),
+      title = getRatingTitle(parseFloat(restaurantData.rating))
 
     return (
-      <ImageBackground style={styles.container} source={{ uri: restaurantData.logo }}>
-        <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details", { userLocation, restaurantData }) : this._toggleDescription()}>
+      <ImageBackground style={styles.container} imageStyle={{ resizeMode: "contain" }} source={{ uri: restaurantData.logo }}>
+        <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details", { userLocation, restaurantData, noShadow: true }) : this._toggleDescription()}>
           <View style={styles.contentContainer}>
             <View style={{ ...styles.verticalLine, backgroundColor: color }}></View>
             <View style={styles.textContainer}>
@@ -45,7 +48,7 @@ export default class RestaurantBanner extends Component {
                   <Icon.Ionicons
                     name={`${iconPrefix}-star`}
                     size={Layout.fontSize.contentTitle} />
-                  {` 4.5 Good`}</Text>
+                  {` ${restaurantData.rating} ${title}`}</Text>
               </View>
               {
                 type && !detail ?
@@ -112,6 +115,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 3,
     elevation: 5,
+    backgroundColor: Colors.basic.white
   },
   contentContainer: {
     flex: 1,

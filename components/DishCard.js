@@ -1,5 +1,6 @@
 import React from "react"
 import { StyleSheet, View, Image, Text, Platform, TouchableWithoutFeedback } from "react-native"
+import { Chip } from "react-native-paper"
 import { Icon } from "expo"
 
 // Constants
@@ -16,7 +17,7 @@ const DishCard = props => {
   return (
     <TouchableWithoutFeedback onPress={() => _onPress ? _onPress() : null}>
       <View style={styles.container}>
-        <View>
+        <View style={styles.imageContainer}>
           <Image style={styles.image} source={require("../assets/images/paella.jpg")} />
         </View>
         <View style={styles.textContainer}>
@@ -32,19 +33,22 @@ const DishCard = props => {
                 size={Layout.fontSize.mainContent}
               />{` Pick-up: 20:00 - 22:30`}
             </Text>
-            <Text style={styles.text}>
-              <Icon.Ionicons
-                name={`${iconPrefix}-pin`}
-                size={Layout.fontSize.mainContent}
-              />{` Categories...`}</Text>
+            <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+              <Chip style={styles.chipContainer}>
+                <Text style={styles.chipText}>Seafood</Text>
+              </Chip>
+              <Chip style={{ ...styles.chipContainer, marginLeft: 5 }}>
+                <Text style={styles.chipText}>Gluten-free</Text>
+              </Chip>
+            </View>
           </View>
           <View style={styles.footer}>
-            <Text style={{ ...styles.price, color: Colors.redible.accent, textDecorationLine: "line-through" }}>€ 5.50</Text>
-            <Text style={{ ...styles.price, color: Colors.basic.black }}>
+            <Text style={{ ...styles.price, color: Colors.redible.silver, textDecorationLine: "line-through" }}>€ 5.50</Text>
+            <Text style={{ ...styles.price, color: Colors.redible.accent }}>
               <Icon.Ionicons
                 name={`${iconPrefix}-pricetags`}
                 size={Layout.fontSize.mediumText}
-                color={Colors.basic.black}
+                color={Colors.redible.accent}
               />{` € 3.25`}
             </Text>
           </View>
@@ -69,16 +73,22 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   textContainer: {
-    flex: 1,
+    flex: 1.8,
     justifyContent: "space-between",
     backgroundColor: "white",
     padding: 10,
     paddingLeft: 20,
     paddingRight: 20
   },
+  imageContainer: {
+    flex: 1,
+    backgroundColor: Colors.basic.white,
+  },
   image: {
-    height: 150,
-    width: 150
+    height: undefined,
+    width: undefined,
+    resizeMode: "cover",
+    flex: 1,
   },
   text: {
     marginTop: 10,
@@ -87,6 +97,13 @@ const styles = StyleSheet.create({
   },
   dishName: {
     fontSize: Layout.fontSize.mainContent
+  },
+  chipContainer: {
+    marginTop: 10
+  },
+  chipText: {
+    fontSize: Layout.fontSize.smallerText,
+    color: Colors.redible.silver
   },
   footer: {
     flexDirection: "row",

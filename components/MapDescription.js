@@ -11,6 +11,10 @@ import Button from "./Button"
 import Layout from "../constants/Layout"
 import Colors from "../constants/Colors"
 
+/**
+ * Renders restaurant description on Map Screen
+ * @param {Object} props 
+ */
 const DescriptionCard = props => {
   const prefix = Platform.OS === "ios" ? "ios" : "md",
     { navigation, _onPress, restaurantData, userLocation } = props
@@ -21,7 +25,7 @@ const DescriptionCard = props => {
         <Text style={styles.contentTitle}>
           {`${restaurantData.name}`}
         </Text>
-        <Stars prefix={prefix} rating={4.3} />
+        <Stars prefix={prefix} rating={restaurantData.rating} />
       </View>
       <View style={styles.descriptionContainer}>
         <Text style={{ ...styles.description, marginBottom: 10 }}>
@@ -51,7 +55,7 @@ const DescriptionCard = props => {
           text={"Go"}
           containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.main, width: 100 }}
           textStyles={{ fontSize: Layout.fontSize.smallText, color: Colors.basic.white }}
-          _onPress={() => navigation.navigate("Details", { userLocation, restaurantData })}
+          _onPress={() => navigation.navigate("Details", { userLocation, restaurantData, noShadow: true })}
         />
       </View>
     </View>
@@ -61,7 +65,8 @@ const DescriptionCard = props => {
 DescriptionCard.propTypes = {
   navigation: PropTypes.object.isRequired,
   _onPress: PropTypes.func.isRequired,
-  restaurantData: PropTypes.object.isRequired
+  restaurantData: PropTypes.object.isRequired,
+  userLocation: PropTypes.object
 }
 
 const styles = StyleSheet.create({

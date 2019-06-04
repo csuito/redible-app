@@ -13,6 +13,9 @@ import RestaurantCard from "../components/RestaurantCard"
 import Layout from "../constants/Layout"
 import Colors from "../constants/Colors"
 
+// Helpers
+import { getRandomRating } from "../helpers/ratingHelper"
+
 // Services
 import RestaurantService from "../services/restaurant"
 
@@ -26,7 +29,8 @@ export default class HomeScreen extends Component {
       userLocation: {},
       restaurants: [],
       loading: true,
-      refreshing: false
+      refreshing: false,
+      error: false
     }
     this.restaurantService = new RestaurantService()
   }
@@ -56,7 +60,7 @@ export default class HomeScreen extends Component {
         this.props.navigation.setParams({ noShadow: false })
       })
     } catch (err) {
-      console.log(err)
+      this.setState({ error: true })
     }
   }
 
@@ -87,14 +91,15 @@ export default class HomeScreen extends Component {
 
   _getAllRestaurants = async () => {
     const { data } = await this.restaurantService.getAllRestaurants()
-    return data.data
+    return data
   }
 
   _buildFeaturedList = () => {
-    const types = ["Top deal", "Top rated", "Healthy", "Trending"],
+    const types = ["Top deal", "Top rated", "Trending"],
       { restaurants, userLocation } = this.state
 
     return restaurants.map((restaurant, i) => {
+      restaurant.rating = getRandomRating(4.2)
       return (
         i >= types.length ? null :
           (
@@ -113,6 +118,7 @@ export default class HomeScreen extends Component {
     const { restaurants, userLocation } = this.state
 
     return restaurants.map(restaurant => {
+      restaurant.rating = getRandomRating()
       return (
         <RestaurantCard
           key={restaurant._id}

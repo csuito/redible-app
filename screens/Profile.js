@@ -36,7 +36,7 @@ export default class ProfileScreen extends Component {
           !isLoggedUser ?
             <View style={styles.contentContainer}>
               <View style={styles.topContainer}>
-                <Image style={styles.logo} source={require("../assets/images/splash.png")} />
+                <Image style={styles.logo} source={require("../assets/images/logo.png")} />
                 <Text style={styles.title}>Love food? Let's <Text style={{ ...styles.title, fontStyle: "italic" }}>save</Text> eat!</Text>
               </View>
               <View style={styles.bottomContainer}>

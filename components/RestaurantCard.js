@@ -1,61 +1,57 @@
 import React, { Component } from "react"
 import { StyleSheet, View, Image, Text, Platform, TouchableWithoutFeedback } from "react-native"
+import { Chip } from "react-native-paper"
 import { Icon } from "expo"
+import PropTypes from "prop-types"
 
 // Constants
 import Layout from "../constants/Layout"
 import Colors from "../constants/Colors"
 
 /**
- * Restaurant card for main screen
+ * Renders restaurant card in Home Screen
+ * @param {Object} props 
  */
-export default class RestaurantCard extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      restaurants: []
-    }
-  }
+const RestaurantCard = props => {
+  const prefix = Platform.OS === "ios" ? "ios" : "md",
+    { navigation, _onPress, userLocation, restaurantData } = props
 
-  render() {
-    const iconPrefix = Platform.OS === "ios" ? "ios" : "md",
-      { navigation, _onPress, userLocation, restaurantData } = this.props
-
-    return (
-      <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details", { userLocation, restaurantData, noShadow: true }) : _onPress ? _onPress() : null}>
-        <View style={styles.container}>
-          <View style={styles.imageContainer}>
-            <Image style={styles.image} source={{ uri: restaurantData.logo }} />
+  return (
+    <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details", { userLocation, restaurantData, noShadow: true }) : _onPress ? _onPress() : null}>
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <Image style={styles.image} source={{ uri: restaurantData.logo }} />
+        </View>
+        <View style={styles.textContainer}>
+          <View>
+            <Text style={styles.dishName}>{restaurantData.name}</Text>
+            <Text style={styles.text}>
+              <Icon.Ionicons
+                name={`${prefix}-pin`}
+                size={Layout.fontSize.mainContent}
+              />{` ${restaurantData.address}`}</Text>
+            <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+              <Chip style={styles.chipContainer}>
+                <Text style={styles.chipText}>Spanish</Text>
+              </Chip>
+              <Chip style={{ ...styles.chipContainer, marginLeft: 5 }}>
+                <Text style={styles.chipText}>Tapas</Text>
+              </Chip>
+            </View>
           </View>
-          <View style={styles.textContainer}>
-            <View>
-              <Text style={styles.dishName}>{restaurantData.name}</Text>
-              <Text style={styles.text}>
-                <Icon.Ionicons
-                  name={`${iconPrefix}-pin`}
-                  size={Layout.fontSize.mainContent}
-                />{` ${restaurantData.address}`}</Text>
-              <Text style={styles.text}>
-                <Icon.Ionicons
-                  name={`${iconPrefix}-time`}
-                  size={Layout.fontSize.mainContent}
-                />{` Categories...`}
-              </Text>
-            </View>
-            <View style={styles.footer}>
-              <Text style={styles.rating}>
-                <Icon.Ionicons
-                  name={`${iconPrefix}-star`}
-                  size={Layout.fontSize.mediumText}
-                  color={Colors.redible.star}
-                />{` 4.2 Good`}
-              </Text>
-            </View>
+          <View style={styles.footer}>
+            <Text style={styles.rating}>
+              <Icon.Ionicons
+                name={`${prefix}-star`}
+                size={Layout.fontSize.mediumText}
+                color={Colors.redible.star}
+              />{` ${restaurantData.rating}`}
+            </Text>
           </View>
         </View>
-      </TouchableWithoutFeedback>
-    )
-  }
+      </View>
+    </TouchableWithoutFeedback>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -73,11 +69,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   imageContainer: {
-    height: "100%",
-    backgroundColor: Colors.basic.white
+    flex: 1,
+    backgroundColor: Colors.basic.white,
   },
   textContainer: {
-    flex: 1,
+    flex: 1.75,
     justifyContent: "space-between",
     backgroundColor: "white",
     padding: 10,
@@ -85,9 +81,10 @@ const styles = StyleSheet.create({
     paddingRight: 20
   },
   image: {
-    height: 150,
-    width: 145,
-    resizeMode: "contain"
+    height: undefined,
+    width: undefined,
+    resizeMode: "contain",
+    flex: 1,
   },
   text: {
     marginTop: 10,
@@ -96,6 +93,13 @@ const styles = StyleSheet.create({
   },
   dishName: {
     fontSize: Layout.fontSize.mainContent
+  },
+  chipContainer: {
+    marginTop: 10
+  },
+  chipText: {
+    fontSize: Layout.fontSize.smallerText,
+    color: Colors.redible.silver
   },
   footer: {
     flexDirection: "row",
@@ -112,3 +116,5 @@ const styles = StyleSheet.create({
     color: Colors.redible.star
   }
 })
+
+export default RestaurantCard

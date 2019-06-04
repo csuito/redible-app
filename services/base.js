@@ -35,11 +35,9 @@ export default class BaseService {
           response = await this.api.get(url)
       }
 
-      console.log("RESPONSE @BASE", response)
-
-      return response
+      return response.data
     } catch (err) {
-      console.log(err)
+      return { error: err, message: "Unable to fetch data" }
     }
   }
 }

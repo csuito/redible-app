@@ -12,6 +12,9 @@ import DescriptionCard from "../components/MapDescription"
 // Constants
 import Colors from "../constants/Colors"
 
+// Helpers
+import { getRandomRating } from "../helpers/ratingHelper"
+
 // Services
 import RestaurantService from "../services/restaurant"
 
@@ -96,7 +99,7 @@ export default class MapScreen extends Component {
   _getRestaurantMarkers = async () => {
     const { data } = await this.restaurantService.getAllRestaurants()
 
-    const restaurants = data.data
+    const restaurants = data
 
     let restaurantMarkers = []
 
@@ -113,6 +116,7 @@ export default class MapScreen extends Component {
 
   _buildRestaurantLocations = restaurants => {
     return restaurants.map(restaurantData => {
+      restaurantData.rating = getRandomRating()
       return (
         <Marker
           key={restaurantData._id}
