@@ -41,6 +41,7 @@ export default class DetailsScreen extends Component {
       restaurantData: {},
       userLocation: {},
       directions: [],
+      duration: "",
       quantity: 1,
       showAddToCart: false,
       showSuccessMessage: false,
@@ -78,6 +79,8 @@ export default class DetailsScreen extends Component {
         restaurantMarker
       ]
 
+      const { duration } = data
+
       const center = {
         latitude: (userLocation.latitude + restaurantMarker.latitude) / 2,
         longitude: (userLocation.longitude + restaurantMarker.longitude) / 2,
@@ -85,7 +88,7 @@ export default class DetailsScreen extends Component {
 
       const mapCenter = { ...this.state.mapCenter, ...center }
 
-      this.setState({ userLocation, directions, restaurantData, mapCenter, restaurantMarker, loading: false }, () => {
+      this.setState({ userLocation, directions, duration, restaurantData, mapCenter, restaurantMarker, loading: false }, () => {
         this.props.navigation.setParams({ noShadow: false })
       })
     } catch (err) {
@@ -115,7 +118,7 @@ export default class DetailsScreen extends Component {
 
   render() {
     const dishList = this._buildDishList(),
-      { mapCenter, restaurantData, restaurantMarker, quantity, directions, showAddToCart, userLocation, showSuccessMessage, loading } = this.state,
+      { mapCenter, restaurantData, restaurantMarker, quantity, directions, duration, showAddToCart, userLocation, showSuccessMessage, loading } = this.state,
       prefix = Platform.OS === "ios" ? "ios" : "md"
 
     return (
@@ -131,6 +134,19 @@ export default class DetailsScreen extends Component {
             }
 
             <View style={styles.mapContainer}>
+              {
+                duration && mapCenter.latitude && mapCenter.longitude && directions ?
+                  <View style={styles.durationContainer}>
+                    <Icon.Ionicons
+                      name={`${prefix}-walk`}
+                      color={Colors.basic.black}
+                      size={Layout.fontSize.mainContent}
+                    />
+                    <Text style={styles.durationText}>{` ${duration}`}</Text>
+                  </View>
+                  :
+                  null
+              }
               {
                 mapCenter.latitude && mapCenter.longitude && directions ?
                   <MapView
@@ -243,10 +259,28 @@ const styles = StyleSheet.create({
     height: Layout.window.height / 3.25,
     margin: 15,
     borderRadius: 8,
-    overflow: "hidden"
+    overflow: "hidden",
+    position: "relative"
   },
   map: {
-    flex: 1
+    flex: 1,
+  },
+  durationContainer: {
+    position: "absolute",
+    zIndex: 1000,
+    right: 5,
+    bottom: 5,
+    backgroundColor: Colors.searchModal,
+    borderRadius: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 5,
+    paddingLeft: 10,
+    paddingRight: 10
+  },
+  durationText: {
+    fontSize: Layout.fontSize.mainContent
   },
   subtitle: {
     marginBottom: 15,
