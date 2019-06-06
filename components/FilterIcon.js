@@ -1,32 +1,38 @@
-import React, { Component } from "react"
+import React from "react"
 import { Platform, StyleSheet, Text, TouchableOpacity } from "react-native"
 import { Icon } from "expo"
+import PropTypes from "prop-types"
 
 // Constants
 import Colors from "../constants/Colors"
 
-export default class FiltersList extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      selected: false
-    }
-  }
-  render() {
-    const { name, size, color, text } = this.props,
-      { selected } = this.state
-    prefix = Platform.OS === "ios" ? "ios" : "md"
+/**
+ * Renders FilterIcon at Search Modal
+ * @param {Object} props 
+ */
+const FilterIcon = props => {
+  const { activeId, name, size, color, text, _onPress } = props
+  prefix = Platform.OS === "ios" ? "ios" : "md"
 
-    return (
-      <TouchableOpacity style={styles.container} onPress={() => this.setState({ selected: !selected })}>
-        <Icon.Ionicons
-          name={`${prefix}-${name}`}
-          size={size}
-          color={selected ? Colors.redible.accent : color} />
-        <Text style={{ ...styles.textStyle, fontSize: size, color: selected ? Colors.redible.accent : color }}>{text}</Text>
-      </TouchableOpacity>
-    )
-  }
+  const selected = name === activeId
+
+  return (
+    <TouchableOpacity style={styles.container} onPress={() => _onPress(name)}>
+      <Icon.Ionicons
+        name={`${prefix}-${name}`}
+        size={size}
+        color={selected ? Colors.redible.accent : color} />
+      <Text style={{ ...styles.textStyle, fontSize: size, color: selected ? Colors.redible.accent : color }}>{text}</Text>
+    </TouchableOpacity>
+  )
+}
+
+FilterIcon.propTypes = {
+  activeId: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  size: PropTypes.number,
+  color: PropTypes.string,
+  _onPress: PropTypes.func.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -36,3 +42,5 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 })
+
+export default FilterIcon

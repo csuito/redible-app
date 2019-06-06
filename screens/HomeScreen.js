@@ -30,6 +30,7 @@ export default class HomeScreen extends Component {
       restaurants: [],
       loading: true,
       refreshing: false,
+      activeId: "",
       error: false
     }
     this.restaurantService = new RestaurantService()
@@ -53,6 +54,9 @@ export default class HomeScreen extends Component {
     this._hideModal()
   }
 
+  /**
+   * Loads user location and restaurant data
+   */
   _loadComponentData = async () => {
     const userLocation = this._getUserLocation(),
       restaurants = this._getAllRestaurants()
@@ -82,6 +86,9 @@ export default class HomeScreen extends Component {
     this.props.navigation.setParams({ modalVisible: false })
   }
 
+  /**
+   * Gets current user coordinates
+   */
   _getUserLocation = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION)
 
@@ -93,6 +100,9 @@ export default class HomeScreen extends Component {
     return coordinates
   }
 
+  /**
+   * Returns list of restaurants from api
+   */
   _getAllRestaurants = async () => {
     const { data } = await this.restaurantService.getAllRestaurants()
     return data
@@ -133,6 +143,12 @@ export default class HomeScreen extends Component {
     })
   }
 
+  _selectFilter = id => {
+    this.setState(prevState => ({
+      activeId: id === prevState.activeId ? "" : id
+    }))
+  }
+
   _onRefresh = async () => {
     this.setState({ refreshing: true })
     const restaurants = await this._getAllRestaurants()
@@ -140,18 +156,18 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    const { loading, refreshing } = this.state,
-      { navigation } = this.props
+    const { loading, refreshing, activeId } = this.state
 
-    let modalVisible = navigation.getParam("modalVisible") || false
+    let modalVisible = this.props.navigation.getParam("modalVisible") || false
 
     return (
       <View style={styles.container}>
 
         <SearchModal
-          navigation={navigation}
           _onPress={this._hideModal}
-          modalVisible={modalVisible} />
+          modalVisible={modalVisible}
+          _selectFilter={this._selectFilter}
+          activeId={activeId} />
 
         <ScrollView style={styles.contentContainer}
           refreshControl={
