@@ -28,8 +28,8 @@ export default class MapScreen extends Component {
       mapCenter: {
         latitude: 0,
         longitude: 0,
-        latitudeDelta: 0.015,
-        longitudeDelta: 0.015,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
       },
       restaurantMarkers: [],
       restaurantData: "",

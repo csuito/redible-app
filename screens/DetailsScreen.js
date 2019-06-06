@@ -81,12 +81,15 @@ export default class DetailsScreen extends Component {
 
       const { duration } = data
 
-      const center = {
+      const durationTime = parseInt(duration.substring(0, 2).trim()),
+        mapZoom = durationTime >= 40 ? 0.03 : durationTime >= 30 ? 0.025 : durationTime >= 20 ? 0.02 : 0.01
+
+      const mapCenter = {
         latitude: (userLocation.latitude + restaurantMarker.latitude) / 2,
         longitude: (userLocation.longitude + restaurantMarker.longitude) / 2,
+        latitudeDelta: mapZoom,
+        longitudeDelta: mapZoom
       }
-
-      const mapCenter = { ...this.state.mapCenter, ...center }
 
       this.setState({ userLocation, directions, duration, restaurantData, mapCenter, restaurantMarker, loading: false }, () => {
         this.props.navigation.setParams({ noShadow: false })

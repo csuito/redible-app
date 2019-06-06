@@ -22,29 +22,40 @@ export default class OrderSummaryScreen extends Component {
       paymentData: {}
     }
   }
+
   static navigationOptions = ({ navigation }) => {
     return {
       header: <WithBackIconHeader text={"Order Summary"} iconName={"arrow-back"} color={Colors.basic.white} navigation={navigation} />
     }
   }
 
+  componentWillUnmount() {
+    this._hideModal()
+  }
+
   _setPaymentMethod = type => {
     if (type === "edit") {
-      this.setState({ paymentMethodModalVisible: true, paymentData: { name: "Carlos Suito", card: "**** **** **** 5437" } })
-    } else {
-      this.setState({ paymentMethodModalVisible: true })
+      this.setState({ paymentData: { name: "Carlos Suito", card: "**** **** **** 5437" } })
     }
+    this.props.navigation.setParams({ modalVisible: true })
+  }
+
+  _hideModal = () => {
+    this.props.navigation.setParams({ modalVisible: false })
   }
 
   render() {
     const prefix = Platform.OS === "ios" ? "ios" : "md",
-      { paymentMethodModalVisible, paymentData } = this.state
+      { paymentData } = this.state
+
+    let modalVisible = this.props.navigation.getParam("modalVisible") || false
 
     return (
       <View style={styles.container}>
 
         <PaymentMethodModal
-          modalVisible={paymentMethodModalVisible}
+          _onPress={this._hideModal}
+          modalVisible={modalVisible}
           paymentData={paymentData}
         />
 

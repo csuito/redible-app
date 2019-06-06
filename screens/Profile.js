@@ -3,6 +3,7 @@ import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity } from "reac
 import { Icon } from "expo"
 
 // Components
+import CustomInput from "../components/CustomInput"
 import Button from "../components/Button"
 
 // Constants
@@ -27,6 +28,7 @@ export default class ProfileScreen extends Component {
       header: null
     }
   }
+
   render() {
     const { isLoggedUser, email, password } = this.state
 
@@ -41,34 +43,28 @@ export default class ProfileScreen extends Component {
               </View>
               <View style={styles.bottomContainer}>
                 <View>
-                  <View style={styles.inputContainer}>
-                    <Icon.Ionicons
-                      name="md-create"
-                      color={Colors.redible.gray}
-                      size={Layout.fontSize.largeText}
-                    />
-                    <TextInput
-                      placeholder="Email"
-                      onChangeText={email => this.setState({ email })}
-                      mode={"outlined"}
-                      value={email}
-                      style={styles.textInput}
-                    />
-                  </View>
-                  <View style={styles.inputContainer}>
-                    <Icon.Ionicons
-                      name="md-create"
-                      color={Colors.redible.gray}
-                      size={Layout.fontSize.largeText}
-                    />
-                    <TextInput
-                      placeholder="Password"
-                      onChangeText={password => this.setState({ password })}
-                      mode={"outlined"}
-                      value={password}
-                      style={styles.textInput}
-                    />
-                  </View>
+                  <CustomInput
+                    containerStyles={styles.inputContainer}
+                    textStyles={styles.textInput}
+                    placeholder={"Email"}
+                    icon={"md-create"}
+                    _onChange={email => this.setState({ email })}
+                    name={email}
+                    value={email}
+                    iconSize={Layout.fontSize.mainContent}
+                    iconColor={Colors.redible.accent}
+                  />
+                  <CustomInput
+                    containerStyles={styles.inputContainer}
+                    textStyles={styles.textInput}
+                    placeholder={"Password"}
+                    icon={"md-create"}
+                    _onChange={password => this.setState({ password })}
+                    name={password}
+                    value={password}
+                    iconSize={Layout.fontSize.mainContent}
+                    iconColor={Colors.redible.accent}
+                  />
                   <Button
                     text={"Login"}
                     containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry, marginTop: 20, marginLeft: 25, marginRight: 25 }}
@@ -142,7 +138,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
     paddingRight: 10,
-    fontSize: Layout.fontSize.mainContent
+    fontSize: Layout.fontSize.mainContent,
+    color: Colors.redible.accent
   },
   passwordRecovery: {
     color: Colors.redible.accent,

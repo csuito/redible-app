@@ -49,6 +49,10 @@ export default class HomeScreen extends Component {
     this._loadComponentData()
   }
 
+  componentWillUnmount() {
+    this._hideModal()
+  }
+
   _loadComponentData = async () => {
     const userLocation = this._getUserLocation(),
       restaurants = this._getAllRestaurants()
