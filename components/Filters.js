@@ -20,6 +20,7 @@ export default class FiltersList extends Component {
   }
   render() {
     const { _onPress } = this.props
+
     return (
       <View style={{ ...styles.container, paddingVertical: 30 }}>
         <Text style={styles.subtitle}>Sort by</Text>
