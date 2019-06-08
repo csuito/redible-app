@@ -186,7 +186,7 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    const { loading, refreshing, activeId } = this.state
+    const { loading, refreshing, activeId, restaurants, searchTerm } = this.state
 
     let modalVisible = this.props.navigation.getParam("modalVisible") || false
 
@@ -203,10 +203,9 @@ export default class HomeScreen extends Component {
           refreshControl={
             <RefreshControl
               onRefresh={this._onRefresh}
-              refreshing={refreshing}
-            />
-          }
-        >
+              refreshing={refreshing} />
+          }>
+
           <View>
             {
               !loading ?
@@ -217,7 +216,17 @@ export default class HomeScreen extends Component {
                     }
                   </ScrollView>
                   {
-                    this._buildRestaurantList()
+                    restaurants.length > 0 ?
+                      <View>
+                        {
+                          this._buildRestaurantList()
+                        }
+                      </View>
+                      :
+                      <View style={styles.noResultsContainer}>
+                        <Text style={styles.title}>Sorry!</Text>
+                        <Text style={styles.noResult}>We couldn't find any restaurants for {searchTerm}</Text>
+                      </View>
                   }
                 </View>
                 :
@@ -240,11 +249,18 @@ const styles = StyleSheet.create({
   contentContainer: {
     backgroundColor: Colors.basic.white,
   },
+  noResultsContainer: {
+    flex: 1,
+    marginLeft: 45,
+    marginRight: 45
+  },
   title: {
+    marginTop: 30,
     marginBottom: 15,
     textAlign: "center",
-    color: Colors.redible.accent,
+    color: Colors.redible.mainDark,
     fontSize: Layout.fontSize.contentTitle,
+    fontWeight: "bold"
   },
   noResult: {
     textAlign: "center",
