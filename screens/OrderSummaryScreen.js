@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Platform, StyleSheet, View, Text, ScrollView } from "react-native"
+import { Platform, StyleSheet, View, Text } from "react-native"
 import { Icon } from "expo"
 
 // Components
@@ -103,11 +103,13 @@ export default class OrderSummaryScreen extends Component {
           </View>
           <Text style={styles.text}>{`**** **** **** 5437`}</Text>
         </View>
+        <Text style={styles.notice}>By placing this order you are helping us reduce food waste</Text>
         <View style={styles.buttonContainer}>
           <Button
             text={"Submit order"}
             containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry }}
             textStyles={{ color: Colors.basic.white, fontSize: Layout.fontSize.mainContent }}
+            _onPress={() => { this.props.navigation.navigate("Confirmation") }}
           />
         </View>
       </View>
@@ -145,5 +147,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     marginTop: 30
+  },
+  notice: {
+    textAlign: "center",
+    fontSize: Layout.fontSize.mediumText,
+    color: Colors.redible.accent,
+    margin: 30,
+    marginBottom: 0,
+    fontStyle: "italic",
   }
 })

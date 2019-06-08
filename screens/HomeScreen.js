@@ -66,7 +66,7 @@ export default class HomeScreen extends Component {
         this.props.navigation.setParams({ noShadow: false })
       })
     } catch (err) {
-      this.setState({ error: true })
+      this.setState({ error: true, message: "Unable to get current location" })
     }
   }
 

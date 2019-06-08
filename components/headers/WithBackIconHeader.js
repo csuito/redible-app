@@ -11,7 +11,7 @@ import Colors from "../../constants/Colors"
  */
 const WithBackIconHeader = props => {
   const prefix = Platform.OS === "ios" ? "ios" : "md",
-    { iconName, text, color, navigation, noShadow, bgColor } = props
+    { iconName, text, color, navigation, noShadow, bgColor, _onPress } = props
 
   const shadowStyles = !navigation.getParam("noShadow") && !noShadow ? {
     shadowColor: Colors.shadow,
@@ -25,7 +25,7 @@ const WithBackIconHeader = props => {
 
   return (
     <View style={{ ...styles.container, ...shadowStyles, backgroundColor }}>
-      <TouchableOpacity style={styles.icon} onPress={() => navigation.goBack(null)}>
+      <TouchableOpacity style={styles.icon} onPress={() => _onPress ? _onPress() : navigation.goBack(null)}>
         <Icon.Ionicons
           name={`${prefix}-${iconName}`}
           color={color}

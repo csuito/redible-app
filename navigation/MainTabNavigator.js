@@ -7,6 +7,7 @@ import HomeScreen from "../screens/HomeScreen"
 import DetailsScreen from "../screens/DetailsScreen"
 import ShoppingCartScreen from "../screens/ShoppingCartScreen"
 import OrderSummaryScreen from "../screens/OrderSummaryScreen"
+import OrderConfirmationScreen from "../screens/OrderConfirmationScreen"
 
 import MapScreen from "../screens/Map"
 
@@ -26,7 +27,8 @@ const HomeStack = createStackNavigator({
   Home: HomeScreen,
   Details: DetailsScreen,
   Cart: ShoppingCartScreen,
-  Summary: OrderSummaryScreen
+  Summary: OrderSummaryScreen,
+  Confirmation: OrderConfirmationScreen
 })
 
 HomeStack.navigationOptions = {
