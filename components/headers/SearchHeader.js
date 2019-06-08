@@ -23,11 +23,9 @@ export default class SearchHeader extends Component {
   }
 
   render() {
-    const { searchTerm } = this.state,
-      { noShadow } = this.props
-    prefix = Platform.OS === "ios" ? "ios" : "md"
+    const prefix = Platform.OS === "ios" ? "ios" : "md"
 
-    const shadowStyles = !this.props.navigation.getParam("noShadow") && !noShadow ? {
+    const shadowStyles = !this.props.navigation.getParam("noShadow") && !this.props.noShadow ? {
       shadowColor: Colors.shadow,
       shadowOffset: { height: 5, width: 0 },
       shadowOpacity: 1,
@@ -35,11 +33,16 @@ export default class SearchHeader extends Component {
       elevation: 5
     } : null
 
+    const searchTerm = this.props.navigation.getParam("searchTerm")
+    const _onChangeText = this.props.navigation.getParam("onChangeText")
+
+    console.log("Header", searchTerm)
+
     return (
       <View style={{ ...styles.container, ...shadowStyles }}>
         <Searchbar
           placeholder="Search restaurants, cuisines..."
-          onChangeText={searchTerm => this.setState({ searchTerm })}
+          onChangeText={searchTerm => _onChangeText(searchTerm)}
           value={searchTerm}
           style={styles.searchBar}
           inputStyle={styles.searchText}

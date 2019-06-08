@@ -24,9 +24,10 @@ export default class PaymentMethodModal extends Component {
       cvc: ""
     }
   }
+
   render() {
     const prefix = Platform.OS === "ios" ? "ios" : "md",
-      { modalVisible, _onPress, paymentData } = this.props,
+      { modalVisible, _onPress } = this.props,
       { name, cardNumber, month, year, cvc } = this.state
 
     return (
@@ -56,7 +57,7 @@ export default class PaymentMethodModal extends Component {
                   placeholder={"Full name"}
                   icon={"md-person"}
                   _onChange={name => this.setState({ name })}
-                  name={name}
+                  name={"name"}
                   value={name}
                   iconSize={Layout.fontSize.mainContent}
                   iconColor={Colors.redible.accent}
@@ -67,7 +68,7 @@ export default class PaymentMethodModal extends Component {
                   placeholder={"Card number"}
                   icon={"md-card"}
                   _onChange={cardNumber => this.setState({ cardNumber })}
-                  name={cardNumber}
+                  name={"cardNumber"}
                   value={cardNumber}
                   iconSize={Layout.fontSize.mainContent}
                   iconColor={Colors.redible.accent}
@@ -81,7 +82,7 @@ export default class PaymentMethodModal extends Component {
                       placeholder={"Month"}
                       icon={"md-calendar"}
                       _onChange={month => this.setState({ month })}
-                      name={month}
+                      name={"month"}
                       value={month}
                       iconSize={Layout.fontSize.mainContent}
                       iconColor={Colors.redible.accent}
@@ -92,7 +93,7 @@ export default class PaymentMethodModal extends Component {
                       placeholder={"Year"}
                       icon={"md-calendar"}
                       _onChange={year => this.setState({ year })}
-                      name={year}
+                      name={"year"}
                       value={year}
                       iconSize={Layout.fontSize.mainContent}
                       iconColor={Colors.redible.accent}
@@ -105,7 +106,7 @@ export default class PaymentMethodModal extends Component {
                     placeholder={"CVC"}
                     icon={"md-lock"}
                     _onChange={cvc => this.setState({ cvc })}
-                    name={cvc}
+                    name={"cvc"}
                     value={cvc}
                     iconSize={Layout.fontSize.mainContent}
                     iconColor={Colors.redible.accent}
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: Colors.redible.babyPowder,
     borderRadius: 8,
-    shadowColor: "rgba(0, 0, 0, 0.4)",
+    shadowColor: Colors.shadow,
     shadowOffset: { height: 2, width: 0 },
     shadowOpacity: 1,
     shadowRadius: 3,

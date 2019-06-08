@@ -36,6 +36,7 @@ export default class MapScreen extends Component {
       userMarker: {},
       showDescription: false,
       modalVisible: false,
+      activeId: "",
       loading: true
     }
     this.restaurantService = new RestaurantService()
@@ -74,15 +75,16 @@ export default class MapScreen extends Component {
     if (status !== "granted") console.log("Gelocation permissions denied")
 
     const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({})
-    const coordinates = { latitude, longitude }
 
     this.setState(prevState => ({
       mapCenter: {
         ...prevState.mapCenter,
-        ...coordinates
+        latitude,
+        longitude
       },
       userMarker: {
-        ...coordinates
+        latitude,
+        longitude
       }
     }))
   }
@@ -130,21 +132,31 @@ export default class MapScreen extends Component {
     })
   }
 
+  /**
+ * Sets active filter in SearchModal
+ * @param {string}
+ */
+  _selectFilter = id => {
+    this.setState(prevState => ({
+      activeId: id === prevState.activeId ? "" : id
+    }))
+  }
+
   render() {
-    const { mapCenter, restaurantMarkers, restaurantData, userMarker, showDescription, loading } = this.state,
-      { latitude, longitude } = mapCenter,
+    const { mapCenter, restaurantMarkers, restaurantData, userMarker, showDescription, activeId, loading } = this.state,
       { navigation } = this.props
 
     let modalVisible = navigation.getParam("modalVisible") || false
 
     return (
-      latitude && longitude && !loading ?
+      mapCenter && mapCenter.latitude && mapCenter.longitude && !loading ?
         <View style={styles.mapContainer}>
 
           <SearchModal
-            navigation={navigation}
             _onPress={this._hideModal}
-            modalVisible={modalVisible} />
+            modalVisible={modalVisible}
+            _selectFilter={this._selectFilter}
+            activeId={activeId} />
 
           <MapView
             style={styles.map}

@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { ScrollView, StyleSheet, View, Text, RefreshControl } from "react-native"
-import { Location, Permissions } from "expo"
 import { PacmanIndicator } from "react-native-indicators"
+import { Location, Permissions } from "expo"
 
 // Components
 import SearchHeader from "../components/headers/SearchHeader"
@@ -27,7 +27,9 @@ export default class HomeScreen extends Component {
     super(props)
     this.state = {
       userLocation: {},
+      allRestaurants: [],
       restaurants: [],
+      searchTerm: "",
       loading: true,
       refreshing: false,
       activeId: "",
@@ -44,7 +46,7 @@ export default class HomeScreen extends Component {
 
   componentDidMount() {
     const { navigation } = this.props
-    navigation.setParams({ noShadow: true })
+    navigation.setParams({ noShadow: true, onChangeText: this._onChangeText, searchTerm: this.state.searchTerm })
     this._addModalSub(navigation)
 
     this._loadComponentData()
@@ -64,7 +66,7 @@ export default class HomeScreen extends Component {
     try {
       const data = await Promise.all([userLocation, restaurants])
 
-      this.setState({ userLocation: data[0], restaurants: data[1], loading: false }, () => {
+      this.setState({ userLocation: data[0], allRestaurants: data[1], restaurants: data[1], loading: false }, () => {
         this.props.navigation.setParams({ noShadow: false })
       })
     } catch (err) {
@@ -108,11 +110,33 @@ export default class HomeScreen extends Component {
     return data
   }
 
+  /**
+   * Handles text change event on search header
+   * @params {String} searchTerm
+   */
+  _onChangeText = searchTerm => {
+    this.props.navigation.setParams({ searchTerm })
+    let { restaurants, allRestaurants } = this.state
+
+    if (searchTerm === "") {
+      return this.setState({ restaurants: allRestaurants })
+    }
+
+    restaurants = restaurants.filter(restaurant => {
+      return restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
+    })
+
+    this.setState({
+      searchTerm,
+      restaurants
+    })
+  }
+
   _buildFeaturedList = () => {
     const types = ["Top deal", "Top rated", "Trending"],
-      { restaurants, userLocation } = this.state
+      { allRestaurants, userLocation } = this.state
 
-    return restaurants.map((restaurant, i) => {
+    return allRestaurants.map((restaurant, i) => {
       restaurant.rating = getRandomRating(4.2)
       return (
         i >= types.length ? null :
@@ -131,6 +155,8 @@ export default class HomeScreen extends Component {
   _buildRestaurantList = () => {
     const { restaurants, userLocation } = this.state
 
+    if (!restaurants) return <Text style={styles.noResult}>No se han encontrado restaurantes</Text>
+
     return restaurants.map(restaurant => {
       restaurant.rating = getRandomRating()
       return (
@@ -143,16 +169,24 @@ export default class HomeScreen extends Component {
     })
   }
 
+  /**
+   * Sets active filter in SearchModal
+   * @param {string}
+   */
   _selectFilter = id => {
     this.setState(prevState => ({
       activeId: id === prevState.activeId ? "" : id
     }))
   }
 
+  /**
+   * Reloads restaurants list
+   */
   _onRefresh = async () => {
     this.setState({ refreshing: true })
-    const restaurants = await this._getAllRestaurants()
-    this.setState({ restaurants, refreshing: false })
+    const allRestaurants = await this._getAllRestaurants()
+    this.props.navigation.setParams({ searchTerm: "" })
+    this.setState({ searchTerm: "", allRestaurants, restaurants: allRestaurants, refreshing: false })
   }
 
   render() {
@@ -216,5 +250,10 @@ const styles = StyleSheet.create({
     color: Colors.redible.accent,
     fontSize: Layout.fontSize.contentTitle,
   },
+  noResult: {
+    textAlign: "center",
+    color: Colors.redible.accent,
+    fontSize: Layout.fontSize.mainContent
+  }
 })
 

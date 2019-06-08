@@ -49,13 +49,13 @@ export default class ShoppingCartScreen extends Component {
             <View style={styles.buttonsContainer}>
               <Button
                 text={"Continue shopping"}
-                containerStyles={{ ...styles.button, marginRight: 7.5, backgroundColor: Colors.redible.star }}
+                containerStyles={{ ...styles.button, marginRight: 10, backgroundColor: Colors.redible.star }}
                 textStyles={{ fontSize: Layout.fontSize.mediumText, color: Colors.basic.white }}
                 _onPress={() => { this._navigate("Details") }}
               />
               <Button
                 text={"Checkout"}
-                containerStyles={{ ...styles.button, marginLeft: 7.5, backgroundColor: Colors.redible.main }}
+                containerStyles={{ ...styles.button, marginLeft: 10, backgroundColor: Colors.redible.main }}
                 textStyles={{ fontSize: Layout.fontSize.mediumText, color: Colors.basic.white }}
                 _onPress={() => { this._navigate("Summary") }}
               />

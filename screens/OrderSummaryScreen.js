@@ -18,8 +18,7 @@ export default class OrderSummaryScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      paymentMethodModalVisible: false,
-      paymentData: {}
+      paymentMethodModalVisible: false
     }
   }
 
@@ -35,9 +34,10 @@ export default class OrderSummaryScreen extends Component {
 
   _setPaymentMethod = type => {
     if (type === "edit") {
-      this.setState({ paymentData: { name: "Carlos Suito", card: "**** **** **** 5437" } })
+      console.log("INSIDE IF")
+      this.setState({ name: "Carlos Suito", cardNumber: "3452986447595437", year: "2023", month: "07" })
     }
-    this.props.navigation.setParams({ modalVisible: true })
+    this.props.navigation.setParams({ modalVisible: true, name: this.state.name })
   }
 
   _hideModal = () => {
@@ -45,8 +45,7 @@ export default class OrderSummaryScreen extends Component {
   }
 
   render() {
-    const prefix = Platform.OS === "ios" ? "ios" : "md",
-      { paymentData } = this.state
+    const prefix = Platform.OS === "ios" ? "ios" : "md"
 
     let modalVisible = this.props.navigation.getParam("modalVisible") || false
 
@@ -54,9 +53,9 @@ export default class OrderSummaryScreen extends Component {
       <View style={styles.container}>
 
         <PaymentMethodModal
+          navigation={this.props.navigation}
           _onPress={this._hideModal}
           modalVisible={modalVisible}
-          paymentData={paymentData}
         />
 
         <View style={styles.pickupInfo}>
