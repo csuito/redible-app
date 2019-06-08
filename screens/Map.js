@@ -31,6 +31,8 @@ export default class MapScreen extends Component {
         latitudeDelta: 0.02,
         longitudeDelta: 0.02,
       },
+      allRestaurants: [],
+      restaurants: [],
       restaurantMarkers: [],
       restaurantData: "",
       userMarker: {},
@@ -49,13 +51,30 @@ export default class MapScreen extends Component {
   }
 
   async componentDidMount() {
-    this.props.navigation.setParams({ noShadow: true })
-    this._addModalSub(this.props.navigation)
-    await this._getCurrentLocation()
-    await this._getRestaurantMarkers()
+    const { navigation } = this.props
+    navigation.setParams({ noShadow: true, onChangeText: this._onChangeText, searchTerm: this.state.searchTerm })
+    this._addModalSub(navigation)
+    const { latitude, longitude } = await this._getCurrentLocation()
+    const restaurants = await this._getAllRestaurants()
 
-    this.setState({ loading: false }, () => {
-      this.props.navigation.setParams({ noShadow: false })
+    this.setState(prevState => ({
+      mapCenter: {
+        ...prevState.mapCenter,
+        latitude,
+        longitude
+      },
+      userMarker: {
+        latitude,
+        longitude
+      },
+      restaurants,
+      allRestaurants: restaurants
+    }), () => {
+      const restaurantMarkers = this._getRestaurantMarkers(this.state.allRestaurants)
+
+      this.setState({ loading: false, restaurantMarkers }, () => {
+        navigation.setParams({ noShadow: false })
+      })
     })
   }
 
@@ -70,23 +89,17 @@ export default class MapScreen extends Component {
   }
 
   _getCurrentLocation = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION)
+    try {
+      let { status } = await Permissions.askAsync(Permissions.LOCATION)
 
-    if (status !== "granted") console.log("Gelocation permissions denied")
+      if (status !== "granted") console.log("Gelocation permissions denied")
 
-    const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({})
+      const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({})
 
-    this.setState(prevState => ({
-      mapCenter: {
-        ...prevState.mapCenter,
-        latitude,
-        longitude
-      },
-      userMarker: {
-        latitude,
-        longitude
-      }
-    }))
+      return { latitude, longitude }
+    } catch (err) {
+      this.setState({ error: true, message: "Unable to get current location" })
+    }
   }
 
   _hideModal = () => {
@@ -98,11 +111,16 @@ export default class MapScreen extends Component {
     this.setState({ mapCenter })
   }
 
-  _getRestaurantMarkers = async () => {
-    const { data } = await this.restaurantService.getAllRestaurants()
+  _getAllRestaurants = async () => {
+    try {
+      const { data } = await this.restaurantService.getAllRestaurants()
+      return data
+    } catch (err) {
+      this.setState({ error: true, message: "Unable to fetch restaurants list" })
+    }
+  }
 
-    const restaurants = data
-
+  _getRestaurantMarkers = restaurants => {
     let restaurantMarkers = []
 
     for (let i = 0; i < restaurants.length; i++) {
@@ -113,7 +131,37 @@ export default class MapScreen extends Component {
         }
       )
     }
-    this.setState({ restaurantMarkers })
+    return restaurantMarkers
+  }
+
+  /**
+   * Handles text change event on search header
+   * @params {String} searchTerm
+   */
+  _onChangeText = searchTerm => {
+    this.props.navigation.setParams({ searchTerm })
+    let { restaurants, allRestaurants } = this.state,
+      restaurantMarkers
+
+    console.log(searchTerm)
+
+    if (searchTerm === "") {
+      restaurantMarkers = this._getRestaurantMarkers(allRestaurants)
+      return this.setState({ restaurants: allRestaurants, restaurantMarkers })
+    }
+
+    restaurants = allRestaurants.filter(restaurant => {
+      return restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
+    })
+
+    this.setState({
+      searchTerm,
+      restaurants
+    }, () => {
+      restaurantMarkers = this._getRestaurantMarkers(this.state.restaurants)
+
+      this.setState({ restaurantMarkers })
+    })
   }
 
   _buildRestaurantLocations = restaurants => {

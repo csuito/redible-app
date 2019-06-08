@@ -1,61 +1,58 @@
-import React, { Component } from "react"
+import React from "react"
 import { Platform, StyleSheet, StatusBar, View, TouchableOpacity } from "react-native"
 import { Searchbar } from "react-native-paper"
 import { Icon } from 'expo'
+import PropTypes from "prop-types"
 
 // Constants
 import Layout from "../../constants/Layout"
 import Colors from "../../constants/Colors"
 
 /**
- * Search header for main screen
+ * Search header for Home and Map screens
+ * @param {Object} props
  */
-export default class SearchHeader extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      searchTerm: ""
-    }
-  }
+const SearchHeader = props => {
+  const { navigation, noShadow } = props
 
-  _showModal = navigation => {
+  const _showModal = navigation => {
     navigation.setParams({ modalVisible: true })
   }
+  const prefix = Platform.OS === "ios" ? "ios" : "md"
 
-  render() {
-    const prefix = Platform.OS === "ios" ? "ios" : "md"
+  const shadowStyles = !navigation.getParam("noShadow") && !noShadow ? {
+    shadowColor: Colors.shadow,
+    shadowOffset: { height: 5, width: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    elevation: 5
+  } : null
 
-    const shadowStyles = !this.props.navigation.getParam("noShadow") && !this.props.noShadow ? {
-      shadowColor: Colors.shadow,
-      shadowOffset: { height: 5, width: 0 },
-      shadowOpacity: 1,
-      shadowRadius: 3,
-      elevation: 5
-    } : null
+  const searchTerm = navigation.getParam("searchTerm")
+  const _onChangeText = navigation.getParam("onChangeText")
 
-    const searchTerm = this.props.navigation.getParam("searchTerm")
-    const _onChangeText = this.props.navigation.getParam("onChangeText")
+  return (
+    <View style={{ ...styles.container, ...shadowStyles }}>
+      <Searchbar
+        placeholder="Search restaurants, cuisines..."
+        onChangeText={searchTerm => _onChangeText(searchTerm)}
+        value={searchTerm}
+        style={styles.searchBar}
+        inputStyle={styles.searchText}
+      />
+      <TouchableOpacity style={styles.iconContainer} onPress={() => _showModal(navigation)}>
+        <Icon.Ionicons
+          name={`${prefix}-options`}
+          size={28}
+          color={Colors.basic.white} />
+      </TouchableOpacity>
+    </View>
+  )
+}
 
-    console.log("Header", searchTerm)
-
-    return (
-      <View style={{ ...styles.container, ...shadowStyles }}>
-        <Searchbar
-          placeholder="Search restaurants, cuisines..."
-          onChangeText={searchTerm => _onChangeText(searchTerm)}
-          value={searchTerm}
-          style={styles.searchBar}
-          inputStyle={styles.searchText}
-        />
-        <TouchableOpacity style={styles.iconContainer} onPress={() => this._showModal(this.props.navigation)}>
-          <Icon.Ionicons
-            name={`${prefix}-options`}
-            size={28}
-            color={Colors.basic.white} />
-        </TouchableOpacity>
-      </View>
-    )
-  }
+SearchHeader.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  noShadow: PropTypes.bool
 }
 
 const styles = StyleSheet.create({
@@ -86,3 +83,5 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end"
   }
 })
+
+export default SearchHeader

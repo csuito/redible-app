@@ -52,10 +52,6 @@ export default class HomeScreen extends Component {
     this._loadComponentData()
   }
 
-  componentWillUnmount() {
-    this._hideModal()
-  }
-
   /**
    * Loads user location and restaurant data
    */
@@ -122,7 +118,7 @@ export default class HomeScreen extends Component {
       return this.setState({ restaurants: allRestaurants })
     }
 
-    restaurants = restaurants.filter(restaurant => {
+    restaurants = allRestaurants.filter(restaurant => {
       return restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
     })
 
