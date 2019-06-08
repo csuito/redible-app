@@ -3,8 +3,7 @@ import { Platform, StyleSheet, View, ScrollView, Text } from "react-native"
 import { MapView, Icon } from "expo"
 import { PacmanIndicator } from "react-native-indicators"
 import * as Animatable from "react-native-animatable"
-const { Marker } = MapView,
-  { Polyline } = MapView
+const { Marker, Polyline } = MapView
 
 // Constants
 import Colors from "../constants/Colors"

@@ -109,7 +109,7 @@ export default class OrderSummaryScreen extends Component {
             text={"Submit order"}
             containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry }}
             textStyles={{ color: Colors.basic.white, fontSize: Layout.fontSize.mainContent }}
-            _onPress={() => { this.props.navigation.navigate("Confirmation") }}
+            _onPress={() => { this.props.navigation.navigate("Confirmation", { noShadow: true }) }}
           />
         </View>
       </View>

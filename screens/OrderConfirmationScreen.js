@@ -29,7 +29,6 @@ export default class OrderConfirmationScreen extends Component {
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ noShadow: true })
     setTimeout(() => {
       this.setState({ isConfirmed: true }, () => {
         this.props.navigation.setParams({ noShadow: false })
@@ -63,7 +62,7 @@ export default class OrderConfirmationScreen extends Component {
                 text={"Pick-up"}
                 containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.star, margin: 35 }}
                 textStyles={{ color: Colors.basic.white, fontSize: Layout.fontSize.mainContent }}
-                _onPress={() => { }}
+                _onPress={() => { this.props.navigation.navigate("Pickup", { noShadow: true }) }}
               />
             </View>
             :
