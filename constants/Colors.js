@@ -20,6 +20,8 @@ export default {
     bronze: "#B1560F",
     silver: "#C0C0C0"
   },
+  facebookBlue: "rgb(59,89,152)",
+  twitterBlue: "rgb(49, 161, 243)",
   searchModal: "rgba(252, 252, 252, 0.9)",
   shadow: "rgba(0, 0, 0, 0.4)",
   gradient: ["#03DAC5", "rgb(255, 255, 255)"]

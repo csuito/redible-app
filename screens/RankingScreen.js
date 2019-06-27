@@ -27,12 +27,12 @@ export default class RankingScreen extends Component {
 
   _buildRankingList = () => {
     const usersList = ["Monica", "Viktor", "Vanessa", "Pedro", "Alessandro", "Tue", "Aycha", "Stefano"],
-      gender = ["female", "male", "female", "male", "male", "female", "female", "male"],
-      points = [3850, 2900, 2850, 2525, 2010, 1765, 1600, 1250]
+      points = [3850, 2900, 2750, 2525, 2010, 1765, 1600, 1250]
 
     let topRanked = []
     for (let i = 0; i < 8; i++) {
-      topRanked.push(<RankingCard key={i} rank={i} name={usersList[i]} gender={gender[i]} points={points[i]} />)
+      const width = `${(points[i] / points[0]) * 100}%`
+      topRanked.push(<RankingCard key={i} rank={i} name={usersList[i]} points={points[i]} width={width} />)
     }
     return topRanked.map(user => user)
   }

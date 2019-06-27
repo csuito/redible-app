@@ -1,5 +1,5 @@
 import React from "react"
-import { Platform, StyleSheet, Text, TouchableOpacity } from "react-native"
+import { Platform, StyleSheet, Text, TouchableOpacity, Image } from "react-native"
 import { Icon } from "expo"
 
 // Constants
@@ -7,10 +7,11 @@ import Colors from "../constants/Colors"
 
 /**
  * Generic button component
+ * @param {Object}
  */
 const Button = props => {
   const prefix = Platform.OS === "ios" ? "ios" : "md",
-    { text, iconName, _onPress, containerStyles, textStyles, noShadow } = props,
+    { text, iconName, image, _onPress, containerStyles, textStyles, noShadow } = props,
     shadowStyles = !noShadow ? {
       shadowColor: Colors.shadow,
       shadowOffset: { height: 2, width: 0 },
@@ -27,6 +28,11 @@ const Button = props => {
             name={`${prefix}-${iconName}`}
             size={textStyles.fontSize}
             color={textStyles.color} /> :
+          null
+      }
+      {
+        image ?
+          <Image style={{ height: textStyles.fontSize, width: textStyles.fontSize }} source={image} /> :
           null
       }
       <Text style={{ ...textStyles }}>{` ${text}`}</Text>

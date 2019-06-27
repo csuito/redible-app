@@ -1,13 +1,18 @@
 import React from "react"
 import { StyleSheet, View, Text } from "react-native"
 import { Icon } from "expo"
+import PropTypes from "prop-types"
 
 // Constants
 import Colors from "../constants/Colors"
 import Layout from "../constants/Layout"
 
+/**
+ * Renders ranking list item
+ * @param {Object} props 
+ */
 const RankingCard = props => {
-  const { name, rank, gender, points } = props
+  const { name, rank, points, width } = props
 
   return (
     <View>
@@ -22,6 +27,9 @@ const RankingCard = props => {
         <View style={styles.textContainer}>
           <View style={{ flex: 1 }}>
             <Text style={styles.text}>{`${rank + 1}.`} {name}</Text>
+            <View style={styles.barContainer}>
+              <View style={{ ...styles.bar, width }}></View>
+            </View>
           </View>
 
           <View style={styles.points}>
@@ -36,6 +44,13 @@ const RankingCard = props => {
       </View>
     </View>
   )
+}
+
+RankingCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  rank: PropTypes.number.isRequired,
+  points: PropTypes.number.isRequired,
+  width: PropTypes.string.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -54,6 +69,18 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginLeft: 15,
     marginRight: 15,
+  },
+  barContainer: {
+    marginTop: 10,
+    height: 10,
+    width: "90%",
+    backgroundColor: Colors.redible.cream,
+    borderRadius: 2.5
+  },
+  bar: {
+    height: 10,
+    backgroundColor: Colors.redible.main,
+    borderRadius: 2.5
   },
   image: {
     height: 45,

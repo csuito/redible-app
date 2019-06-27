@@ -143,8 +143,6 @@ export default class MapScreen extends Component {
     let { restaurants, allRestaurants } = this.state,
       restaurantMarkers
 
-    console.log(searchTerm)
-
     if (searchTerm === "") {
       restaurantMarkers = this._getRestaurantMarkers(allRestaurants)
       return this.setState({ restaurants: allRestaurants, restaurantMarkers })

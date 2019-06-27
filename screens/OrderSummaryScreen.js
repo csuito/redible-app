@@ -34,7 +34,6 @@ export default class OrderSummaryScreen extends Component {
 
   _setPaymentMethod = type => {
     if (type === "edit") {
-      console.log("INSIDE IF")
       this.setState({ name: "Carlos Suito", cardNumber: "3452986447595437", year: "2023", month: "07" })
     }
     this.props.navigation.setParams({ modalVisible: true, name: this.state.name })

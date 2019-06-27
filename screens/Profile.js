@@ -17,16 +17,14 @@ export default class ProfileScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoggedUser: false,
+      isLoggedUser: true,
       email: "",
       password: ""
     }
   }
 
-  static navigationOptions = ({ navigation }) => {
-    return {
-      header: null
-    }
+  static navigationOptions = {
+    header: null
   }
 
   render() {
@@ -67,21 +65,25 @@ export default class ProfileScreen extends Component {
                   />
                   <Button
                     text={"Login"}
-                    containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry, marginTop: 20, marginLeft: 25, marginRight: 25 }}
+                    containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry, marginTop: 35, marginLeft: 25, marginRight: 25 }}
                     textStyles={{ color: Colors.basic.white, fontSize: Layout.fontSize.mainContent }}
                   />
                   <Button
-                    noShadow
-                    text={"Sign up"}
-                    containerStyles={{ flexDirection: "row", backgroundColor: Colors.basic.white, marginTop: 20, marginLeft: 25, marginRight: 25 }}
-                    textStyles={{ color: Colors.redible.accent, fontSize: Layout.fontSize.mainContent }}
+                    text={"Login with Facebook"}
+                    containerStyles={{ flexDirection: "row", backgroundColor: Colors.facebookBlue, marginTop: 20, marginLeft: 25, marginRight: 25 }}
+                    textStyles={{ color: Colors.basic.white, fontSize: Layout.fontSize.mainContent }}
                   />
                 </View>
-                <TouchableOpacity><Text style={styles.passwordRecovery}>Forgot password?</Text></TouchableOpacity>
+                <View style={styles.footer}>
+                  <TouchableOpacity><Text style={{ ...styles.passwordRecovery, marginRight: 25 }}>Forgot password?</Text></TouchableOpacity>
+                  <TouchableOpacity><Text style={{ ...styles.passwordRecovery, marginLeft: 25 }}>Sign up</Text></TouchableOpacity>
+                </View>
               </View>
             </View>
             :
-            <Text>Logged in</Text>
+            <View style={styles.profileContainer}>
+
+            </View>
         }
       </View>
     )
@@ -106,14 +108,15 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   logo: {
-    width: 155,
-    height: 155,
+    marginTop: 30,
+    width: 150,
+    height: 150,
     resizeMode: "contain"
   },
   title: {
-    fontSize: Layout.fontSize.title,
+    fontSize: Layout.fontSize.contentTitle,
     color: Colors.basic.white,
-    marginTop: 35
+    marginTop: 30
   },
   bottomContainer: {
     flex: 1,
@@ -141,10 +144,20 @@ const styles = StyleSheet.create({
     fontSize: Layout.fontSize.mainContent,
     color: Colors.redible.accent
   },
+  footer: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center"
+  },
   passwordRecovery: {
     color: Colors.redible.accent,
     fontSize: Layout.fontSize.mediumText,
     marginBottom: 15,
-    fontStyle: "italic"
+  },
+  profileContainer: {
+    flex: 1,
+    backgroundColor: Colors.redible.main
+
   }
 })

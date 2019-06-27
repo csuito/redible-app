@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React from "react"
 import { StyleSheet, View, Image, Text, Platform, TouchableWithoutFeedback } from "react-native"
 import { Chip } from "react-native-paper"
 import { Icon } from "expo"
@@ -52,6 +52,13 @@ const RestaurantCard = props => {
       </View>
     </TouchableWithoutFeedback>
   )
+}
+
+RestaurantCard.propTypes = {
+  navigation: PropTypes.object,
+  _onPress: PropTypes.func,
+  userLocation: PropTypes.object,
+  restaurantData: PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({
