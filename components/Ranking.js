@@ -2,6 +2,7 @@ import React from "react"
 import { StyleSheet, View, Text } from "react-native"
 import { Icon } from "expo"
 import PropTypes from "prop-types"
+import * as Animatable from "react-native-animatable"
 
 // Constants
 import Colors from "../constants/Colors"
@@ -12,7 +13,15 @@ import Layout from "../constants/Layout"
  * @param {Object} props 
  */
 const RankingCard = props => {
-  const { name, rank, points, width } = props
+  const { name, rank, points, width } = props,
+    progress = {
+      from: {
+        width: "0%"
+      },
+      to: {
+        width
+      }
+    }
 
   return (
     <View>
@@ -28,7 +37,7 @@ const RankingCard = props => {
           <View style={{ flex: 1 }}>
             <Text style={styles.text}>{`${rank + 1}.`} {name}</Text>
             <View style={styles.barContainer}>
-              <View style={{ ...styles.bar, width }}></View>
+              <Animatable.View delay={300} animation={progress} duration={800} style={{ ...styles.bar, width: "0%" }}></Animatable.View>
             </View>
           </View>
 
