@@ -5,6 +5,7 @@ import { PacmanIndicator } from "react-native-indicators"
 
 // Components
 import WithBackIconHeader from "../components/headers/WithBackIconHeader"
+import PointsEarnedPopup from "../components/modals/PointsEarnedPopup"
 import Button from "../components/Button"
 
 // Constants
@@ -18,29 +19,43 @@ export default class OrderConfirmationScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isConfirmed: false
+      isConfirmed: false,
+      modalVisible: false
     }
   }
 
   static navigationOptions = ({ navigation }) => {
     return {
-      header: <WithBackIconHeader _onPress={() => navigation.navigate("Home")} iconName={"home"} text={"Order Confirmation"} color={Colors.basic.white} navigation={navigation} />
+      header: <WithBackIconHeader _onPress={() => navigation.navigate("Home")} iconName={"home"} text={"Confirmation"} color={Colors.basic.white} navigation={navigation} />
     }
   }
 
-  componentDidMount() {
-    setTimeout(() => {
+  async componentDidMount() {
+    await setTimeout(() => {
       this.setState({ isConfirmed: true }, () => {
         this.props.navigation.setParams({ noShadow: false })
       })
+    }, 2500)
+
+    setTimeout(() => {
+      this.setState({ modalVisible: true })
     }, 3500)
   }
 
   render() {
-    const { isConfirmed } = this.state
+    const { isConfirmed, modalVisible } = this.state
 
     return (
       <View style={styles.container}>
+        {
+          isConfirmed && modalVisible ?
+            <PointsEarnedPopup
+              modalVisible={modalVisible}
+              _onPress={() => { this.setState({ modalVisible: false }) }}
+            />
+            :
+            null
+        }
         {
           isConfirmed ?
             <View style={styles.contentContainer}>
