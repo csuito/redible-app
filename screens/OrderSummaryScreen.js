@@ -39,7 +39,7 @@ export default class OrderSummaryScreen extends Component {
   }
 
   componentWillUnmount() {
-    this._hideModal()
+    this.setState({ modalVisible: false })
   }
 
   _setPaymentMethod = type => {
