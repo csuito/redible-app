@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { StyleSheet, View, Text } from "react-native"
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native"
 import { Icon } from "expo"
 import * as Animatable from "react-native-animatable"
 
@@ -38,9 +38,9 @@ export default class AccountDetails extends Component {
             <Text style={styles.name}>{`Vanessa`}</Text>
             <Text style={styles.account}>{`vanessa.higasi@bts.tech`}</Text>
           </View>
-          <View>
-            <Text style={{ textAlign: "center", color: Colors.redible.star, fontWeight: "bold", fontSize: Layout.fontSize.title }}>{totalPoints}</Text>
-            <Text style={{ textAlign: "center", color: Colors.redible.star, fontWeight: "bold", fontSize: Layout.fontSize.title }}>points</Text>
+          <View style={{ alignItems: "center", justifyContent: "center", height: 100, width: 100, borderRadius: 50, backgroundColor: Colors.redible.star }}>
+            <Text style={{ textAlign: "center", color: Colors.basic.white, fontWeight: "bold", fontSize: Layout.fontSize.title }}>{totalPoints}</Text>
+            <Text style={{ textAlign: "center", color: Colors.basic.white, fontWeight: "bold", fontSize: Layout.fontSize.title }}>points</Text>
           </View>
         </View>
 
@@ -68,6 +68,33 @@ export default class AccountDetails extends Component {
               />
               <Text style={styles.smallText}><Text style={{ fontWeight: "bold" }}>17</Text> meals saved</Text>
             </View>
+          </View>
+
+          <View style={styles.list}>
+            <TouchableOpacity style={{ flex: 1, flexDirection: "row", paddingTop: 25, paddingBottom: 25, alignItems: "center" }}>
+              <Icon.Ionicons
+                name={"md-settings"}
+                color={Colors.redible.gray}
+                size={Layout.fontSize.mainContent}
+              />
+              <Text style={{ marginLeft: 15, fontSize: Layout.fontSize.mainContent, color: Colors.redible.gray }}>Settings</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ flex: 1, flexDirection: "row", paddingTop: 25, paddingBottom: 25, alignItems: "center" }}>
+              <Icon.Ionicons
+                name={"md-list-box"}
+                color={Colors.redible.gray}
+                size={Layout.fontSize.mainContent}
+              />
+              <Text style={{ marginLeft: 15, fontSize: Layout.fontSize.mainContent, color: Colors.redible.gray }}>Order history</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ flex: 1, flexDirection: "row", paddingTop: 25, paddingBottom: 25, alignItems: "center" }}>
+              <Icon.Ionicons
+                name={"md-log-out"}
+                color={Colors.redible.gray}
+                size={Layout.fontSize.mainContent}
+              />
+              <Text style={{ marginLeft: 15, fontSize: Layout.fontSize.mainContent, color: Colors.redible.gray }}>Logout</Text>
+            </TouchableOpacity>
           </View>
 
         </View>
@@ -139,5 +166,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 10
+  },
+  list: {
+    marginTop: 100
   }
 })
