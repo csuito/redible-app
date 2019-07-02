@@ -63,6 +63,7 @@ RestaurantCard.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: Colors.basic.white,
     borderRadius: 8,
     marginLeft: 15,
     marginRight: 15,
@@ -77,12 +78,10 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    backgroundColor: Colors.basic.white,
   },
   textContainer: {
     flex: 1.75,
     justifyContent: "space-between",
-    backgroundColor: "white",
     padding: 10,
     paddingLeft: 20,
     paddingRight: 20

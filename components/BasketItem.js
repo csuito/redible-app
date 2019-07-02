@@ -13,10 +13,10 @@ import Layout from "../constants/Layout"
 const BasketItem = props => {
   const { name, quantity, price, header } = props,
     isTotal = name === "Total",
-    color = isTotal ? Colors.basic.black : Colors.redible.accent,
+    color = isTotal ? Colors.basic.black : Colors.basic.black,
     borderStyles = isTotal ? {
       borderTopWidth: 1,
-      borderColor: Colors.redible.accent
+      borderColor: Colors.redible.silver
     } : null
 
   return (
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Colors.basic.white,
     paddingTop: 10,
     paddingBottom: 10
   },
@@ -66,11 +65,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   headerText: {
-    fontSize: Layout.fontSize.mainContent,
+    fontSize: Layout.fontSize.mediumText,
     color: Colors.basic.black,
+    fontWeight: "bold"
   },
   text: {
-    fontSize: Layout.fontSize.mainContent,
+    fontSize: Layout.fontSize.mediumText,
   }
 })
 

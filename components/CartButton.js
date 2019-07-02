@@ -1,11 +1,16 @@
 import React from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { Icon } from "expo"
+import PropTypes from "prop-types"
 
 // Constants
 import Colors from "../constants/Colors"
 import Layout from "../constants/Layout"
 
+/**
+ * Renders basket  floating button on Details Screen
+ * @param {Object} props 
+ */
 const CartButton = props => {
   const { _onPress, prefix } = props
 
@@ -40,5 +45,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   }
 })
+
+CartButton.propTypes = {
+  _onPress: PropTypes.func.isRequired,
+  prefix: PropTypes.string
+}
 
 export default CartButton
