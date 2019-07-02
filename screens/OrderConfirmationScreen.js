@@ -37,7 +37,7 @@ export default class OrderConfirmationScreen extends Component {
 
     setTimeout(() => {
       this.setState({ modalVisible: true })
-    }, 3500)
+    }, 3000)
   }
 
   render() {

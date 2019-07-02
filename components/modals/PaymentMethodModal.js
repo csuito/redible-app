@@ -25,6 +25,14 @@ export default class PaymentMethodModal extends Component {
     }
   }
 
+  componentDidMount() {
+    const { paymentData } = this.props
+    if (paymentData) {
+      const { name, cardNumber, month, year, cvc } = paymentData
+      this.setState({ name, cardNumber, month, year, cvc })
+    }
+  }
+
   render() {
     const prefix = Platform.OS === "ios" ? "ios" : "md",
       { modalVisible, _onPress } = this.props,

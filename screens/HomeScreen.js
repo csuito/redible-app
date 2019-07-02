@@ -134,6 +134,7 @@ export default class HomeScreen extends Component {
 
     return allRestaurants.map((restaurant, i) => {
       restaurant.rating = getRandomRating(4.2)
+
       return (
         i >= types.length ? null :
           (
@@ -244,9 +245,6 @@ export default class HomeScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.basic.white,
-  },
-  contentContainer: {
     backgroundColor: Colors.basic.white,
   },
   noResultsContainer: {

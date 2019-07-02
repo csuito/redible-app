@@ -41,7 +41,9 @@ export default class RestaurantBanner extends Component {
       <ImageBackground style={styles.container} imageStyle={{ resizeMode: "contain" }} source={{ uri: restaurantData.logo }}>
         <TouchableWithoutFeedback onPress={() => navigation ? navigation.navigate("Details", { userLocation, restaurantData, noShadow: true }) : this._toggleDescription()}>
           <View style={styles.contentContainer}>
+            {/*
             <View style={{ ...styles.verticalLine, backgroundColor: color }}></View>
+            */}
             <View style={styles.textContainer}>
               <View style={styles.ratingContainer}>
                 <Text style={styles.rating}>

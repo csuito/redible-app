@@ -2,7 +2,6 @@ import React, { Component } from "react"
 import { Platform, StyleSheet, View, ScrollView, Text } from "react-native"
 import { MapView, Icon } from "expo"
 import { PacmanIndicator } from "react-native-indicators"
-import * as Animatable from "react-native-animatable"
 const { Marker, Polyline } = MapView
 
 // Constants
@@ -13,11 +12,12 @@ import Layout from "../constants/Layout"
 import { decode } from "../helpers/decodeDirections"
 
 // Components
+import BasketModal from "../components/modals/BasketModal"
 import RestaurantBanner from "../components/RestaurantBanner"
 import DishCard from "../components/DishCard"
 import WithBackIconHeader from "../components/headers/WithBackIconHeader"
-import Button from "../components/Button"
 import CartButton from "../components/CartButton"
+import AddDish from "../components/AddDish"
 
 // Services
 import DirectionsService from "../services/directions"
@@ -46,7 +46,9 @@ export default class DetailsScreen extends Component {
       showSuccessMessage: false,
       loading: true,
       rating: 0,
-      error: false
+      error: false,
+      animation: "fadeInUp",
+      showModal: false
     }
     this.directionsService = new DirectionsService()
   }
@@ -101,33 +103,54 @@ export default class DetailsScreen extends Component {
   _buildDishList = () => {
     let dishList = []
     for (let i = 0; i <= 5; i++) {
-      dishList.push(<DishCard key={i} _onPress={() => this.setState({ showAddToCart: true })} />)
+      dishList.push(<DishCard key={i} _onPress={this._resetState} />)
     }
     return dishList.map(dish => dish)
+  }
+
+  _resetState = () => {
+    this.setState({ showAddToCart: true, quantity: 1, showSuccessMessage: false, animation: "fadeInUp" })
   }
 
   _hideAddToBasket = (success = false) => {
     if (success) {
       this.setState({ showSuccessMessage: true }, () => {
         setTimeout(() => {
-          this.setState({ showAddToCart: false, quantity: 1, showSuccessMessage: false })
-        }, 2000)
+          this.setState({ animation: "fadeOutDown" })
+        }, 1800)
       })
     } else {
-      this.setState({ showAddToCart: false, quantity: 1 })
+      this.setState({ showAddToCart: false })
     }
+  }
+
+  _changeQuantity = type => {
+    if (type === "add") return this.setState(prevState => ({ quantity: prevState.quantity + 1 }))
+    else if (type === "remove") return this.setState(prevState => ({ quantity: prevState.quantity - 1 }))
+  }
+
+  _goToCheckout = () => {
+    this.setState({ showModal: false }, () => {
+      this.props.navigation.navigate("Summary")
+    })
   }
 
   render() {
     const dishList = this._buildDishList(),
-      { mapCenter, restaurantData, restaurantMarker, quantity, directions, duration, showAddToCart, userLocation, showSuccessMessage, loading } = this.state,
+      { showModal, mapCenter, restaurantData, restaurantMarker, quantity, directions, duration, showAddToCart, userLocation, showSuccessMessage, loading, animation } = this.state,
       prefix = Platform.OS === "ios" ? "ios" : "md"
 
     return (
       !loading ?
         <View style={styles.container}>
 
-          <CartButton _onPress={() => this.props.navigation.navigate("Cart")} prefix={prefix} />
+          <BasketModal
+            modalVisible={showModal}
+            _close={() => this.setState({ showModal: false })}
+            _goToCheckout={this._goToCheckout}
+          />
+
+          <CartButton _onPress={() => this.setState({ showModal: true })} prefix={prefix} />
           <ScrollView style={styles.contentContainer}>
             {
               restaurantData ?
@@ -140,7 +163,7 @@ export default class DetailsScreen extends Component {
                 duration && mapCenter.latitude && mapCenter.longitude && directions ?
                   <View style={styles.durationContainer}>
                     <Icon.Ionicons
-                      name={`${prefix}-walk`}
+                      name={`md-walk`}
                       color={Colors.basic.black}
                       size={Layout.fontSize.mainContent}
                     />
@@ -191,59 +214,13 @@ export default class DetailsScreen extends Component {
           </ScrollView>
           {
             showAddToCart ?
-              <Animatable.View animation={"fadeInUp" || "fadeOutDown"} duration={200} style={styles.addToCart}>
-                <Text style={styles.dishText}>{`Paella Valenciana`}</Text>
-                {
-                  !showSuccessMessage ?
-                    <View style={styles.row}>
-                      <Text style={styles.addToText}>{`Quantity `}</Text>
-                      <Icon.Ionicons
-                        onPress={() => this.setState(prevState => {
-                          return { quantity: prevState.quantity - 1 >= 0 ? prevState.quantity - 1 : 0 }
-                        })}
-                        name={`${prefix}-remove-circle-outline`}
-                        color={Colors.redible.lavenderGray}
-                        size={Layout.fontSize.largeIcon}
-                      />
-                      <Text style={styles.addToText}>{quantity}</Text>
-                      <Icon.Ionicons
-                        onPress={() => this.setState(prevState => {
-                          return { quantity: prevState.quantity + 1 }
-                        })}
-                        name={`${prefix}-add-circle-outline`}
-                        color={Colors.redible.main}
-                        size={Layout.fontSize.largeIcon}
-                      />
-                      {
-                        quantity > 0 ?
-                          <Button
-                            iconName={"basket"}
-                            text={"Add to basket"}
-                            containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.main }}
-                            textStyles={{ fontSize: Layout.fontSize.mediumText, color: Colors.basic.white }}
-                            _onPress={() => this._hideAddToBasket(true)} />
-                          :
-                          <Button
-                            iconName={"close"}
-                            text={"Cancel"}
-                            containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry }}
-                            textStyles={{ fontSize: Layout.fontSize.mediumText, color: Colors.basic.white }}
-                            _onPress={() => this._hideAddToBasket()} />
-                      }
-                    </View>
-                    :
-                    <View style={styles.row}>
-                      <Text style={{ ...styles.dishText, color: Colors.redible.main }}>Added to the basket!</Text>
-                    </View>
-                }
-
-              </Animatable.View>
+              <AddDish animation={animation} quantity={quantity} dishAdded={showSuccessMessage} _hideAddToBasket={this._hideAddToBasket} _changeQuantity={this._changeQuantity} />
               :
               null
           }
         </View>
         :
-        <View style={{ height: Layout.window.height, width: Layout.window.width, backgroundColor: Colors.redible.main }}>
+        <View style={styles.loading}>
           <PacmanIndicator size={75} color={Colors.basic.white} />
         </View>
     )
@@ -291,36 +268,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: Layout.fontSize.mainContent,
   },
-  addToCart: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
-    position: "absolute",
+  loading: {
+    height: Layout.window.height,
     width: Layout.window.width,
-    bottom: 0,
-    shadowColor: Colors.basic.black,
-    backgroundColor: Colors.basic.white,
-    shadowOffset: { height: 5, width: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 3,
-    elevation: 5,
-  },
-  row: {
-    flex: 1,
-    backgroundColor: Colors.basic.white,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-  },
-  dishText: {
-    fontSize: Layout.fontSize.mainContent,
-    color: Colors.redible.accent,
-    textAlign: "center",
-    marginBottom: 10,
-  },
-  addToText: {
-    fontSize: Layout.fontSize.mainContent,
-    color: Colors.redible.accent
+    backgroundColor: Colors.redible.main
   }
 })

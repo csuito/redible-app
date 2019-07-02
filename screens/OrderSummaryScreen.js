@@ -18,7 +18,13 @@ export default class OrderSummaryScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      paymentMethodModalVisible: false
+      paymentMethodModalVisible: false,
+      paymentData: {
+        name: "Carlos Suito",
+        cardNumber: "3452986447595437",
+        year: "2023",
+        month: "07"
+      }
     }
   }
 
@@ -28,34 +34,45 @@ export default class OrderSummaryScreen extends Component {
     }
   }
 
+  componentDidMount() {
+    this.props.navigation.setParams({ paymentData: this.state.paymentData })
+  }
+
   componentWillUnmount() {
-    this._hideModal()
+    this.setState({ modalVisible: false })
   }
 
   _setPaymentMethod = type => {
-    if (type === "edit") {
-      this.setState({ name: "Carlos Suito", cardNumber: "3452986447595437", year: "2023", month: "07" })
-    }
-    this.props.navigation.setParams({ modalVisible: true, name: this.state.name })
-  }
+    let paymentData
 
-  _hideModal = () => {
-    this.props.navigation.setParams({ modalVisible: false })
+    if (type === "edit") {
+      paymentData = {
+        name: "Carlos Suito",
+        cardNumber: "3452986447595437",
+        year: "2023",
+        month: "07"
+      }
+    }
+    this.setState(prevState => ({ modalVisible: !prevState.modalVisible, paymentData }))
   }
 
   render() {
-    const prefix = Platform.OS === "ios" ? "ios" : "md"
-
-    let modalVisible = this.props.navigation.getParam("modalVisible") || false
+    const prefix = Platform.OS === "ios" ? "ios" : "md",
+      { modalVisible, paymentData } = this.state
 
     return (
       <View style={styles.container}>
-
-        <PaymentMethodModal
-          navigation={this.props.navigation}
-          _onPress={this._hideModal}
-          modalVisible={modalVisible}
-        />
+        {
+          modalVisible ?
+            <PaymentMethodModal
+              navigation={this.props.navigation}
+              _onPress={() => this.setState({ modalVisible: false })}
+              modalVisible={modalVisible}
+              paymentData={paymentData}
+            />
+            :
+            null
+        }
 
         <View style={styles.pickupInfo}>
           <Text style={styles.title}>Forastera Restaurant</Text>
@@ -106,7 +123,7 @@ export default class OrderSummaryScreen extends Component {
         <View style={styles.buttonContainer}>
           <Button
             text={"Submit order"}
-            containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.raspberry }}
+            containerStyles={{ marginTop: 30, paddingLeft: 35, paddingRight: 35, backgroundColor: Colors.redible.raspberry }}
             textStyles={{ color: Colors.basic.white, fontSize: Layout.fontSize.mainContent }}
             _onPress={() => { this.props.navigation.navigate("Confirmation", { noShadow: true }) }}
           />
