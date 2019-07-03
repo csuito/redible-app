@@ -18,13 +18,14 @@ export default class OrderSummaryScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      paymentMethodModalVisible: false,
+      modalVisible: false,
       paymentData: {
         name: "Carlos Suito",
         cardNumber: "3452986447595437",
         year: "2023",
         month: "07"
-      }
+      },
+      restaurantData: {}
     }
   }
 
@@ -35,7 +36,8 @@ export default class OrderSummaryScreen extends Component {
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ paymentData: this.state.paymentData })
+    const restaurantData = this.props.navigation.getParam("restaurantData")
+    this.setState({ restaurantData })
   }
 
   componentWillUnmount() {
@@ -58,7 +60,7 @@ export default class OrderSummaryScreen extends Component {
 
   render() {
     const prefix = Platform.OS === "ios" ? "ios" : "md",
-      { modalVisible, paymentData } = this.state
+      { modalVisible, paymentData, restaurantData } = this.state
 
     return (
       <View style={styles.container}>
@@ -75,7 +77,7 @@ export default class OrderSummaryScreen extends Component {
         }
 
         <View style={styles.pickupInfo}>
-          <Text style={styles.title}>Forastera Restaurant</Text>
+          <Text style={styles.title}>{restaurantData.name}</Text>
           <Text style={styles.text}><Icon.Ionicons
             name={`${prefix}-pin`}
             color={Colors.redible.accent}
@@ -125,7 +127,7 @@ export default class OrderSummaryScreen extends Component {
             text={"Submit order"}
             containerStyles={{ marginTop: 30, paddingLeft: 35, paddingRight: 35, backgroundColor: Colors.redible.raspberry }}
             textStyles={{ color: Colors.basic.white, fontSize: Layout.fontSize.mainContent }}
-            _onPress={() => { this.props.navigation.navigate("Confirmation", { noShadow: true }) }}
+            _onPress={() => { this.props.navigation.navigate("Confirmation", { noShadow: true, restaurantData }) }}
           />
         </View>
       </View>

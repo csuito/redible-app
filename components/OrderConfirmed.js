@@ -13,7 +13,7 @@ import Layout from "../constants/Layout"
  * Renders Order Confirmation 
  */
 const OrderConfirmed = props => {
-  const { navigation } = props
+  const { navigation, restaurantData } = props
 
   return (
     <View style={styles.contentContainer}>
@@ -29,13 +29,13 @@ const OrderConfirmed = props => {
         <Text style={styles.text}>Your order</Text>
         <Text style={{ ...styles.text, ...styles.highlighted }}># 37963429</Text>
         <Text style={styles.text}>has been confirmed by</Text>
-        <Text style={{ ...styles.text, ...styles.highlighted, marginBottom: 15 }}>Forastera Restaurant</Text>
+        <Text style={{ ...styles.text, ...styles.highlighted, marginBottom: 15 }}>{restaurantData.name}</Text>
       </View>
       <Button
         text={"Pick-up"}
         containerStyles={{ flexDirection: "row", backgroundColor: Colors.redible.star, margin: 35 }}
         textStyles={{ color: Colors.basic.white, fontSize: Layout.fontSize.mainContent }}
-        _onPress={() => { navigation.navigate("Pickup", { noShadow: true }) }}
+        _onPress={() => { navigation.navigate("Pickup", { noShadow: true, restaurantData }) }}
       />
     </View>
   )

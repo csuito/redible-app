@@ -63,6 +63,10 @@ export default class DetailsScreen extends Component {
     this._getDirections()
   }
 
+  componentWillUnmount() {
+    this.setState({ showModal: false })
+  }
+
   _getDirections = async () => {
     const
       userLocation = await this.props.navigation.getParam("userLocation"),
@@ -130,8 +134,9 @@ export default class DetailsScreen extends Component {
   }
 
   _goToCheckout = () => {
+    const { restaurantData } = this.state
     this.setState({ showModal: false }, () => {
-      this.props.navigation.navigate("Summary")
+      this.props.navigation.navigate("Summary", { restaurantData })
     })
   }
 

@@ -18,7 +18,8 @@ export default class OrderConfirmationScreen extends Component {
     super(props)
     this.state = {
       isConfirmed: false,
-      modalVisible: false
+      modalVisible: false,
+      restaurantData: {}
     }
   }
 
@@ -29,8 +30,10 @@ export default class OrderConfirmationScreen extends Component {
   }
 
   async componentDidMount() {
+    const restaurantData = this.props.navigation.getParam("restaurantData")
+
     await setTimeout(() => {
-      this.setState({ isConfirmed: true }, () => {
+      this.setState({ isConfirmed: true, restaurantData }, () => {
         this.props.navigation.setParams({ noShadow: false })
       })
     }, 2500)
@@ -41,7 +44,7 @@ export default class OrderConfirmationScreen extends Component {
   }
 
   render() {
-    const { isConfirmed, modalVisible } = this.state
+    const { isConfirmed, modalVisible, restaurantData } = this.state
 
     return (
       <View style={styles.container}>
@@ -56,7 +59,7 @@ export default class OrderConfirmationScreen extends Component {
         }
         {
           isConfirmed ?
-            <OrderConfirmed navigation={this.props.navigation} />
+            <OrderConfirmed navigation={this.props.navigation} restaurantData={restaurantData} />
             :
             <WaitConfirmation />
         }

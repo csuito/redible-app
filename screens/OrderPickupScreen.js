@@ -1,11 +1,12 @@
 import React, { Component } from "react"
-import { StyleSheet, Platform, View, Text } from "react-native"
+import { StyleSheet, View, TouchableWithoutFeedback } from "react-native"
 import { PacmanIndicator } from "react-native-indicators"
-import { MapView, Location, Permissions, Icon } from "expo"
+import { MapView, Location, Permissions } from "expo"
 const { Marker, Polyline } = MapView
 
 // Components
 import WithBackIconHeader from "../components/headers/WithBackIconHeader"
+import PickupDescription from "../components/PickupDescription"
 
 // Constants
 import Colors from "../constants/Colors"
@@ -34,7 +35,8 @@ export default class OrderPickupScreen extends Component {
       restaurantMarker: {},
       directions: [],
       duration: "",
-      loading: true
+      loading: true,
+      restaurantData: {}
     }
     this.directionsService = new DirectionsService()
   }
@@ -69,10 +71,11 @@ export default class OrderPickupScreen extends Component {
    */
   _getDirections = async () => {
     const
+      restaurantData = this.props.navigation.getParam("restaurantData"),
       userLocation = await this._getUserLocation(),
-      restaurantMarker = { latitude: 41.397440, longitude: 2.188432 },
+      restaurantMarker = { latitude: parseFloat(restaurantData.lat), longitude: parseFloat(restaurantData.lng) },
       originString = `${userLocation.latitude},${userLocation.longitude}`,
-      destinationString = "41.397440,2.188432"
+      destinationString = `${restaurantData.lat},${restaurantData.lng}`
 
     try {
       const { data } = await this.directionsService.getDirections(originString, destinationString)
@@ -96,7 +99,7 @@ export default class OrderPickupScreen extends Component {
         longitudeDelta: mapZoom
       }
 
-      this.setState({ userLocation, directions, duration, mapCenter, restaurantMarker, loading: false }, () => {
+      this.setState({ userLocation, directions, duration, mapCenter, restaurantData, restaurantMarker, loading: false }, () => {
         this.props.navigation.setParams({ noShadow: false })
       })
     } catch (err) {
@@ -105,62 +108,55 @@ export default class OrderPickupScreen extends Component {
   }
 
   render() {
-    const { loading, mapCenter, userLocation, restaurantMarker, duration, directions } = this.state,
-      prefix = Platform.OS === "ios" ? "ios" : "md"
+    const { loading, mapCenter, userLocation, restaurantData, restaurantMarker, duration, directions } = this.state
 
     return (
       <View style={styles.container}>
         {
           !loading ?
             <View style={styles.mapContainer}>
-              {
-                duration && mapCenter.latitude && mapCenter.longitude && directions ?
-                  <View style={styles.durationContainer}>
-                    <Icon.Ionicons
-                      name={`${prefix}-walk`}
-                      color={Colors.basic.black}
-                      size={Layout.fontSize.mainContent}
-                    />
-                    <Text style={styles.durationText}>{` ${duration}`}</Text>
-                  </View>
-                  :
-                  null
-              }
-              {
-                mapCenter.latitude && mapCenter.longitude && directions ?
-                  <MapView
-                    style={styles.map}
-                    initialRegion={mapCenter}
-                    onRegionChange={() => null}>
+              <View style={{ flex: 1 }}>
+                {
+                  duration ?
+                    <PickupDescription restaurantData={restaurantData} duration={duration} /> :
+                    null
+                }
+                {
+                  mapCenter.latitude && mapCenter.longitude && directions ?
+                    <MapView
+                      style={styles.map}
+                      initialRegion={mapCenter}
+                      onRegionChange={() => { }}>
 
-                    <Polyline
-                      coordinates={directions}
-                      strokeWidth={3}
-                      strokeColor={Colors.redible.main}
-                    />
+                      <Polyline
+                        coordinates={directions}
+                        strokeWidth={3}
+                        strokeColor={Colors.redible.main}
+                      />
 
-                    {
-                      userLocation.latitude && userLocation.longitude ?
-                        <Marker
-                          coordinate={userLocation}
-                          pinColor={Colors.redible.raspberry}
-                          onPress={() => { }}
-                        /> :
-                        null
-                    }
-                    {
-                      restaurantMarker.latitude && restaurantMarker.longitude ?
-                        <Marker
-                          coordinate={restaurantMarker}
-                          tracksViewChanges={false}
-                          tracksInfoWindowChanges={false}
-                          pinColor={Colors.redible.main} /> :
-                        null
-                    }
-                  </MapView>
-                  :
-                  null
-              }
+                      {
+                        userLocation.latitude && userLocation.longitude ?
+                          <Marker
+                            coordinate={userLocation}
+                            pinColor={Colors.redible.raspberry}
+                            onPress={() => { }}
+                          /> :
+                          null
+                      }
+                      {
+                        restaurantMarker.latitude && restaurantMarker.longitude ?
+                          <Marker
+                            coordinate={restaurantMarker}
+                            tracksViewChanges={false}
+                            tracksInfoWindowChanges={false}
+                            pinColor={Colors.redible.main} /> :
+                          null
+                      }
+                    </MapView>
+                    :
+                    null
+                }
+              </View>
             </View>
             :
             <View style={{ flex: 1, backgroundColor: Colors.redible.main }}>
@@ -183,25 +179,5 @@ const styles = StyleSheet.create({
     flex: 1,
     overflow: "hidden",
     position: "relative"
-  },
-  map: {
-    flex: 1,
-  },
-  durationContainer: {
-    position: "absolute",
-    zIndex: 1000,
-    right: 5,
-    bottom: 5,
-    backgroundColor: Colors.searchModal,
-    borderRadius: 8,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 5,
-    paddingLeft: 10,
-    paddingRight: 10
-  },
-  durationText: {
-    fontSize: Layout.fontSize.mainContent
   },
 })
