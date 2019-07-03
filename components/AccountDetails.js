@@ -18,8 +18,9 @@ export default class AccountDetails extends Component {
   }
 
   render() {
-    const nextLevel = 1750,
-      totalPoints = 1375 + 285,
+    const
+      nextLevel = 2251,
+      totalPoints = 2150,
       width = `${(totalPoints / nextLevel) * 100}%`,
       progress = {
         from: {
@@ -38,8 +39,8 @@ export default class AccountDetails extends Component {
         <View style={styles.lifted}>
           <View style={styles.userInformation}>
             <View style={styles.accountContainer}>
-              <Text style={styles.name}>{`Vanessa`}</Text>
-              <Text style={styles.account}>{`vanessa.higasi@bts.tech`}</Text>
+              <Text style={styles.name}>{`Marcel`}</Text>
+              <Text style={styles.account}>{`marcel@bts.tech`}</Text>
             </View>
             <View style={{ alignItems: "center", justifyContent: "center", height: 100, width: 100, borderRadius: 50, backgroundColor: Colors.redible.star }}>
               <Text style={{ textAlign: "center", color: Colors.basic.white, fontWeight: "bold", fontSize: Layout.fontSize.title }}>{totalPoints}</Text>
@@ -48,7 +49,7 @@ export default class AccountDetails extends Component {
           </View>
 
           <View style={styles.rankingContainer}>
-            <Text style={styles.bold}>Level 6: <Text style={styles.level}>Food saving Master</Text></Text>
+            <Text style={styles.bold}>Level 8: <Text style={styles.level}>Food saving Legend</Text></Text>
             <View style={styles.barContainer}>
               <Animatable.View delay={300} animation={progress} duration={800} style={{ ...styles.bar, width: "0%" }}></Animatable.View>
             </View>
@@ -67,7 +68,7 @@ export default class AccountDetails extends Component {
                   size={Layout.fontSize.largeIcon}
                   color={Colors.redible.lavenderGray}
                 />
-                <Text style={styles.smallText}><Text style={{ fontWeight: "bold" }}>17</Text> meals saved</Text>
+                <Text style={styles.smallText}><Text style={{ fontWeight: "bold" }}>9</Text> meals saved</Text>
               </View>
             </View>
           </View>

@@ -9,6 +9,7 @@ import RankingCard from "../components/Ranking"
 // Constants
 import Colors from "../constants/Colors"
 import Layout from "../constants/Layout"
+import Users from "../constants/Data/Users"
 
 /**
  * Renders top ranked food savers
@@ -17,7 +18,8 @@ export default class RankingScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeDrawer: -1
+      activeDrawer: -1,
+      users: Users
     }
   }
 
@@ -28,13 +30,15 @@ export default class RankingScreen extends Component {
   }
 
   _buildRankingList = () => {
-    const usersList = ["Monica", "Viktor", "Vanessa", "Pedro", "Alessandro", "Tue", "Aycha", "Stefano"],
-      points = [3850, 2900, 2750, 2525, 2010, 1765, 1600, 1250]
+    let { users } = this.state
+
+    users = users.sort((a, b) => {
+      return a.points < b.points
+    })
 
     let topRanked = []
-    for (let i = 0; i < 8; i++) {
-      const width = `${(points[i] / points[0]) * 100}%`
-      topRanked.push(<RankingCard key={i} rank={i} _onPress={this.openDrawer} name={usersList[i]} points={points[i]} width={width} activeDrawer={this.state.activeDrawer} />)
+    for (let i = 0; i < users.length; i++) {
+      topRanked.push(<RankingCard key={i} rank={i} _onPress={this.openDrawer} user={users[i]} activeDrawer={this.state.activeDrawer} />)
     }
     return topRanked.map(user => user)
   }
@@ -42,14 +46,11 @@ export default class RankingScreen extends Component {
   openDrawer = id => {
     this.setState(prevState => ({
       activeDrawer: prevState.activeDrawer === id ? -1 : id
-    }), () => {
-      console.log(id, this.state.activeDrawer, typeof id, typeof this.state.activeDrawer)
-    })
+    }))
   }
 
   render() {
-    const ranking = this._buildRankingList(),
-      prefix = Platform.OS === "ios" ? "ios" : "md"
+    const ranking = this._buildRankingList()
 
     return (
       <View style={styles.container}>

@@ -7,23 +7,34 @@ import * as Animatable from "react-native-animatable"
 // Constants
 import Colors from "../constants/Colors"
 import Layout from "../constants/Layout"
+import Levels from "../constants/Data/Levels"
 
 /**
  * Renders ranking list item
  * @param {Object} props 
  */
 const RankingCard = props => {
-  const { name, rank, points, width, _onPress, activeDrawer } = props,
-    progress = {
-      from: {
-        width: "0%"
-      },
-      to: {
-        width
-      }
-    }
+  const { rank, user, _onPress, activeDrawer } = props
 
-  console.log(rank === activeDrawer)
+  let level, levelName, nextLevel, pointsForNext, width
+  for (let i = 0; i < Levels.length; i++) {
+    if (user.points > Levels[i].from && user.points <= Levels[i].to) {
+      level = Levels[i].level
+      levelName = Levels[i].levelName
+      nextLevel = Levels[i].nextLevel
+      pointsForNext = (Levels[i].to + 1) - user.points
+      width = `${(user.points / Levels[i + 1].from) * 100}%`
+    }
+  }
+
+  const progress = {
+    from: {
+      width: "0%"
+    },
+    to: {
+      width
+    }
+  }
 
   return (
     <TouchableWithoutFeedback style={styles.touchable} onPress={() => _onPress(rank)}>
@@ -37,8 +48,8 @@ const RankingCard = props => {
 
         <View style={styles.textContainer}>
           <View style={{ flex: 1 }}>
-            <Text style={styles.text}>{`${rank + 1}.`} {name}</Text>
-            <Text style={{ ...styles.pointsText, marginTop: 5 }}><Text style={{ ...styles.pointsText, fontWeight: "bold", color: Colors.redible.star }}>Level 5:</Text> Top food saver</Text>
+            <Text style={styles.text}>{`${rank + 1}.`} {user.name}</Text>
+            <Text style={{ ...styles.pointsText, marginTop: 5 }}><Text style={{ ...styles.pointsText, fontWeight: "bold", color: Colors.redible.star }}>Level{` ${level}`}:</Text>{` ${levelName}`}</Text>
           </View>
 
           <View style={styles.points}>
@@ -47,7 +58,7 @@ const RankingCard = props => {
               color={Colors.redible.silver}
               size={Layout.fontSize.largeIcon}
             />
-            <Text style={styles.pointsText}>{`${points} points`}</Text>
+            <Text style={styles.pointsText}>{`${user.points} points`}</Text>
           </View>
         </View>
         {
@@ -59,16 +70,21 @@ const RankingCard = props => {
                     name={"md-globe"}
                     size={Layout.fontSize.mediumText}
                     color={Colors.redible.lavenderGray}
-                  />{` 10 meals saved`}</Text>
+                  />{` ${user.mealsSaved} meals saved`}</Text>
                 <View style={styles.barContainer}>
                   <Animatable.View delay={300} animation={progress} duration={800} style={{ ...styles.bar, width: "0%" }}></Animatable.View>
                 </View>
-                <Text style={styles.drawerText}>
-                  <Icon.Ionicons
-                    name={"md-trending-up"}
-                    size={Layout.fontSize.smallText}
-                    color={Colors.redible.lavenderGray}
-                  />{` 90 points for next level`}</Text>
+                {
+                  nextLevel ?
+                    <Text style={styles.drawerText}>
+                      <Icon.Ionicons
+                        name={"md-trending-up"}
+                        size={Layout.fontSize.smallText}
+                        color={Colors.redible.lavenderGray}
+                      />{` ${pointsForNext} points for ${nextLevel} level `}</Text>
+                    :
+                    null
+                }
               </Animatable.View>
             </View>
             : null
@@ -79,10 +95,7 @@ const RankingCard = props => {
 }
 
 RankingCard.propTypes = {
-  name: PropTypes.string.isRequired,
-  rank: PropTypes.number.isRequired,
-  points: PropTypes.number.isRequired,
-  width: PropTypes.string.isRequired
+  user: PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({
