@@ -1,5 +1,5 @@
 import React from "react"
-import { StyleSheet, View, Text } from "react-native"
+import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native"
 import { Icon } from "expo"
 import PropTypes from "prop-types"
 import * as Animatable from "react-native-animatable"
@@ -13,7 +13,7 @@ import Layout from "../constants/Layout"
  * @param {Object} props 
  */
 const RankingCard = props => {
-  const { name, rank, points, width } = props,
+  const { name, rank, points, width, _onPress, activeDrawer } = props,
     progress = {
       from: {
         width: "0%"
@@ -23,8 +23,10 @@ const RankingCard = props => {
       }
     }
 
+  console.log(rank === activeDrawer)
+
   return (
-    <View>
+    <TouchableWithoutFeedback style={styles.touchable} onPress={() => _onPress(rank)}>
       <View style={styles.container}>
 
         {/**
@@ -36,9 +38,7 @@ const RankingCard = props => {
         <View style={styles.textContainer}>
           <View style={{ flex: 1 }}>
             <Text style={styles.text}>{`${rank + 1}.`} {name}</Text>
-            <View style={styles.barContainer}>
-              <Animatable.View delay={300} animation={progress} duration={800} style={{ ...styles.bar, width: "0%" }}></Animatable.View>
-            </View>
+            <Text style={{ ...styles.pointsText, marginTop: 5 }}><Text style={{ ...styles.pointsText, fontWeight: "bold", color: Colors.redible.star }}>Level 5:</Text> Top food saver</Text>
           </View>
 
           <View style={styles.points}>
@@ -50,8 +50,31 @@ const RankingCard = props => {
             <Text style={styles.pointsText}>{`${points} points`}</Text>
           </View>
         </View>
+        {
+          rank === activeDrawer ?
+            <View style={styles.drawer}>
+              <Animatable.View animation={"slideInDown"} delay={50} duration={200}>
+                <Text style={styles.drawerText}>
+                  <Icon.Ionicons
+                    name={"md-globe"}
+                    size={Layout.fontSize.mediumText}
+                    color={Colors.redible.lavenderGray}
+                  />{` 10 meals saved`}</Text>
+                <View style={styles.barContainer}>
+                  <Animatable.View delay={300} animation={progress} duration={800} style={{ ...styles.bar, width: "0%" }}></Animatable.View>
+                </View>
+                <Text style={styles.drawerText}>
+                  <Icon.Ionicons
+                    name={"md-trending-up"}
+                    size={Layout.fontSize.smallText}
+                    color={Colors.redible.lavenderGray}
+                  />{` 90 points for next level`}</Text>
+              </Animatable.View>
+            </View>
+            : null
+        }
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 
@@ -65,7 +88,6 @@ RankingCard.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
     alignItems: "center",
     backgroundColor: Colors.basic.white,
     marginBottom: 15,
@@ -82,7 +104,7 @@ const styles = StyleSheet.create({
   barContainer: {
     marginTop: 10,
     height: 10,
-    width: "90%",
+    width: "100%",
     backgroundColor: Colors.redible.cream,
     borderRadius: 2.5
   },
@@ -97,12 +119,18 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
+    backgroundColor: Colors.basic.white,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 10,
-    paddingLeft: 15,
-    paddingRight: 15,
+    borderRadius: 8,
+    shadowColor: Colors.shadow,
+    shadowOffset: { height: 3, width: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    elevation: 3,
+    overflow: "hidden",
+    padding: 15
   },
   text: {
     fontSize: Layout.fontSize.mainContent,
@@ -115,6 +143,15 @@ const styles = StyleSheet.create({
   pointsText: {
     color: Colors.basic.black,
     fontSize: Layout.fontSize.mediumText
+  },
+  drawer: {
+    width: "100%",
+    padding: 15
+  },
+  drawerText: {
+    color: Colors.redible.gray,
+    fontSize: Layout.fontSize.mediumText,
+    marginTop: 7.5
   }
 })
 

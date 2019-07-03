@@ -10,7 +10,6 @@ import PickupDescription from "../components/PickupDescription"
 
 // Constants
 import Colors from "../constants/Colors"
-import Layout from "../constants/Layout"
 
 // Helpers
 import { decode } from "../helpers/decodeDirections"
@@ -90,7 +89,7 @@ export default class OrderPickupScreen extends Component {
 
       const
         durationTime = parseInt(duration.substring(0, 2).trim()),
-        mapZoom = durationTime >= 40 ? 0.03 : durationTime >= 30 ? 0.025 : durationTime >= 20 ? 0.02 : 0.01
+        mapZoom = durationTime >= 40 ? 0.0332 : durationTime >= 30 ? 0.0275 : durationTime >= 20 ? 0.0225 : 0.0155
 
       const mapCenter = {
         latitude: (userLocation.latitude + restaurantMarker.latitude) / 2,

@@ -13,7 +13,8 @@ import Layout from "../constants/Layout"
 export default class AccountDetails extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+    }
   }
 
   render() {
@@ -83,6 +84,14 @@ export default class AccountDetails extends Component {
           </TouchableOpacity>
           <TouchableOpacity style={{ ...styles.listItem, ...styles.middleItem }}>
             <Icon.Ionicons
+              name={"md-card"}
+              color={Colors.redible.gray}
+              size={Layout.fontSize.mediumText}
+            />
+            <Text style={styles.listItemText}>Payment methods</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ ...styles.listItem, ...styles.middleItem }}>
+            <Icon.Ionicons
               name={"md-list-box"}
               color={Colors.redible.gray}
               size={Layout.fontSize.mediumText}
@@ -142,7 +151,7 @@ const styles = StyleSheet.create({
   },
   account: {
     fontSize: Layout.fontSize.mediumText,
-    color: Colors.redible.accent
+    color: Colors.redible.gray
   },
   rankingContainer: {
     width: "100%",
@@ -183,7 +192,7 @@ const styles = StyleSheet.create({
     padding: 5
   },
   list: {
-    marginTop: 100,
+    marginTop: 50,
     backgroundColor: Colors.basic.white,
     borderBottomWidth: 1,
     borderTopWidth: 1,

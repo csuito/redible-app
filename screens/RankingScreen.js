@@ -16,7 +16,9 @@ import Layout from "../constants/Layout"
 export default class RankingScreen extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      activeDrawer: -1
+    }
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -32,9 +34,17 @@ export default class RankingScreen extends Component {
     let topRanked = []
     for (let i = 0; i < 8; i++) {
       const width = `${(points[i] / points[0]) * 100}%`
-      topRanked.push(<RankingCard key={i} rank={i} name={usersList[i]} points={points[i]} width={width} />)
+      topRanked.push(<RankingCard key={i} rank={i} _onPress={this.openDrawer} name={usersList[i]} points={points[i]} width={width} activeDrawer={this.state.activeDrawer} />)
     }
     return topRanked.map(user => user)
+  }
+
+  openDrawer = id => {
+    this.setState(prevState => ({
+      activeDrawer: prevState.activeDrawer === id ? -1 : id
+    }), () => {
+      console.log(id, this.state.activeDrawer, typeof id, typeof this.state.activeDrawer)
+    })
   }
 
   render() {
@@ -45,12 +55,15 @@ export default class RankingScreen extends Component {
       <View style={styles.container}>
         <ScrollView style={styles.contentContainer}>
           <View style={styles.titleContainer}>
+            {/**
             <Icon.Ionicons
               name={`${prefix}-trending-up`}
               size={72}
               color={Colors.redible.main}
             />
+             */}
             <Text style={styles.title}>Redible's Top Food Savers</Text>
+            <Image source={require("../assets/images/happy.jpg")} style={styles.image} />
           </View>
           <View style={styles.listContainer}>
             {ranking}
@@ -73,13 +86,18 @@ const styles = StyleSheet.create({
   titleContainer: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 30,
-    marginBottom: 30
+    marginTop: 50,
   },
   title: {
     fontSize: Layout.fontSize.title,
-    color: Colors.redible.accent,
+    fontWeight: "bold",
+    color: Colors.redible.star,
     textAlign: "center"
+  },
+  image: {
+    height: 275,
+    width: 275,
+    resizeMode: "contain"
   },
   listContainer: {
     marginTop: 15,

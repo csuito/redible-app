@@ -34,28 +34,28 @@ const PickupDescription = props => {
       </View>
 
       <View style={styles.descriptionContainer}>
-        <Text style={{ ...styles.description, textAlign: "center", marginBottom: 10 }}>
+        <Text style={{ ...styles.description, marginBottom: 10 }}>
           <Icon.Ionicons
             name={`${prefix}-pin`}
             color={Colors.redible.accent}
             size={Layout.fontSize.mediumText}
           />
           {` ${restaurantData.address}`}</Text>
-        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
           <Text style={{ ...styles.description, textAlign: "center" }}>
             <Icon.Ionicons
               name={`${prefix}-walk`}
               color={Colors.redible.accent}
               size={Layout.fontSize.mediumText}
             />
-            {` ${duration}`}</Text>
+            {` Distance: ${duration}`}</Text>
           <Text style={styles.description}>
             <Icon.Ionicons
               name={`${prefix}-time`}
               color={Colors.redible.accent}
               size={Layout.fontSize.mediumText}
             />
-            {` 20:15`}</Text>
+            {` Pick-up time: 20:15`}</Text>
         </View>
       </View>
       <View style={styles.buttonsContainer}>
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flexDirection: "row",
-    backgroundColor: Colors.redible.mainDark,
+    backgroundColor: Colors.redible.main,
     alignItems: "center",
     justifyContent: "space-between",
     padding: 10,
